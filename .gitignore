@@ -1,4 +1,5 @@
-main.data
-index.html main.html
-main.wasm
+*.data
+*.html 
+*.js 
+*.wasm
 *.o

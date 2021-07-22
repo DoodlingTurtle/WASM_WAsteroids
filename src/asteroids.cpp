@@ -30,6 +30,8 @@ void Asteroid::generateShape(olc::PixelGameEngine* pge) {
         float startx = x1;
         float starty = y1;
 
+        olc::Pixel col(138, 100, 73, 255);
+
         for(float a = 0; a <= lastsegment; a++) {
             x = x1;
             y = y1;
@@ -44,7 +46,12 @@ void Asteroid::generateShape(olc::PixelGameEngine* pge) {
                 y1 = cos(angle)*radius;
             }
             
-            pge->FillTriangle(32, 32, 32 + x, 32 + y, 32 + x1, 32 + y1, olc::DARK_YELLOW);
+            pge->FillTriangle(
+                    32, 32, 
+                    32 + x, 32 + y, 
+                    32 + x1, 32 + y1, 
+                    col
+            );
         }
 
 	pge->SetDrawTarget(nullptr);

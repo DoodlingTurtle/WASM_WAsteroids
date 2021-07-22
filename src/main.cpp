@@ -18,6 +18,17 @@ public:
 	bool OnUserCreate() override {
 		srand(time(nullptr));
 		asteroids.init(this);
+
+        starfield = new olc::Sprite(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
+            for(int a = 0; a < CNT_STARS; a++) {
+                uint8_t i = 96 + (rand()%64);
+                starfield->SetPixel(
+                        rand()%APP_SCREEN_WIDTH, 
+                        rand()%APP_SCREEN_HEIGHT, 
+                        olc::Pixel(i, i, i, 255)
+                );
+
+            }
         currentScene = nullptr;
 		currentScene = nextScene();
 
@@ -31,7 +42,7 @@ public:
 		if(currentScene != nullptr) {
 			currentScene->onUpdate(this, fElapsedTime);
 			if(currentScene->isActive()) {
-                Clear(olc::BLACK);
+                DrawSprite(0, 0, starfield);
                 SetPixelMode(olc::Pixel::ALPHA); 
 				currentScene->onDraw(this);
                 SetPixelMode(olc::Pixel::NORMAL); 
@@ -55,7 +66,6 @@ public:
 			next = &titleScreen; //TODO: add more Scenes (;.;)
         
         if(currentScene != nullptr){
-            printf("currentScene: %d\n", currentScene);
             currentScene->onEnd();
         }
 
@@ -70,6 +80,7 @@ public:
 	Asteroids   asteroids;
 	TitleScreen titleScreen;
 	Scene*      currentScene;
+    olc::Sprite* starfield;
 
 };
 
