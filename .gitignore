@@ -1,0 +1,4 @@
+main.data
+index.html main.html
+main.wasm
+*.o
