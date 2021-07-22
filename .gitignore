@@ -1,0 +1,7 @@
+*.data
+*.html 
+*.js 
+*.wasm
+release/*.wasm
+release/*.js
+*.o
