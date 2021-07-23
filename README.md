@@ -30,7 +30,7 @@ is bound to its own OLC-3 License and can or should therefor not be changed.
 
 If you build something cool from my source code, and you have a Twitter account, 
 fell free to show it to me at [@TurtleDoodling](https://twitter.com/turtledoodling).
-I may event retweet it.
+I may even retweet it.
 
 With that out of the way, here is how you setup the build environement for the project.
 
