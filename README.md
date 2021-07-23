@@ -53,7 +53,7 @@ With that out of the way, here is how you setup the build environement for the p
 6. After that, you can use ` make ` to build the project into a main.html file.
 7. You can use ` make run ` to start a preview server and open the project in your default browser.
    
-   you will have to manually stop the the server by pressing "Ctrl + C" in your terminal
+   you will have to manually stop the server by pressing "Ctrl + C" in your terminal
 
 8. Or you can use ` make debug ` to do the same as ` make run `, but the shown site has a Javascript console attached.
   
@@ -83,5 +83,6 @@ There is a lot to be done, before it reaches a playable state.
 
 - Add support for different window formats and resolutions
 - Add Touch controls
+- Store highscores and Settings via LocalStorage in the Browser
 - Add sound effects
 
