@@ -2,7 +2,7 @@
 #define COMPONENT_H 1
 
 #include "olcPixelGameEngine.h"
-#include "asteroids.h"
+#include "gameobjects/asteroids.h"
 
 class Scene {
 

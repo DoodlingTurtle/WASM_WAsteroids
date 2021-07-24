@@ -1,8 +1,8 @@
 #ifndef __SHOT_H__
 #define __SHOT_H__
 
-#include "olcPixelGameEngine.h"
-#include "spaceobj.h"
+#include "../olcPixelGameEngine.h"
+#include "../spaceobj.h"
 
 #define MAX_SHOT_CNT 32
 

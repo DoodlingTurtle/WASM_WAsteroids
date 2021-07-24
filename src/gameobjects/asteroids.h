@@ -1,11 +1,11 @@
 #ifndef ASTEROIDS_H
 #define ASTEROIDS_H
 
-#include "config.h"
-#include "olcPixelGameEngine.h"
-#include "olcPGEX_Graphics2D.h"
+#include "../config.h"
+#include "../olcPixelGameEngine.h"
+#include "../olcPGEX_Graphics2D.h"
+#include "../spaceobj.h"
 
-#include "spaceobj.h"
 #include "shot.h"
 
 #include <vector>

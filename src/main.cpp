@@ -4,7 +4,7 @@
 #include "scenes/titlescreen.h"
 #include "scenes/creditsscreen.h"
 
-#include "asteroids.h"
+#include "gameobjects/asteroids.h"
 
 #include <ctime>
 #include <stdio.h>

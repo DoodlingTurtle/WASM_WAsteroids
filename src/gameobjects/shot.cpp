@@ -1,4 +1,4 @@
-#include "./shot.h"
+#include "shot.h"
 //#include "gamestatemaingame.h"
 
 Shot _instances[MAX_SHOT_CNT];

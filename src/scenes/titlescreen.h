@@ -3,7 +3,7 @@
 
 #include "../olcPixelGameEngine.h"
 #include "../scene.h"
-#include "../asteroids.h"
+#include "../gameobjects/asteroids.h"
 
 #include "../textmenu.h"
 
