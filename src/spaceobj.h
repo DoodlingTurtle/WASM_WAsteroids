@@ -29,8 +29,8 @@ public:
 
     void draw(std::function<void(RGNDS::Transform*)> drawingLambda);
 
-    virtual void onUpdate(MainGameUpdateData* ) {};
-    virtual void onDraw(MainGameDrawData* ){};
+    virtual void onUpdate(float deltaTime) {};
+    virtual void onDraw(olc::PixelGameEngine* pge ){};
     virtual short getScoreValue() { return 0; }
 
     virtual void kill();

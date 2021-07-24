@@ -1,11 +1,12 @@
 #include "olcPixelGameEngine.h"
 #include "config.h"
 #include "scene.h"
+
 #include "scenes/titlescreen.h"
 #include "scenes/creditsscreen.h"
+#include "scenes/maingame.h"
 
 #include "gameobjects/asteroids.h"
-
 #include <ctime>
 #include <stdio.h>
 using namespace std;
@@ -17,10 +18,12 @@ class WAsteroids : public olc::PixelGameEngine
 {
 public:
     bool OnUserCreate() override {
+        // Initialize functions
         srand(time(nullptr));
         asteroids.init(this);
         currentScene = nullptr;
-
+        
+        //Generate starfield background
         starfield = new olc::Sprite(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
         for(int a = 0; a < CNT_STARS; a++) {
             uint8_t i = 96 + (rand()%64);
@@ -31,6 +34,7 @@ public:
             );
         }
 
+        // Load first scene
         nextScene();
 
         //TODO: Override GetFontSprite() with own Font set
@@ -71,10 +75,13 @@ public:
             printf("Selected: %d\n", titleScreen.selectedMenu());
             switch(titleScreen.selectedMenu()) {
                 case 2: { // Credits
-                    next = &creditsScreen; 
-                    break;
-                }
-                case 0:
+                    next = &creditsScreen; break; }
+                        
+                case 0: { // new Game
+                    mainGameScreen.game_difficulty = 1.0f;
+                    next = &mainGameScreen; 
+                    break; }
+                        
                 case 1:
                 default: {
                     next = &titleScreen; //TODO: add more Scenes (;.;)
@@ -86,20 +93,21 @@ public:
         }
 
         // Hook up global ressources and restart the new scene
-        if(next != nullptr) {
-            next->asteroids = &asteroids;
+        if(next != nullptr)
             next->restart();
-        }
 
         currentScene = next;
     }
 
-    Asteroids   asteroids;
-    Scene*      currentScene;
+    int          score = 0;
+    Asteroids    asteroids;
+    Scene*       currentScene;
     olc::Sprite* starfield;
 
-    TitleScreen titleScreen;
-    CreditsScreen creditsScreen;
+    TitleScreen     titleScreen    = TitleScreen(&asteroids);
+    CreditsScreen   creditsScreen;
+    MainGameScreen  mainGameScreen = MainGameScreen(&asteroids, &score);
+
 };
 
 int main()

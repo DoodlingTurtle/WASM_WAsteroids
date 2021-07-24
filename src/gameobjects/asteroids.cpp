@@ -4,16 +4,16 @@
 #include <stdio.h>
 using namespace std;
 
-Asteroid::Asteroid() : SpaceObj(32.0f)
+Asteroids::Asteroid::Asteroid() : SpaceObj(32.0f)
 { sprite = new olc::Sprite(64, 64); }
 
-void Asteroid::init(olc::PixelGameEngine* pge) 
+void Asteroids::Asteroid::init(olc::PixelGameEngine* pge) 
 { /*TODO: delete if not needed later*/ }
 
 float _getradius() {
     return 22 + rand()%10;
 }
-void Asteroid::generateShape(olc::PixelGameEngine* pge) {
+void Asteroids::Asteroid::generateShape(olc::PixelGameEngine* pge) {
 
 	pge->SetDrawTarget(sprite);
 
@@ -57,7 +57,11 @@ void Asteroid::generateShape(olc::PixelGameEngine* pge) {
 	pge->SetDrawTarget(nullptr);
 }
 
-void Asteroid::bringBackToLife(olc::PixelGameEngine* pge, olc::vf2d pos, bool generateNewShape, float scale) 
+void Asteroids::Asteroid::bringBackToLife(
+        olc::PixelGameEngine* pge, 
+        olc::vf2d pos, bool generateNewShape, 
+        Asteroids::SIZES size
+) 
 {
 
     setAngle(RandF() * PI2);
@@ -67,14 +71,29 @@ void Asteroid::bringBackToLife(olc::PixelGameEngine* pge, olc::vf2d pos, bool ge
 
     this->pos.x = pos.x;
 	this->pos.y = pos.y;
-    this->scale = scale;
+
+    this->size = size;
+    if(size == SIZE_RANDOM) 
+        size = static_cast<Asteroids::SIZES>(rand()%3);
+
+    switch(size) {
+        case Asteroids::SIZE_SMALL: {
+            this->scale = 0.25f; break; }
+                                    
+        case Asteroids::SIZE_MIDDLE: {
+            this->scale = 0.5f; break; }
+
+        case Asteroids::SIZE_LARGE: 
+        default: {
+            this->scale = 1.0f; break; }
+    }
 
     if(generateNewShape)
         generateShape(pge);
 
     bIsAlive = true;
 }
-void Asteroid::onUpdate(float deltatime) {
+void Asteroids::Asteroid::onUpdate(float deltatime) {
     setAngleRel(PI2 * (deltatime * spinSpeed));
     updatePosition(deltatime);
 
@@ -82,18 +101,22 @@ void Asteroid::onUpdate(float deltatime) {
 }
 
 
-short Asteroid::getScoreValue() {
+short Asteroids::Asteroid::getScoreValue() {
     return 100/scale;
 }
 
-void Asteroid::onDraw(SpaceObj::MainGameDrawData* data) {
+Asteroids::SIZES Asteroids::Asteroid::getSize() {
+    return size;
+}
+
+void Asteroids::Asteroid::onDraw(olc::PixelGameEngine* pge) {
     SpaceObj::draw([this](RGNDS::Transform* tr){
         olc::GFX2D::Transform2D tra;
         tr->toTransform2D(32, 32, &tra);
         olc::GFX2D::DrawSprite(sprite, tra); 
     });
 }
-Asteroid::~Asteroid() { delete sprite; }
+Asteroids::Asteroid::~Asteroid() { delete sprite; }
 
 
 /*#############################################################################
@@ -120,29 +143,21 @@ void Asteroids::draw() {
 }
 
 
- vector<Asteroid*>* Asteroids::spawnAsteroids(
+ vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
         int nr, 
         Asteroids::SIZES size, 
         int x, int y
     ) {
 
     int spawned = 0;
-    vector<Asteroid*>* list = new vector<Asteroid*>();
+    vector<Asteroids::Asteroid*>* list = new vector<Asteroids::Asteroid*>();
     float sx=x, sy=y;
-    float scale = 1.0f;
 
     if(nr > MAX_ASTEROIDS) 
         nr = MAX_ASTEROIDS;
-
-    switch(size){
-        case SIZE_MIDDLE: scale = 0.5f; break;
-        case SIZE_SMALL:  scale = 0.25f; break;
-    }
     
     for(int a = 0; a < MAX_ASTEROIDS && spawned < nr; a++) {
 
-
-        if(size == SIZE_RANDOM) scale = 1.0f / (float)(1<<(rand()%3));
         if(x == 0)              sx = (rand()%APP_SCREEN_WIDTH);
         if(y == 0)              sy = (rand()%APP_SCREEN_HEIGHT);
 
@@ -151,13 +166,21 @@ void Asteroids::draw() {
                     pge, 
                     {sx, sy}, 
                     true, 
-                    scale  
+                    size
             );
             list->push_back(&asteroids[a]);
             spawned++;
         }
     }
     return list;
+}
+
+Asteroids::Asteroid* Asteroids::isAsteroid(void* go) {
+    Asteroids::Asteroid* ret = nullptr;
+    if(go >= asteroids && go < (&asteroids[MAX_ASTEROIDS-1]))
+        ret = (Asteroids::Asteroid*)go;
+    
+    return ret;
 }
 
 void Asteroids::killall() {

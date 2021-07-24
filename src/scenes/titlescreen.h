@@ -10,7 +10,7 @@
 class TitleScreen : public Scene {
 
 public:
-    TitleScreen();
+    TitleScreen(Asteroids*);
 
 	void onUpdate(olc::PixelGameEngine* pge, float dt) override;
 	void onDraw(olc::PixelGameEngine* pge) override;
@@ -20,7 +20,9 @@ public:
 protected:
     void onStart() override;
     void onEnd() override;
+
 private:
+    Asteroids* asteroids;
     TextMenu menu;
 };
 

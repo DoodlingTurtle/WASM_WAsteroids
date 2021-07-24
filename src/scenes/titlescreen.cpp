@@ -1,6 +1,8 @@
 #include "titlescreen.h"
 
-TitleScreen::TitleScreen() {
+TitleScreen::TitleScreen(Asteroids* asteroids) 
+: asteroids(asteroids)
+{
     menu.transform.pos.y = 272;
     menu.transform.pos.x = 32;
     menu.transform.scale = 2;
