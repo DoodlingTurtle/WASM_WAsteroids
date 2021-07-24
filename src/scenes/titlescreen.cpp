@@ -1,8 +1,6 @@
 #include "titlescreen.h"
 
-void TitleScreen::onStart() {
-    asteroids->spawnAsteroids(4);
-
+TitleScreen::TitleScreen() {
     menu.transform.pos.y = 272;
     menu.transform.pos.x = 32;
     menu.transform.scale = 2;
@@ -12,6 +10,10 @@ void TitleScreen::onStart() {
     menu.addOption("credits");
 }
 
+void TitleScreen::onStart() {
+    asteroids->spawnAsteroids(4);
+}
+
 void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     asteroids->update(deltaTime);
 
@@ -19,8 +21,9 @@ void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         menu.selectNext();
     else if(pge->GetKey(GameKeyMap[KEYPAD_UP]).bPressed)
         menu.selectPrev();
-//    else if(press&(KEY_START|KEY_A))
-//        exit();
+    else if(pge->GetKey(olc::ENTER).bPressed 
+            || pge->GetKey(GameKeyMap[KEYPAD_A]).bPressed)
+        exit();
 }
 
 void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
@@ -37,5 +40,9 @@ void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
 }
 void TitleScreen::onEnd() {
     asteroids->killall();
+}
+
+int TitleScreen::selectedMenu(){
+    return menu.selected();
 }
 

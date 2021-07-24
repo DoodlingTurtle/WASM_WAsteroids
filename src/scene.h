@@ -10,16 +10,18 @@ public:
 	Scene();
 	virtual ~Scene();
 
-    virtual void onStart();
+    void restart();
 	virtual	void onUpdate(olc::PixelGameEngine* pge, float deltaTime);
 	virtual void onDraw(olc::PixelGameEngine* pge);
-    virtual void onEnd();
 
 	bool isActive();
 
     Asteroids* asteroids;
 
 protected:
+    virtual void onStart();
+    virtual void onEnd();
+    
 	void exit();
 
 private:

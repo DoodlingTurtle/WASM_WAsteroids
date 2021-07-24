@@ -2,6 +2,7 @@
 #include "config.h"
 #include "scene.h"
 #include "scenes/titlescreen.h"
+#include "scenes/creditsscreen.h"
 
 #include "asteroids.h"
 
@@ -15,86 +16,103 @@ using namespace std;
 class WAsteroids : public olc::PixelGameEngine
 {
 public:
-	bool OnUserCreate() override {
-		srand(time(nullptr));
-		asteroids.init(this);
+    bool OnUserCreate() override {
+        srand(time(nullptr));
+        asteroids.init(this);
+        currentScene = nullptr;
 
         starfield = new olc::Sprite(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
-            for(int a = 0; a < CNT_STARS; a++) {
-                uint8_t i = 96 + (rand()%64);
-                starfield->SetPixel(
-                        rand()%APP_SCREEN_WIDTH, 
-                        rand()%APP_SCREEN_HEIGHT, 
-                        olc::Pixel(i, i, i, 255)
-                );
+        for(int a = 0; a < CNT_STARS; a++) {
+            uint8_t i = 96 + (rand()%64);
+            starfield->SetPixel(
+                    rand()%APP_SCREEN_WIDTH, 
+                    rand()%APP_SCREEN_HEIGHT, 
+                    olc::Pixel(i, i, i, 255)
+            );
+        }
 
-            }
-        currentScene = nullptr;
-		currentScene = nextScene();
+        nextScene();
 
         //TODO: Override GetFontSprite() with own Font set
 
-		return true;
-	}
+        return true;
+    }
 
-	bool OnUserUpdate(float fElapsedTime) override {
+    bool OnUserUpdate(float fElapsedTime) override {
 
-		if(currentScene != nullptr) {
-			currentScene->onUpdate(this, fElapsedTime);
-			if(currentScene->isActive()) {
+        if(currentScene != nullptr) {
+        // Update logic
+            currentScene->onUpdate(this, fElapsedTime);
+            
+        // if the scene is activate after the logic update
+            if(currentScene->isActive()) {
+                // draw a new frame
                 DrawSprite(0, 0, starfield);
                 SetPixelMode(olc::Pixel::ALPHA); 
-				currentScene->onDraw(this);
+                currentScene->onDraw(this);
                 SetPixelMode(olc::Pixel::NORMAL); 
-			}
-			else {
-				printf("Scene has ended\n");
-				currentScene = nextScene();
-			}
+            }
+            else {
+                // else switch to the next scene
+                printf("Scene has ended\n");
+                nextScene();
+            }
 
-		}
+        }
 
-		// Called once per frame, draws random coloured pixels
-		return true;
-	}
+        return true;
+    }
 
-	Scene* nextScene() {
+    void nextScene() {
         Scene* next = nullptr;
         if(currentScene == nullptr)
             next = &titleScreen;
-        else if(currentScene == (Scene*)&titleScreen)
-			next = &titleScreen; //TODO: add more Scenes (;.;)
-        
-        if(currentScene != nullptr){
-            currentScene->onEnd();
+        else if(currentScene == (Scene*)&titleScreen) {
+            printf("Selected: %d\n", titleScreen.selectedMenu());
+            switch(titleScreen.selectedMenu()) {
+                case 2: { // Credits
+                    next = &creditsScreen; 
+                    break;
+                }
+                case 0:
+                case 1:
+                default: {
+                    next = &titleScreen; //TODO: add more Scenes (;.;)
+                }
+            }
+        }
+        else if(currentScene == (Scene*)&creditsScreen) {
+            next = &titleScreen;
         }
 
+        // Hook up global ressources and restart the new scene
         if(next != nullptr) {
             next->asteroids = &asteroids;
-            next->onStart();
+            next->restart();
         }
 
-        return next;
-	}
+        currentScene = next;
+    }
 
-	Asteroids   asteroids;
-	TitleScreen titleScreen;
-	Scene*      currentScene;
+    Asteroids   asteroids;
+    Scene*      currentScene;
     olc::Sprite* starfield;
 
+    TitleScreen titleScreen;
+    CreditsScreen creditsScreen;
 };
 
 int main()
 {
-	WAsteroids app;
+    WAsteroids app;
 
-	if (app.Construct(
-		APP_SCREEN_WIDTH, 
-		APP_SCREEN_HEIGHT, 
-		APP_SCREEN_SCALE, 
-		APP_SCREEN_SCALE
-	)) app.Start();
+    if (app.Construct(
+        APP_SCREEN_WIDTH, 
+        APP_SCREEN_HEIGHT, 
+        APP_SCREEN_SCALE, 
+        APP_SCREEN_SCALE
+    )) app.Start();
 
-	return 0;
+    return 0;
 }
 

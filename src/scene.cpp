@@ -2,7 +2,8 @@
 
 Scene::Scene() { active = true; };
 bool Scene::isActive() { return active; }
-void Scene::exit() { active = false; }
+void Scene::exit() { active = false; onEnd(); }
+void Scene::restart() { active = true; onStart(); }
 Scene::~Scene() {};
 
 void Scene::onStart() {}

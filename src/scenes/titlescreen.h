@@ -10,11 +10,16 @@
 class TitleScreen : public Scene {
 
 public:
-    void onStart() override;
+    TitleScreen();
+
 	void onUpdate(olc::PixelGameEngine* pge, float dt) override;
 	void onDraw(olc::PixelGameEngine* pge) override;
-    void onEnd() override;
 
+    int selectedMenu();
+
+protected:
+    void onStart() override;
+    void onEnd() override;
 private:
     TextMenu menu;
 };
