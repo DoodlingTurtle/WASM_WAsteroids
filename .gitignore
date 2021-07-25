@@ -5,3 +5,4 @@
 release/*.wasm
 release/*.js
 *.o
+ressource/*
