@@ -5,10 +5,6 @@ RELEASEDIR:=release
 
 
 
-################################################################################
-#you need to edit anything after this
-################################################################################
-
 CPPSOURCEFILES:=$(wildcard ./*/*/*/*.cpp) $(wildcard ./*/*/*.cpp) $(wildcard */*.cpp) 
 
 OBJFILES:=$(patsubst %.cpp,%.cpp.o,$(CPPSOURCEFILES)) 
