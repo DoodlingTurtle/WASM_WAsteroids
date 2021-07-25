@@ -43,7 +43,7 @@ namespace RGNDS {
 
     void Transform::toTransform2D(float ox, float oy, olc::GFX2D::Transform2D* tra) {
         tra->Translate(-ox, -oy);
-        tra->Rotate(ang);
+        tra->Rotate(-ang);
         tra->Scale(scale, scale);
         tra->Translate(pos.x, pos.y);
     }

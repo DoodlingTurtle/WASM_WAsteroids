@@ -4,6 +4,7 @@
 #include "../olcPixelGameEngine.h"
 #include "../scene.h"
 #include "../gameobjects/asteroids.h"
+#include "../gameobjects/ship.h"
 
 class MainGameScreen : public Scene {
 
@@ -28,7 +29,7 @@ private:
     Asteroids* asteroids;
     int* score;
 
-    //Ship ship;
+    Ship* ship;
 };
 
 #endif

@@ -9,6 +9,9 @@
 #include "gameobjects/asteroids.h"
 #include <ctime>
 #include <stdio.h>
+
+#include "global.h"
+
 using namespace std;
 
 //EMSCRIPTEN_KEEPALIVE int number = 0;
@@ -113,6 +116,8 @@ public:
 int main()
 {
     WAsteroids app;
+
+    Global::pge = &app; 
 
     if (app.Construct(
         APP_SCREEN_WIDTH, 

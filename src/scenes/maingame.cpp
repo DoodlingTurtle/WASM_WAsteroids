@@ -1,34 +1,29 @@
 #include "maingame.h"
 #include <vector>
 
-#include "../gameobjects/shipexplosion.h"
-
 static std::vector<SpaceObj*>   gameObjList[3];
 static std::vector<SpaceObj*>*  gameObjects         = &gameObjList[0];
 static std::vector<SpaceObj*>*  prevGameObjects     = &gameObjList[1];
 static std::vector<SpaceObj*>*  newGameObjects      = &gameObjList[2];
 
 static unsigned char tick = 0;
-static ShipExplosion* shipexp = nullptr;
 
 MainGameScreen::MainGameScreen(Asteroids* asteroids, int* score) 
 : asteroids(asteroids), score(score)
-{ }
-
-void MainGameScreen::onStart() {
-    
-    int a;
-    
-//    ship.controlls = keys;
-
-    // setup the scoreboard
+{ 
+// setup the scoreboard
     scorelocation.pos.x = 5;
     scorelocation.pos.y = 5;
     scorelocation.scale = 2;
     scoreTimer = 0.0f;
+}
 
-//    ship.reset();
-//   newGameObjects->push_back(&ship);
+void MainGameScreen::onStart() {
+    int a;
+
+// Initialize the Ship
+    ship = new Ship();
+    newGameObjects->push_back(ship);
 
 // Initialize the asteroids
     std::vector<Asteroids::Asteroid*>* spawnedAsteroids = asteroids->spawnAsteroids(
@@ -42,8 +37,7 @@ void MainGameScreen::onStart() {
 }
 
 void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    asteroids->update(deltaTime);
-
+    
 // score countdown
     if(*score > 0) {
         scoreTimer += 1000.0f * deltaTime;
@@ -54,7 +48,7 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         }
     }
 
-// switch gameobject lists
+// switch Spaceobject lists
     tick++;
     tick = (tick&1);
 
@@ -66,9 +60,8 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     bool asteroidFound = false;
     bool hasAsteroids = false;
     Asteroids::Asteroid* ast;
-    
 
-    printf("sort dead SO\n");
+    //printf("sort dead SO\n");
 
     // Check and remove all dead SpaceObjects
     for(SpaceObj* go : *prevGameObjects) {
@@ -82,7 +75,9 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         else {
             short addScore = go->getScoreValue();
             if(addScore > 0) *score += addScore;    
-            
+           
+            printf("dead SO: %d\n", go);
+
             // Check if killed object is part of the Asteroids List
             if(asteroidFound) {
                 // If yes, Spawn ScorePopups TODO: reactivate
@@ -116,7 +111,7 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 // Add new SpaceObjects to the cycle
     for(SpaceObj* go : *newGameObjects)
         if(go->isAlive()) {
-            printf("add new SO: %d \n", go);
+            //printf("add new SO: %d \n", go);
             if(asteroids->isAsteroid(go) != nullptr)
                 hasAsteroids = true;
             gameObjects->push_back(go);
@@ -136,7 +131,7 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
 // Send out an update heartbeat to all attached objects
     for(SpaceObj* go : *gameObjects) {
-        printf("update new SO: %d \n", go);
+        //printf("update SO: %d \n", go);
         go->onUpdate(deltaTime);
     }
     
@@ -162,7 +157,7 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
 
 // Rendering Score
     char buffer[18];
-    sprintf(buffer, "Score: % 8d", *score);
+    //printf(buffer, "Score: % 8d", *score);
     std::string s(buffer);
     
     pge->DrawString(
@@ -173,14 +168,16 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
 }
 
 void MainGameScreen::onEnd() {
-    if(shipexp != nullptr)
+    /*if(shipexp != nullptr)
         delete shipexp;
     
     shipexp = nullptr;
-
+    */
     //ScorePopup::cleanup();
     
     //Shot::cleanup();
+
+    delete ship;
 
     gameObjects->clear();
     prevGameObjects->clear();

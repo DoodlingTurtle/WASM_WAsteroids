@@ -22,7 +22,6 @@ public:
     SpaceObj();
     SpaceObj(float objectRadius);
 
-    olc::vd2d velocity;
 
     void updatePosition(float deltaTime);
     void getCollisionSphere(olc::vf2d *pos, float *radius);
@@ -37,6 +36,8 @@ public:
     bool isAlive();
 
 protected:
+    olc::vd2d velocity;
+
     WrapAroundRenderer renderer;
     float objRadius;
     bool bIsAlive;
