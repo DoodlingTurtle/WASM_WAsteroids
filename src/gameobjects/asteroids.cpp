@@ -2,6 +2,8 @@
 #include "../config.h"
 #include "../global.h"
 
+#include "scorepopup.h"
+
 #include <stdio.h>
 using namespace std;
 
@@ -117,6 +119,7 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
         Global::score += 100/scale;
 
         //TODO: spawn score number
+        spa->push_back(ScorePopup::spawn(100/scale, pos.x, pos.y));
         //TODO: Spawn AsteroidExplosion at go->pos
         //(once particle system is reintroduced)
         this->kill();
