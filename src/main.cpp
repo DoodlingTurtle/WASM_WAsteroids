@@ -45,7 +45,6 @@ public:
 
     bool OnUserUpdate(float fElapsedTime) override {
 
-        Debug("update scene " << currentScene);
         if(currentScene != nullptr) {
         // Update logic
             currentScene->onUpdate(this, fElapsedTime);

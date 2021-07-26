@@ -1,5 +1,5 @@
-#include "../config.h"
 #include "asteroids.h"
+#include "../config.h"
 #include "../global.h"
 
 #include <stdio.h>
@@ -8,11 +8,16 @@ using namespace std;
 Asteroids::Asteroid::Asteroid() : SpaceObj(32.0f)
 { 
     sprite = new olc::Sprite(64, 64); 
+    killOnNextUpdate = false;
 }
+
+void Asteroids::Asteroid::markAsHit() { killOnNextUpdate = true; }
+
 
 float _getradius() {
     return 22 + rand()%10;
 }
+
 void Asteroids::Asteroid::generateShape() {
     olc::PixelGameEngine* pge = Global::pge;
 
@@ -58,6 +63,7 @@ void Asteroids::Asteroid::generateShape() {
 	pge->SetDrawTarget(nullptr);
 }
 
+
 void Asteroids::Asteroid::bringBackToLife(
         olc::vf2d pos, bool generateNewShape, 
         Asteroids::SIZES size
@@ -92,19 +98,41 @@ void Asteroids::Asteroid::bringBackToLife(
         generateShape();
 
     bIsAlive = true;
+    killOnNextUpdate = false;
 }
 std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
-    setAngleRel(PI2 * (deltatime * spinSpeed));
-    updatePosition(deltatime);
+
+    if(killOnNextUpdate) {
+
+        std::vector<SpaceObj*>* spa;
+
+        if(this->size != Asteroids::SIZE_SMALL) {
+            spa = (std::vector<SpaceObj*>*)Global::asteroids->spawnAsteroids( 2,  
+                   static_cast<Asteroids::SIZES>(
+                       static_cast<int>(this->size)-1
+                    ), this->pos.x, this->pos.y);
+        }
+        else spa = new std::vector<SpaceObj*>();
+
+        Global::score += 100/scale;
+
+        //TODO: spawn score number
+        //TODO: Spawn AsteroidExplosion at go->pos
+        //(once particle system is reintroduced)
+        this->kill();
+        Global::asteroids->markDirty();
+        return spa;
+    }
+    else {
+        setAngleRel(PI2 * (deltatime * spinSpeed));
+        updatePosition(deltatime);
+    }
+    
 
     //TODO: Reintroduce Spaceship collision
     return nullptr;
 }
 
-
-short Asteroids::Asteroid::getScoreValue() {
-    return 100/scale;
-}
 
 Asteroids::SIZES Asteroids::Asteroid::getSize() {
     return size;
@@ -124,7 +152,9 @@ Asteroids::Asteroid::~Asteroid() { delete sprite; }
  * Asteroids
  *###########################################################################*/
 
-
+Asteroids::Asteroids() 
+: dirty(true)
+{}
 
 void Asteroids::update(float deltaTime) {
 	for(int a = 0; a < MAX_ASTEROIDS; a++) 
@@ -140,15 +170,31 @@ void Asteroids::draw() {
 		
 }
 
+void Asteroids::markDirty() { dirty = true; }
 
- vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
+std::vector<Asteroids::Asteroid*> Asteroids::getLiveAsteroids() {
+    if(dirty) {
+        liveAsteroids.clear();
+        for(int a = 0; a < MAX_ASTEROIDS; a++) {
+            if(asteroids[a].isAlive())
+                liveAsteroids.push_back(&asteroids[a]);
+        }
+        dirty = false;
+    }
+
+    return liveAsteroids;
+}
+
+
+
+vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
         int nr, 
         Asteroids::SIZES size, 
         int x, int y
     ) {
 
 
-    Debug(this << " spawns " << nr << " asteroid(s) " << Global::pge);
+    Debug(this << " spawns " << nr << " asteroid(s) ");
 
     int spawned = 0;
     vector<Asteroids::Asteroid*>* list = new vector<Asteroids::Asteroid*>();
@@ -169,10 +215,12 @@ void Asteroids::draw() {
                     size
             );
             list->push_back(&asteroids[a]);
-            Debug("found asteroid" << a << " " << asteroids);
             spawned++;
         }
     }
+
+    dirty = true;
+
     return list;
 }
 
@@ -185,8 +233,13 @@ Asteroids::Asteroid* Asteroids::isAsteroid(void* go) {
 }
 
 void Asteroids::killall() {
-    Debug("Killall asteroids");
-	for(int a = 0; a < MAX_ASTEROIDS; a++) 
-        asteroids[a].kill();
+    Debug("Killall asteroids" << asteroids);
+	for(int a = 0; a < MAX_ASTEROIDS; a++) {
+        Debug("check asteroid " << a << ": " << asteroids[a].isAlive());
+        if(asteroids[a].isAlive())
+            asteroids[a].kill();
+    }
+
+    dirty = true;
 }
 

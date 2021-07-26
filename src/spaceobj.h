@@ -34,7 +34,7 @@ public:
     virtual short getScoreValue() { return 0; }
 
     virtual void kill();
-    bool isAlive();
+    virtual bool isAlive();
 
 protected:
     olc::vd2d velocity;

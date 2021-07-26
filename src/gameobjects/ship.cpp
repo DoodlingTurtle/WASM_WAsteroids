@@ -43,6 +43,8 @@ Ship::~Ship()
     delete sprShipThrusting;
     delete sprShipIdle;
 
+    shots.killall();
+
     clearUpgrades();
     /*
     mmUnloadEffect(SFX_SFX_LASER1);

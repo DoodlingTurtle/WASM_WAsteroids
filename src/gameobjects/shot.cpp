@@ -1,5 +1,7 @@
 #include "shot.h"
 #include "../olcPGEX_Graphics2D.h"
+#include "../global.h"
+#include "../collision.h"
 
 Shots::Shot::Shot() : SpaceObj(3.0f)    
 {
@@ -42,6 +44,23 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
     else {
         moveInDirection(64.0f * deltaTime);
         updatePosition(deltaTime);
+
+        std::vector<Asteroids::Asteroid*> asteroids = Global::asteroids->getLiveAsteroids();
+        Debug(this << " check " << asteroids.size() << " asteroid collisions ");
+
+        for(auto a : asteroids) {
+            if(RGNDS::Collision::checkCircleOnCircle(
+                &a->pos
+              , a->scale * 16 
+              , &this->pos, 3
+            )) {
+                a->markAsHit();
+                this->kill();
+                //TODO: Redo audio
+                //mmEffect(sounds[(int)(Engine_RandF() * 4)]);
+            }
+        }
+
     }
 
     return nullptr;
@@ -69,7 +88,9 @@ Shots::Shot* Shots::spawnShot(float ang, olc::vf2d *pos) {
 }
 
 void Shots::killall() {
+    Debug("Kill all shots");
     for(int a = 0; a < MAX_SHOT_CNT; a++)
         shots[a].kill();
 }
+
 

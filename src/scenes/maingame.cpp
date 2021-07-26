@@ -31,7 +31,6 @@ void MainGameScreen::onStart() {
            (int)game_difficulty, Asteroids::SIZE_LARGE);
 
     for(auto ast : *spawnedAsteroids) {
-        Debug("Add Asteroid " << ast);
         ast->moveInDirection(64);
         newGameObjects->push_back(ast);
     }
@@ -67,46 +66,10 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     for(SpaceObj* go : *prevGameObjects) {
         // Check and get Pointer for potential asteroid
         ast = Global::asteroids->isAsteroid((void*)go);
-        Debug("is asteroid " << ast);
 
         if(go->isAlive()) {
-            Debug("live SO " << go);
             gameObjects->push_back(go);
             hasAsteroids |= (ast != nullptr);
-        }
-        else {
-            short addScore = go->getScoreValue();
-            if(addScore > 0) Global::score += addScore;    
-           
-            Debug("dead SO " << go);
-
-            // Check if killed object is part of the Asteroids List
-            if(asteroidFound) {
-                // If yes, Spawn ScorePopups TODO: reactivate
-                //newGameObjects->push_back(ScorePopup::spawn(addScore, go->pos.x, go->pos.y));
-                
-                Asteroids::SIZES astSize = ast->getSize();
-                
-                //TODO: Spawn AsteroidExplosion at go->pos
-                //TODO: Move logic into Asteroids onUpdate
-                //(once particle system is reintroduced)
-
-                // If the destroyed asteroid is bigger then the min. size, span 2
-                // smaller asteroids at the same position
-                if(astSize > Asteroids::SIZE_SMALL){
-                    std::vector<Asteroids::Asteroid*>* spawned = asteroids->spawnAsteroids(
-                           2,  
-                           static_cast<Asteroids::SIZES>(
-                               static_cast<int>(astSize)-1
-                            ), ast->pos.x, ast->pos.y);
-
-                    for(auto ast : *spawned) {
-                        ast->moveInDirection(64);
-                        newGameObjects->push_back(ast);
-                    }
-                    delete spawned;
-                }
-            }
         }
     } 
 
@@ -138,7 +101,6 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     for(SpaceObj* go : *gameObjects) {
         so = go->onUpdate(deltaTime);
         if(so != nullptr) {
-            Debug("SO " << go << " spawned " << so->size() << " new SO");
             for(auto s : *so)
                 newGameObjects->push_back(s);
         
@@ -186,15 +148,12 @@ void MainGameScreen::onEnd() {
     */
     //ScorePopup::cleanup();
     
-    //Shot::cleanup();
-
+    Global::asteroids->killall();
     delete ship;
 
     gameObjects->clear();
     prevGameObjects->clear();
     newGameObjects->clear();
-
-    asteroids->killall();
 }
 
 

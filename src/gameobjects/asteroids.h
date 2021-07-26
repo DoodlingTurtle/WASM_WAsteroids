@@ -34,10 +34,10 @@ public:
 
         void bringBackToLife(olc::vf2d pos, bool generateNewShape, Asteroids::SIZES size);
 
-        void onDraw(olc::PixelGameEngine* pge);
-        std::vector<SpaceObj*>* onUpdate(float deltaTime);
+        void onDraw(olc::PixelGameEngine* pge) override;
+        std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
 
-        short getScoreValue();
+        void markAsHit();
 
         Asteroids::SIZES getSize();
 
@@ -53,8 +53,12 @@ public:
 
         // Each asteroid consits of one sprite, which is created at the start of the game
         olc::Sprite* sprite;
-            
+        
+        bool killOnNextUpdate;
     };
+
+    Asteroids();
+
 
     // Draw all asteroids via PGE Draw-Call
 	void draw();
@@ -73,12 +77,20 @@ public:
     void killall();
 
     // Check if a given Pointer belongs to one of the asteroids
-    Asteroid* isAsteroid(void*);
-    
+    Asteroid* isAsteroid(void*);    
+
+    std::vector<Asteroid*> getLiveAsteroids();
+    void markDirty();
 
 private:
 	// reserve Memory to store all asteroids in the game
 	Asteroid asteroids[MAX_ASTEROIDS];
+
+    // a list of life ansteroids
+    std::vector<Asteroid*> liveAsteroids;
+
+    // defines if the list of live asteroids must be refreshed
+    bool dirty;
 
 
 };
