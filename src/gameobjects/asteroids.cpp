@@ -1,19 +1,20 @@
 #include "../config.h"
 #include "asteroids.h"
+#include "../global.h"
 
 #include <stdio.h>
 using namespace std;
 
 Asteroids::Asteroid::Asteroid() : SpaceObj(32.0f)
-{ sprite = new olc::Sprite(64, 64); }
-
-void Asteroids::Asteroid::init(olc::PixelGameEngine* pge) 
-{ /*TODO: delete if not needed later*/ }
+{ 
+    sprite = new olc::Sprite(64, 64); 
+}
 
 float _getradius() {
     return 22 + rand()%10;
 }
-void Asteroids::Asteroid::generateShape(olc::PixelGameEngine* pge) {
+void Asteroids::Asteroid::generateShape() {
+    olc::PixelGameEngine* pge = Global::pge;
 
 	pge->SetDrawTarget(sprite);
 
@@ -58,7 +59,6 @@ void Asteroids::Asteroid::generateShape(olc::PixelGameEngine* pge) {
 }
 
 void Asteroids::Asteroid::bringBackToLife(
-        olc::PixelGameEngine* pge, 
         olc::vf2d pos, bool generateNewShape, 
         Asteroids::SIZES size
 ) 
@@ -89,15 +89,16 @@ void Asteroids::Asteroid::bringBackToLife(
     }
 
     if(generateNewShape)
-        generateShape(pge);
+        generateShape();
 
     bIsAlive = true;
 }
-void Asteroids::Asteroid::onUpdate(float deltatime) {
+std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
     setAngleRel(PI2 * (deltatime * spinSpeed));
     updatePosition(deltatime);
 
     //TODO: Reintroduce Spaceship collision
+    return nullptr;
 }
 
 
@@ -122,11 +123,8 @@ Asteroids::Asteroid::~Asteroid() { delete sprite; }
 /*#############################################################################
  * Asteroids
  *###########################################################################*/
-void Asteroids::init(olc::PixelGameEngine* pge){
-    this->pge = pge;
-	for(int a = 0; a < MAX_ASTEROIDS; a++) 
-		asteroids[a].init(pge);
-}
+
+
 
 void Asteroids::update(float deltaTime) {
 	for(int a = 0; a < MAX_ASTEROIDS; a++) 
@@ -149,6 +147,9 @@ void Asteroids::draw() {
         int x, int y
     ) {
 
+
+    Debug(this << " spawns " << nr << " asteroid(s) " << Global::pge);
+
     int spawned = 0;
     vector<Asteroids::Asteroid*>* list = new vector<Asteroids::Asteroid*>();
     float sx=x, sy=y;
@@ -157,18 +158,18 @@ void Asteroids::draw() {
         nr = MAX_ASTEROIDS;
     
     for(int a = 0; a < MAX_ASTEROIDS && spawned < nr; a++) {
-
-        if(x == 0)              sx = (rand()%APP_SCREEN_WIDTH);
-        if(y == 0)              sy = (rand()%APP_SCREEN_HEIGHT);
-
         if(!asteroids[a].isAlive()) {
+
+            if(x == 0)              sx = (rand()%APP_SCREEN_WIDTH);
+            if(y == 0)              sy = (rand()%APP_SCREEN_HEIGHT);
+
             asteroids[a].bringBackToLife( 
-                    pge, 
                     {sx, sy}, 
                     true, 
                     size
             );
             list->push_back(&asteroids[a]);
+            Debug("found asteroid" << a << " " << asteroids);
             spawned++;
         }
     }
@@ -184,8 +185,8 @@ Asteroids::Asteroid* Asteroids::isAsteroid(void* go) {
 }
 
 void Asteroids::killall() {
+    Debug("Killall asteroids");
 	for(int a = 0; a < MAX_ASTEROIDS; a++) 
-        if(asteroids[a].isAlive())
-            asteroids[a].kill();
+        asteroids[a].kill();
 }
 

@@ -1,7 +1,9 @@
 #include "titlescreen.h"
+#include "../global.h"
+#include "../config.h"
 
-TitleScreen::TitleScreen(Asteroids* asteroids) 
-: asteroids(asteroids)
+
+TitleScreen::TitleScreen() 
 {
     menu.transform.pos.y = 272;
     menu.transform.pos.x = 32;
@@ -13,11 +15,11 @@ TitleScreen::TitleScreen(Asteroids* asteroids)
 }
 
 void TitleScreen::onStart() {
-    asteroids->spawnAsteroids(4);
+    Global::asteroids->spawnAsteroids(4);
 }
 
 void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    asteroids->update(deltaTime);
+    Global::asteroids->update(deltaTime);
 
     if(pge->GetKey(GameKeyMap[KEYPAD_DOWN]).bPressed)
         menu.selectNext();
@@ -29,7 +31,7 @@ void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 }
 
 void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
-    asteroids->draw();
+    Global::asteroids->draw();
 
     pge->DrawString(10, 88, "WASteroids", olc::WHITE, 3.0f);
     pge->FillRect(
@@ -41,7 +43,7 @@ void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
     menu.draw(pge);
 }
 void TitleScreen::onEnd() {
-    asteroids->killall();
+    Global::asteroids->killall();
 }
 
 int TitleScreen::selectedMenu(){

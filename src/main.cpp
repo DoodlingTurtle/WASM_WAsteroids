@@ -8,11 +8,8 @@
 
 #include "gameobjects/asteroids.h"
 #include <ctime>
-#include <stdio.h>
 
 #include "global.h"
-
-using namespace std;
 
 //EMSCRIPTEN_KEEPALIVE int number = 0;
 
@@ -20,10 +17,11 @@ using namespace std;
 class WAsteroids : public olc::PixelGameEngine
 {
 public:
+    WAsteroids(){};
+    ~WAsteroids(){};
     bool OnUserCreate() override {
         // Initialize functions
         srand(time(nullptr));
-        asteroids.init(this);
         currentScene = nullptr;
         
         //Generate starfield background
@@ -47,6 +45,7 @@ public:
 
     bool OnUserUpdate(float fElapsedTime) override {
 
+        Debug("update scene " << currentScene);
         if(currentScene != nullptr) {
         // Update logic
             currentScene->onUpdate(this, fElapsedTime);
@@ -61,7 +60,7 @@ public:
             }
             else {
                 // else switch to the next scene
-                printf("Scene has ended\n");
+                Debug("Scene has ended");
                 nextScene();
             }
 
@@ -71,17 +70,18 @@ public:
     }
 
     void nextScene() {
+        Debug("switch Scene:");
         Scene* next = nullptr;
         if(currentScene == nullptr)
             next = &titleScreen;
         else if(currentScene == (Scene*)&titleScreen) {
-            printf("Selected: %d\n", titleScreen.selectedMenu());
             switch(titleScreen.selectedMenu()) {
                 case 2: { // Credits
                     next = &creditsScreen; break; }
                         
                 case 0: { // new Game
-                    mainGameScreen.game_difficulty = 1.0f;
+                    Global::score = 0;                       //reset score
+                    mainGameScreen.game_difficulty = 1.0f;   //reset difficulty
                     next = &mainGameScreen; 
                     break; }
                         
@@ -94,7 +94,12 @@ public:
         else if(currentScene == (Scene*)&creditsScreen) {
             next = &titleScreen;
         }
+        else if(currentScene == (Scene*)&mainGameScreen) {
+            next = &titleScreen;
+            //TODO: check for win condition then goto next level, or gameover
+        }
 
+        Debug("Asteroids spawned " << Global::asteroids);
         // Hook up global ressources and restart the new scene
         if(next != nullptr)
             next->restart();
@@ -102,23 +107,26 @@ public:
         currentScene = next;
     }
 
-    int          score = 0;
-    Asteroids    asteroids;
     Scene*       currentScene;
     olc::Sprite* starfield;
 
-    TitleScreen     titleScreen    = TitleScreen(&asteroids);
+    TitleScreen     titleScreen;
     CreditsScreen   creditsScreen;
-    MainGameScreen  mainGameScreen = MainGameScreen(&asteroids, &score);
+    MainGameScreen  mainGameScreen;
 
 };
 
 int main()
 {
+//Setup global ressources
+    Asteroids asteroids;
+
+    Global::score = 0;
+    Global::asteroids = &asteroids;
+
+//Setup PGE 
     WAsteroids app;
-
     Global::pge = &app; 
-
     if (app.Construct(
         APP_SCREEN_WIDTH, 
         APP_SCREEN_HEIGHT, 

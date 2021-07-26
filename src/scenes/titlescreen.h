@@ -3,14 +3,13 @@
 
 #include "../olcPixelGameEngine.h"
 #include "../scene.h"
-#include "../gameobjects/asteroids.h"
 
 #include "../textmenu.h"
 
 class TitleScreen : public Scene {
 
 public:
-    TitleScreen(Asteroids*);
+    TitleScreen();
 
 	void onUpdate(olc::PixelGameEngine* pge, float dt) override;
 	void onDraw(olc::PixelGameEngine* pge) override;
@@ -22,7 +21,6 @@ protected:
     void onEnd() override;
 
 private:
-    Asteroids* asteroids;
     TextMenu menu;
 };
 

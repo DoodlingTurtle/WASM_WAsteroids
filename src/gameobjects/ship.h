@@ -1,5 +1,7 @@
 #ifndef SHIP_H
-#define SHIP_H #include "shipstats.h"
+#define SHIP_H 
+
+#include "ship/shipstats.h"
 
 #include <vector>
 
@@ -26,7 +28,7 @@ class Ship : public SpaceObj {
 
         std::function<void(int, void*)> heartbeat;
 
-        void onUpdate(float deltaTime);
+        std::vector<SpaceObj*>* onUpdate(float deltaTime);
         void onDraw(olc::PixelGameEngine*);
 
         bool gotHit(SpaceObj* culprit);
@@ -39,8 +41,9 @@ class Ship : public SpaceObj {
     protected:
         ShipUpgrade_Shield* currentShield;
 
-        ShipEngine shipEngine;
+        ShipEngine                  shipEngine;
         ShipUpgrade_ShieldGenerator shieldgenerator;
+        Shots                       shots;
 
     private:
 

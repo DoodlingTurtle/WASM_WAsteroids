@@ -2,6 +2,7 @@
 #include "config.h"
 
 olc::PixelGameEngine* Global::pge = nullptr;
+int Global::score = 0;
 
 olc::Key Global::gamecontrols[5] = {
     GameKeyMap[KEYPAD_UP],

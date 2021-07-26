@@ -14,10 +14,6 @@ class Asteroids {
 
 public:
    
-	// A reference to the PixelGameEngine instances 
-	// (in case an Asteroid needs to change its shape)
-	static olc::PixelGameEngine* pge; 
-
     enum SIZES {
         SIZE_SMALL,
         SIZE_MIDDLE,
@@ -31,18 +27,15 @@ public:
         Asteroid();
         ~Asteroid();
 
-        // Prints out the Sprite transformed via transform
-        void init(olc::PixelGameEngine* pge);
-
         // Allows the Asteroid to change its shape
-        void generateShape(olc::PixelGameEngine* pge);
+        void generateShape();
 
         static std::function<void(int, void*)> onShipAction;
 
-        void bringBackToLife(olc::PixelGameEngine* pge, olc::vf2d pos, bool generateNewShape, Asteroids::SIZES size);
+        void bringBackToLife(olc::vf2d pos, bool generateNewShape, Asteroids::SIZES size);
 
         void onDraw(olc::PixelGameEngine* pge);
-        void onUpdate(float deltaTime);
+        std::vector<SpaceObj*>* onUpdate(float deltaTime);
 
         short getScoreValue();
 
@@ -50,7 +43,7 @@ public:
 
      protected:
         // Objects for Asteroid to keep track of
-        static std::vector<Shot*> shots;
+        //static std::vector<Shot*> shots;
         float spinSpeed = 0.10f;
 
         Asteroids::SIZES size;
@@ -60,17 +53,11 @@ public:
 
         // Each asteroid consits of one sprite, which is created at the start of the game
         olc::Sprite* sprite;
-
-        // this defines the location, rotation and scale of the asteroid
-        olc::GFX2D::Transform2D transform;
             
     };
 
     // Draw all asteroids via PGE Draw-Call
 	void draw();
-
-	// setup from game engine
-	void init(olc::PixelGameEngine* engine);
 
     // Update all asteroids
     void update(float deltaTime);

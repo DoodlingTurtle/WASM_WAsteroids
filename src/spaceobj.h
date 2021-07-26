@@ -22,13 +22,14 @@ public:
     SpaceObj();
     SpaceObj(float objectRadius);
 
-
     void updatePosition(float deltaTime);
     void getCollisionSphere(olc::vf2d *pos, float *radius);
 
     void draw(std::function<void(RGNDS::Transform*)> drawingLambda);
 
-    virtual void onUpdate(float deltaTime) {};
+    //Adds On update can respond with nullptr or vector<SpaceObj*>
+    virtual std::vector<SpaceObj*>* onUpdate(float deltaTime) { return nullptr; };
+    
     virtual void onDraw(olc::PixelGameEngine* pge ){};
     virtual short getScoreValue() { return 0; }
 

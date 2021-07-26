@@ -9,7 +9,7 @@
 class MainGameScreen : public Scene {
 
 public:
-    MainGameScreen(Asteroids*, int* score);
+    MainGameScreen();
 
     void onUpdate(olc::PixelGameEngine* pge, float dt) override;
     void onDraw(olc::PixelGameEngine* pge) override;
@@ -17,7 +17,9 @@ public:
     bool wasGameWon();
     
     float game_difficulty;        // difficulty goes from 1 to 16;
-    
+
+    void addSpaceObj(SpaceObj*);
+
 protected:
     void onStart() override;
     void onEnd() override;
@@ -25,9 +27,6 @@ protected:
 private:
     RGNDS::Transform scorelocation;
     float scoreTimer;
-
-    Asteroids* asteroids;
-    int* score;
 
     Ship* ship;
 };

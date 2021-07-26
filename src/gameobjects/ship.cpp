@@ -91,9 +91,15 @@ void Ship::reset()
     //Engine_Log("Generator-Cap: " << stats->generatorcapacity);
 }
 
-void Ship::onUpdate(float deltaTime) {
+std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 //TODO: Redo Controlls
+    std::vector<SpaceObj*>* ret = nullptr;
 
+    if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_FIRE]).bPressed) {
+        Shots::Shot* s = shots.spawnShot(ang, &pos);
+        ret = new std::vector<SpaceObj*>();
+        ret->push_back(s);
+    } 
     if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_TURNRIGHT]).bHeld)
         setAngleRel(angRes*deltaTime);
 
@@ -159,6 +165,8 @@ void Ship::onUpdate(float deltaTime) {
     
 // Update Position based on Screen-Borders
     updatePosition(deltaTime);
+
+    return ret;
 }
 
 void Ship::onDraw(olc::PixelGameEngine* pge) 

@@ -1,27 +1,52 @@
 #ifndef __SHOT_H__
 #define __SHOT_H__
 
+#include "../config.h"
 #include "../olcPixelGameEngine.h"
 #include "../spaceobj.h"
 
-#define MAX_SHOT_CNT 32
+#include <vector>
 
-class Shot : public SpaceObj {
 
+class Shots {
 public:
-    static std::vector<SpaceObj*>* shotGameObjects; 
-    static std::vector<Shot*> getShots();
-    static void Spawn(float angle, olc::vf2d* pos);
-    static void cleanup();
     
-    Shot();
-    virtual ~Shot();
+    class Shot : public SpaceObj {
 
-    void onDraw(SpaceObj::MainGameDrawData*);
-    void onUpdate(SpaceObj::MainGameUpdateData*);
+    public:
+        static void cleanup();
+        
+        Shot();
+        virtual ~Shot();
+
+        void onDraw(olc::PixelGameEngine*) override;
+        std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
+
+        void revive(olc::vf2d* pos, float ang, olc::Sprite*);
+
+        olc::Sprite* sprite;
+
+    private:
+        int lifetime = 1000;
+
+    };
+   
+    Shots();
+    ~Shots();
+
+
+    // create new Shot - instances
+    Shot* spawnShot(float angle, olc::vf2d* pos);
+
+    // disables all possible shot instances
+    void killall();
+
+
+    // Sprite, that is used to draw each shot
+    olc::Sprite* sprShot;
 
 private:
-    int lifetime = 1000;
+    Shot shots[MAX_SHOT_CNT];
 
 };
 

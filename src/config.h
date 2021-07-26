@@ -9,6 +9,7 @@
 
 #define MAX_ASTEROIDS 32 
 #define CNT_STARS 64
+#define MAX_SHOT_CNT 32
 
 #ifndef PI
 #define PI 3.141592653589793238462643383279
@@ -19,6 +20,9 @@
 #endif // PI2
 
 #define RandF() ((float)rand() / (float)RAND_MAX)
+
+#include <iostream>
+#define Debug(msg) std::cout << msg << std::endl
 
 enum GameInput {
     GAMEINPUT_ACCELERATE,
