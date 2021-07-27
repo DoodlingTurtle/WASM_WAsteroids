@@ -3,7 +3,7 @@
 
 ScorePopup::ScorePopup(short s, float x, float y) {
     score = s;       
-    lifetime = 45;   //45 ticks = 1.5 Sec @ 30 FPS
+    lifetime = 1000;   //1000ms ms = 1 Sec
     pos.x = x;
     pos.y = y;
     bIsAlive = true;
@@ -51,9 +51,9 @@ ScorePopup* ScorePopup::spawn(short score, float x, float y) {
 }
 
 std::vector<SpaceObj*>* ScorePopup::onUpdate(float deltaTime) {  
-    this->lifetime--;
+    this->lifetime -= 1000 * deltaTime;
     this->pos.y -= 20.0f*deltaTime;
-    if(this->lifetime==0)
+    if(this->lifetime<=0)
         this->kill();
 
     return nullptr;

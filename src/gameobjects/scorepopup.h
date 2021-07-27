@@ -28,7 +28,7 @@ public:
 
 protected:
     short score;        // Keeps track of what score is displayed
-    unsigned char lifetime;      // for how many ticks this popup will stay 
+    short lifetime;      // for how many ticks this popup will stay 
 
 private:
     static std::vector<ScorePopup*> _instances;

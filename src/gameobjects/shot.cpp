@@ -51,7 +51,7 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
         for(auto a : asteroids) {
             if(RGNDS::Collision::checkCircleOnCircle(
                 &a->pos
-              , a->scale * 16 
+              , a->scale * 26 
               , &this->pos, 3
             )) {
                 a->markAsHit();
