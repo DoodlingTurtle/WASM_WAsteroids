@@ -50,3 +50,4 @@ enum KeyPadInput {
 
 extern olc::Key GameKeyMap[11];
 extern olc::Pixel pix_menubg;
+extern olc::Pixel pix_asteroid;

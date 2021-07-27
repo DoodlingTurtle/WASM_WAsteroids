@@ -3,6 +3,7 @@
 #include "../global.h"
 
 #include "scorepopup.h"
+#include "../particles/asteroid_particles.h"
 
 #include <stdio.h>
 using namespace std;
@@ -38,8 +39,6 @@ void Asteroids::Asteroid::generateShape() {
         float startx = x1;
         float starty = y1;
 
-        olc::Pixel col(138, 100, 73, 255);
-
         for(float a = 0; a <= lastsegment; a++) {
             x = x1;
             y = y1;
@@ -58,7 +57,7 @@ void Asteroids::Asteroid::generateShape() {
                     32, 32, 
                     32 + x, 32 + y, 
                     32 + x1, 32 + y1, 
-                    col
+                    pix_asteroid
             );
         }
 
@@ -71,6 +70,8 @@ void Asteroids::Asteroid::bringBackToLife(
         Asteroids::SIZES size
 ) 
 {
+
+    Debug("revive Asteroid " << this);
 
     setAngle(RandF() * PI2);
     velocity.x = rand()%10; // velocity is up to 10 px per second
@@ -101,6 +102,7 @@ void Asteroids::Asteroid::bringBackToLife(
 
     bIsAlive = true;
     killOnNextUpdate = false;
+
 }
 std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
 
@@ -118,9 +120,21 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
 
         Global::score += 100/scale;
 
-        //TODO: spawn score number
         spa->push_back(ScorePopup::spawn(100/scale, pos.x, pos.y));
+        
         //TODO: Spawn AsteroidExplosion at go->pos
+  
+        Asteroid_Particle_Emitter* e = new Asteroid_Particle_Emitter(this->pos.x, this->pos.y);
+        Asteroid_Particle* p = new Asteroid_Particle(e);
+        if(!Global::particleSystem->assign(e, p)) {
+            Debug("Failed to assign PS");
+            delete e;
+            delete p;
+        }
+        else {
+            spa->push_back(e);
+        }
+        
         //(once particle system is reintroduced)
         this->kill();
         Global::asteroids->markDirty();
@@ -131,8 +145,6 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
         updatePosition(deltatime);
     }
     
-
-    //TODO: Reintroduce Spaceship collision
     return nullptr;
 }
 
@@ -188,8 +200,6 @@ std::vector<Asteroids::Asteroid*> Asteroids::getLiveAsteroids() {
     return liveAsteroids;
 }
 
-
-
 vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
         int nr, 
         Asteroids::SIZES size, 
@@ -207,6 +217,7 @@ vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
         nr = MAX_ASTEROIDS;
     
     for(int a = 0; a < MAX_ASTEROIDS && spawned < nr; a++) {
+
         if(!asteroids[a].isAlive()) {
 
             if(x == 0)              sx = (rand()%APP_SCREEN_WIDTH);

@@ -1,12 +1,14 @@
 #include "olcPixelGameEngine.h"
 #include "config.h"
 #include "scene.h"
+#include "particles.h"
 
 #include "scenes/titlescreen.h"
 #include "scenes/creditsscreen.h"
 #include "scenes/maingame.h"
 
 #include "gameobjects/asteroids.h"
+#include "particles/asteroid_particles.h"
 #include <ctime>
 
 #include "global.h"
@@ -24,7 +26,8 @@ public:
         srand(time(nullptr));
         currentScene = nullptr;
         
-        //Generate starfield background
+        // Initialize stuff, that needs olc ressources
+            //Generate starfield background
         starfield = new olc::Sprite(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
         for(int a = 0; a < CNT_STARS; a++) {
             uint8_t i = 96 + (rand()%64);
@@ -34,6 +37,8 @@ public:
                     olc::Pixel(i, i, i, 255)
             );
         }
+        // Define Particles
+        Asteroid_Particle::init(this);
 
         // Load first scene
         nextScene();
@@ -44,6 +49,9 @@ public:
     }
 
     bool OnUserUpdate(float fElapsedTime) override {
+
+        // Remove all unused Partice emitters
+        Global::particleSystem->destroyFinished();
 
         if(currentScene != nullptr) {
         // Update logic
@@ -65,6 +73,11 @@ public:
 
         }
 
+        return true;
+    }
+
+    bool OnUserDestroy() override {
+        Asteroid_Particle::deinit();
         return true;
     }
 
@@ -121,9 +134,11 @@ int main()
 {
 //Setup global ressources
     Asteroids asteroids;
+    ParticleSystem particleSystem;
 
     Global::score = 0;
     Global::asteroids = &asteroids;
+    Global::particleSystem = &particleSystem;
 
 //Setup PGE 
     WAsteroids app;

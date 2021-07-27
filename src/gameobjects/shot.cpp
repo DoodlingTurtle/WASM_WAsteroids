@@ -46,7 +46,6 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
         updatePosition(deltaTime);
 
         std::vector<Asteroids::Asteroid*> asteroids = Global::asteroids->getLiveAsteroids();
-        Debug(this << " check " << asteroids.size() << " asteroid collisions ");
 
         for(auto a : asteroids) {
             if(RGNDS::Collision::checkCircleOnCircle(
