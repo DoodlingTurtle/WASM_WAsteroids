@@ -94,8 +94,10 @@ public:
             next = &titleScreen;
         }
         else if(currentScene == (Scene*)&mainGameScreen) {
-            next = &titleScreen;
-            //TODO: check for win condition then goto next level, or gameover
+            if(mainGameScreen.gameWasWon()) {
+                mainGameScreen.game_difficulty+=0.66f;
+                next = &mainGameScreen;
+            } else next = &titleScreen;
         }
 
         Debug("Asteroids spawned " << Global::asteroids);

@@ -14,7 +14,7 @@ public:
     void onUpdate(olc::PixelGameEngine* pge, float dt) override;
     void onDraw(olc::PixelGameEngine* pge) override;
 
-    bool wasGameWon();
+    bool gameWasWon();
     
     float game_difficulty;        // difficulty goes from 1 to 16;
 
@@ -29,6 +29,7 @@ private:
     float scoreTimer;
 
     Ship* ship;
+    bool shipSurvived;
 };
 
 #endif

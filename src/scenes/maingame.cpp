@@ -3,6 +3,8 @@
 #include "../config.h"
 #include "../global.h"
 
+#include "../gameobjects/scorepopup.h"
+
 static std::vector<SpaceObj*>   gameObjList[3];
 static std::vector<SpaceObj*>*  gameObjects         = &gameObjList[0];
 static std::vector<SpaceObj*>*  prevGameObjects     = &gameObjList[1];
@@ -18,12 +20,17 @@ MainGameScreen::MainGameScreen()
     scorelocation.scale = 2;
     scoreTimer = 0.0f;
     game_difficulty = 1.0f;
+    shipSurvived = true;
 }
 
 void MainGameScreen::onStart() {
 
+    if(game_difficulty>8.0f)
+        game_difficulty = 8.0f;
+
 // Initialize the Ship
     ship = new Ship();
+    shipSurvived = true;
     newGameObjects->push_back(ship);
 
 // Initialize the asteroids
@@ -71,6 +78,8 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
             gameObjects->push_back(go);
             hasAsteroids |= (ast != nullptr);
         }
+        else if(go == (SpaceObj*)ship)
+            shipSurvived = false;
     } 
 
 // Add new SpaceObjects to the cycle 
@@ -86,8 +95,7 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     newGameObjects->clear();
 
 // Check win condition
-    if(!hasAsteroids) {
-        Debug("no asteroids found");
+    if(!hasAsteroids || !shipSurvived) {
         exit();
         return;
     }
@@ -146,7 +154,7 @@ void MainGameScreen::onEnd() {
     
     shipexp = nullptr;
     */
-    //ScorePopup::cleanup();
+    ScorePopup::cleanup();
     
     Global::asteroids->killall();
     delete ship;
@@ -156,4 +164,4 @@ void MainGameScreen::onEnd() {
     newGameObjects->clear();
 }
 
-
+bool MainGameScreen::gameWasWon() { return shipSurvived; }
