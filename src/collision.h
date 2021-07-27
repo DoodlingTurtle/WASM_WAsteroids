@@ -22,7 +22,15 @@ namespace RGNDS {
              *
              *  \return - true if both circles are
              */
-            static bool checkCircleOnCircle(olc::vf2d* const pos1, float radius1, olc::vf2d* const pos2, float radius2, Collision* overlapdata=nullptr );
+            static bool checkCircleOnCircle(
+                    olc::vf2d* const pos1, 
+                    float radius1, 
+
+                    olc::vf2d* const pos2, 
+                    float radius2, 
+
+                    Collision* overlapdata=nullptr
+                );
 
 
 

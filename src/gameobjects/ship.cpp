@@ -4,6 +4,7 @@
 
 #include "../config.h"
 #include "../global.h"
+#include "../collision.h"
 
 #define SHIP_DEFAULT_RADIUS 16.0f
 
@@ -94,6 +95,20 @@ void Ship::reset()
 }
 
 std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
+//check asteroids collision
+    std::vector<Asteroids::Asteroid*> ast = Global::asteroids->getLiveAsteroids();
+    for(auto a : ast) {
+        if(RGNDS::Collision::checkCircleOnCircle(
+            &pos,
+            16,
+            &(a->pos),
+            a->scale * 28
+        )) {
+            this->kill();
+            return nullptr;
+        }; 
+    }
+
 //TODO: Redo Controlls
     std::vector<SpaceObj*>* ret = nullptr;
 
