@@ -139,12 +139,12 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
 
 // Rendering Score
     char buffer[18];
-    //printf(buffer, "Score: % 8d", *score);
+    sprintf(buffer, "Score: % 8d", Global::score);
     std::string s(buffer);
     
     pge->DrawString(
             scorelocation.pos.x, scorelocation.pos.y, 
-            s, olc::Pixel(8, 0, 80, 255), 
+            s, olc::Pixel(32, 32, 196), 
             scorelocation.scale
     ); 
 }
