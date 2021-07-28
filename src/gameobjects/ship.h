@@ -57,8 +57,8 @@ class Ship : public SpaceObj {
         std::vector<ShipUpgrade*> upgrades;
         std::vector<ShipUpgrade*> newUpgrades; 
 
-        olc::Sprite* sprShipIdle;
-        olc::Sprite* sprShipThrusting;
+        olc::Sprite* sprShip;
+        olc::Decal*  decShip;
 };
 
 

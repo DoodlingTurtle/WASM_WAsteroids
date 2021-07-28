@@ -62,6 +62,10 @@ void Asteroids::Asteroid::generateShape() {
         }
 
 	pge->SetDrawTarget(nullptr);
+    if(decal == nullptr)
+        decal = new olc::Decal(sprite);
+    else
+        decal->UpdateSprite();
 }
 
 
@@ -115,6 +119,9 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
                    static_cast<Asteroids::SIZES>(
                        static_cast<int>(this->size)-1
                     ), this->pos.x, this->pos.y);
+
+            for(SpaceObj* a : *spa)
+               a->moveInDirection(24.0f*this->scale); 
         }
         else spa = new std::vector<SpaceObj*>();
 
@@ -122,9 +129,9 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
 
         spa->push_back(ScorePopup::spawn(100/scale, pos.x, pos.y));
         
-        //TODO: Spawn AsteroidExplosion at go->pos
-  
-        Asteroid_Particle_Emitter* e = new Asteroid_Particle_Emitter(this->pos.x, this->pos.y);
+        //Spawn AsteroidExplosion at go->pos
+        Asteroid_Particle_Emitter* e 
+            = new Asteroid_Particle_Emitter(this->pos.x, this->pos.y, this->scale);
         Asteroid_Particle* p = new Asteroid_Particle(e);
         if(!Global::particleSystem->assign(e, p)) {
             Debug("Failed to assign PS");
@@ -135,7 +142,6 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
             spa->push_back(e);
         }
         
-        //(once particle system is reintroduced)
         this->kill();
         Global::asteroids->markDirty();
         return spa;
@@ -154,13 +160,20 @@ Asteroids::SIZES Asteroids::Asteroid::getSize() {
 }
 
 void Asteroids::Asteroid::onDraw(olc::PixelGameEngine* pge) {
+    pge->SetDrawTarget(layer_asteroids);
     SpaceObj::draw([this](RGNDS::Transform* tr){
-        olc::GFX2D::Transform2D tra;
-        tr->toTransform2D(32, 32, &tra);
-        olc::GFX2D::DrawSprite(sprite, tra); 
+        Global::pge->DrawRotatedDecal( 
+            tr->pos, decal, tr->ang,
+            {(float)sprite->width/2.0f,(float)sprite->height/2.0f},
+            {tr->scale, tr->scale}
+        );
     });
+    pge->SetDrawTarget(nullptr);
 }
-Asteroids::Asteroid::~Asteroid() { delete sprite; }
+Asteroids::Asteroid::~Asteroid() { 
+    delete decal;
+    delete sprite;
+}
 
 
 /*#############################################################################
@@ -181,7 +194,7 @@ void Asteroids::draw() {
 	int a; 
 	for(a = 0; a < MAX_ASTEROIDS; a++) 
 		if(asteroids[a].isAlive())
-            asteroids[a].onDraw(nullptr);
+            asteroids[a].onDraw(Global::pge);
 		
 }
 
@@ -249,7 +262,6 @@ Asteroids::Asteroid* Asteroids::isAsteroid(void* go) {
 void Asteroids::killall() {
     Debug("Killall asteroids" << asteroids);
 	for(int a = 0; a < MAX_ASTEROIDS; a++) {
-        Debug("check asteroid " << a << ": " << asteroids[a].isAlive());
         if(asteroids[a].isAlive())
             asteroids[a].kill();
     }

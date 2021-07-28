@@ -68,7 +68,6 @@ int ParticleSystem::Emitter::spawnNewParticles(int cnt) {
 }
 
 void ParticleSystem::Emitter::updateParticles(float deltaTime) {
-    Debug("Update particles " << particles.size() );
     Particle* p;
     int a;
     

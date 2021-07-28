@@ -26,19 +26,42 @@ public:
         srand(time(nullptr));
         currentScene = nullptr;
         
-        // Initialize stuff, that needs olc ressources
-            //Generate starfield background
-        starfield = new olc::Sprite(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
+        // setup layers
+        layer_ship  = CreateLayer();
+        layer_asteroids = CreateLayer();
+        layer_shots = CreateLayer();
+        layer_stars= CreateLayer();
+
+        // initialize Layers
+        SetDrawTarget(layer_stars);
+        Clear(olc::BLANK);
         for(int a = 0; a < CNT_STARS; a++) {
             uint8_t i = 96 + (rand()%64);
-            starfield->SetPixel(
+            Draw(
                     rand()%APP_SCREEN_WIDTH, 
                     rand()%APP_SCREEN_HEIGHT, 
                     olc::Pixel(i, i, i, 255)
             );
         }
+        EnableLayer(layer_stars, true);
+
+        SetDrawTarget(layer_shots);
+        Clear(olc::BLANK);
+        EnableLayer(layer_shots, true);
+
+        SetDrawTarget(layer_asteroids);
+        Clear(olc::BLANK);
+        EnableLayer(layer_asteroids, true);
+
+        SetDrawTarget(layer_ship);
+        Clear(olc::BLANK);
+        EnableLayer(layer_ship, true);
+
+        SetDrawTarget(nullptr);
+
         // Define Particles
         Asteroid_Particle::init(this);
+
 
         // Load first scene
         nextScene();
@@ -60,7 +83,7 @@ public:
         // if the scene is activate after the logic update
             if(currentScene->isActive()) {
                 // draw a new frame
-                DrawSprite(0, 0, starfield);
+                Clear(olc::BLANK);
                 SetPixelMode(olc::Pixel::ALPHA); 
                 currentScene->onDraw(this);
                 SetPixelMode(olc::Pixel::NORMAL); 

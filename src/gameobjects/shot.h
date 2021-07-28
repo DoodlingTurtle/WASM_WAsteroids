@@ -22,9 +22,9 @@ public:
         void onDraw(olc::PixelGameEngine*) override;
         std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
 
-        void revive(olc::vf2d* pos, float ang, olc::Sprite*);
+        void revive(olc::vf2d* pos, float ang, olc::Decal*);
 
-        olc::Sprite* sprite;
+        olc::Decal* decal;
 
     private:
         int lifetime = 1000;
@@ -44,6 +44,7 @@ public:
 
     // Sprite, that is used to draw each shot
     olc::Sprite* sprShot;
+    olc::Decal * decShot;
 
 private:
     Shot shots[MAX_SHOT_CNT];

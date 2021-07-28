@@ -1,5 +1,4 @@
 #include "shot.h"
-#include "../olcPGEX_Graphics2D.h"
 #include "../global.h"
 #include "../collision.h"
 
@@ -16,7 +15,7 @@ Shots::Shot::~Shot() {}
 void Shots::Shot::revive(
         olc::vf2d* pos, 
         float ang,
-        olc::Sprite* spr
+        olc::Decal* spr
 ) {
     this->pos.x = pos->x;
     this->pos.y = pos->y;
@@ -24,15 +23,19 @@ void Shots::Shot::revive(
     lifetime = 1000;
     moveInDirection(8.0);
     bIsAlive = true;
-    sprite = spr;
+    decal = spr;
 }
 
 void Shots::Shot::onDraw(olc::PixelGameEngine* pge) {
+    pge->SetDrawTarget(layer_shots);
     SpaceObj::draw([this](RGNDS::Transform *tr){
-        olc::GFX2D::Transform2D tra;
-        tr->toTransform2D(3, 3, &tra); 
-        olc::GFX2D::DrawSprite(sprite, tra);
+        Global::pge->DrawRotatedDecal(
+                tr->pos, 
+                decal, 
+                tr->ang, 
+                {tr->scale, tr->scale});
     });
+    pge->SetDrawTarget(nullptr); 
 }
 
 std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
@@ -69,8 +72,14 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
  * Shots
  *###########################################################################*/
 
-Shots::Shots() { sprShot = new olc::Sprite("./assets/shot.png"); }
-Shots::~Shots(){ delete sprShot; }
+Shots::Shots() { 
+    sprShot = new olc::Sprite("./assets/shot.png"); 
+    decShot = new olc::Decal(sprShot);
+}
+Shots::~Shots(){ 
+    delete decShot;
+    delete sprShot; 
+}
 
 Shots::Shot* Shots::spawnShot(float ang, olc::vf2d *pos) {
 
@@ -78,7 +87,7 @@ Shots::Shot* Shots::spawnShot(float ang, olc::vf2d *pos) {
         if(shots[a].isAlive()) continue;
 
         Shot* shot = &shots[a];
-        shot->revive(pos, ang, sprShot);
+        shot->revive(pos, ang, decShot);
 
         return shot;
     }

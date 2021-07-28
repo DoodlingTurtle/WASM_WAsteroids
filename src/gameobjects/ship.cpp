@@ -13,8 +13,8 @@ Ship::Ship()
   , angRes(PI/2)
   , thrusting(false)
   , shieldIsUp(false)
-  , sprShipIdle(nullptr)
-  , sprShipThrusting(nullptr)
+  , sprShip(nullptr)
+  , decShip(nullptr)
 {
     /*TODO: redo all audio
     mmLoadEffect(SFX_SFX_LASER1);
@@ -22,18 +22,8 @@ Ship::Ship()
     mmLoadEffect(SFX_S_THRUST);
     */
 
-    olc::Sprite spr = olc::Sprite("./assets/ship.png");
-    
-    sprShipIdle      = new olc::Sprite(32, 32);
-    sprShipThrusting = new olc::Sprite(32, 32);
-
-    Global::pge->SetDrawTarget(sprShipThrusting);
-    Global::pge->DrawPartialSprite(0, 0, &spr, 0, 0, 32, 32);
-    
-    Global::pge->SetDrawTarget(sprShipIdle);
-    Global::pge->DrawPartialSprite(0, 0, &spr, 32, 0, 32, 32);
-    
-    Global::pge->SetDrawTarget(nullptr);
+    sprShip = new olc::Sprite("./assets/ship.png");
+    decShip = new olc::Decal(sprShip);    
 
     this->bIsAlive = true;
     reset();
@@ -41,8 +31,8 @@ Ship::Ship()
 
 Ship::~Ship() 
 {
-    delete sprShipThrusting;
-    delete sprShipIdle;
+    delete sprShip;
+    delete decShip;
 
     shots.killall();
 
@@ -96,6 +86,7 @@ void Ship::reset()
 
 std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 //check asteroids collision
+
     std::vector<Asteroids::Asteroid*> ast = Global::asteroids->getLiveAsteroids();
     for(auto a : ast) {
         if(RGNDS::Collision::checkCircleOnCircle(
@@ -166,7 +157,7 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
     for(int a = upgrades.size()-1; a >= 0; a--) {
         upgrade = upgrades.at(a);
         if(!upgrade->update(stats, this, deltaTime)) {
-            std::printf("remove ship upgrage %d\n", upgrade);
+            Debug("remove ship upgrage " << upgrade);
             
             if(upgrade == currentShield) {
                 currentShield = nullptr;
@@ -188,29 +179,18 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 
 void Ship::onDraw(olc::PixelGameEngine* pge) 
 {
+    pge->SetDrawTarget(layer_ship);
     SpaceObj::draw([this](Transform* tr) {
-        
         olc::GFX2D::Transform2D tra;
         tr->toTransform2D(16, 16, &tra);
 
-
-        if(this->thrusting)
-            olc::GFX2D::DrawSprite(sprShipThrusting, tra); 
-        else
-            olc::GFX2D::DrawSprite(sprShipIdle, tra); 
-
-        Global::pge->DrawLine(
-                tr->pos.x, tr->pos.y, 
-                tr->pos.x + dir.x*16, tr->pos.y + dir.y*16, 
-                olc::GREEN
+        Global::pge->DrawPartialRotatedDecal(
+            tr->pos, decShip, tr->ang,  
+            {sprShip->height / 2.0f, sprShip->height / 2.0f},
+            {(1-thrusting)*32.0f, 0}, {(float)sprShip->height, (float)sprShip->height}
         );
-
-        /*
-        for(auto upgrade : upgrades) {
-            upgrade->draw(*tr);
-        }
-        */
     });
+    pge->SetDrawTarget(nullptr);
    
     int barheight = (int)((stats->generator / stats->generatorcapacity) * 164.0f);
     //RGNDS::GL2D::glRectFilled(240, 28 + (164 - barheight), 16, barheight, 0xffff) ;

@@ -10,7 +10,7 @@ class Asteroid_Particle_Emitter
 : public ParticleSystem::Emitter 
 , public SpaceObj {
 public:
-    Asteroid_Particle_Emitter(int x, int y);
+    Asteroid_Particle_Emitter(int x, int y, float scale);
 
     void onParticleAssign(ParticleSystem::Particle*) override;
     void onNoParticlesLeft() override;

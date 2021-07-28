@@ -4,16 +4,16 @@
 /*#############################################################################
  * Asteroid_Particle_Emitter
  *###########################################################################*/
-Asteroid_Particle_Emitter::Asteroid_Particle_Emitter(int x, int y)
+Asteroid_Particle_Emitter::Asteroid_Particle_Emitter(int x, int y, float scale)
 :SpaceObj(64)
 {
     bIsAlive = true;
     pos.x = x;
     pos.y = y;
+    this->scale = scale;
 }
 
 void Asteroid_Particle_Emitter::onParticleAssign(ParticleSystem::Particle* p) { 
-    Debug("Particle Assign");
     spawnNewParticles(16); }
 void Asteroid_Particle_Emitter::onNoParticlesLeft() { kill(); }
 
@@ -55,10 +55,11 @@ ParticleSystem::Particle* Asteroid_Particle::spawnNewParticle(){
 
     Asteroid_Particle* p = new Asteroid_Particle(this->em);
 
-    p->pos.x = (RandF() * 8 - 4);
-    p->pos.y = (RandF() * 8 - 4);
+    p->pos.x = ((RandF() * 56.0f) - 28.0f) * em->scale;
+    p->pos.y = ((RandF() * 56.0f) - 28.0f) * em->scale;
     p->directionFromPositionVector();
-    p->lifetime = 2000;
+    p->lifetime = 1500 + RandF()*500;
+
     return (ParticleSystem::Particle*)p;
 
 }

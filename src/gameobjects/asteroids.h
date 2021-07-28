@@ -3,7 +3,6 @@
 
 #include "../config.h"
 #include "../olcPixelGameEngine.h"
-#include "../olcPGEX_Graphics2D.h"
 #include "../spaceobj.h"
 
 #include "shot.h"
@@ -53,6 +52,7 @@ public:
 
         // Each asteroid consits of one sprite, which is created at the start of the game
         olc::Sprite* sprite;
+        olc::Decal*  decal;
         
         bool killOnNextUpdate;
     };
