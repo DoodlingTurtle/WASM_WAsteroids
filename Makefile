@@ -18,7 +18,7 @@ FLAGS:=-std=c++17
 LINKERFLAGS:= -s EXPORTED_RUNTIME_METHODS=ccall,cwrap,getValue,setValue,stringToUTF8,UTF8ToString -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ALLOW_MEMORY_GROWTH=1 -s MAX_WEBGL_VERSION=2 -s MIN_WEBGL_VERSION=2 -s USE_LIBPNG=1
 
 $(TARGET).html:$(OBJFILES)
-	$(CPP) $^ -O1 -o $@ $(LINKERFLAGS) --preload-file ./assets $(FLAGS)
+	$(CPP) $^ -O1 -o $@ $(LINKERFLAGS) --emrun --preload-file ./assets $(FLAGS)
 
 $(TARGET).js:$(OBJFILES)	
 	$(CPP) $^ -O3 -o $@ $(LINKERFLAGS) --preload-file ./assets $(FLAGS)

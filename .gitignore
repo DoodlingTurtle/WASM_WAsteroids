@@ -6,3 +6,4 @@ release/*.wasm
 release/*.js
 *.o
 ressource/*
+src/tags
