@@ -24,8 +24,8 @@ void SpaceObj::draw(std::function<void(RGNDS::Transform*)> drawingLambda) {
 
     olc::vf2d posOrig = this->pos;
 
-    for(int a = 0; a < renderer.getInstanceCnt(); a++) {
-        this->pos = renderer.getInstance(a);
+    for(olc::vf2d p : renderer.getInstances()) { 
+        this->pos = p;
         drawingLambda(this);
     }
 

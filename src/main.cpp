@@ -145,7 +145,6 @@ public:
     }
 
     Scene*       currentScene;
-    olc::Sprite* starfield;
 
     TitleScreen     titleScreen;
     CreditsScreen   creditsScreen;

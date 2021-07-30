@@ -1,7 +1,7 @@
 #include "wraparoundrenderer.h"
 
 WrapAroundRenderer::WrapAroundRenderer() {
-    drawingInstances[0] = {0, 0};
+    drawingInstances.push_back({0,0});
 }
 
 WrapAroundRenderer::~WrapAroundRenderer() {}
@@ -9,6 +9,9 @@ WrapAroundRenderer::~WrapAroundRenderer() {}
 void WrapAroundRenderer::updateDrawingInstances(olc::vf2d* pos, float shipRadius) {
 
     float halfRadius = shipRadius / 2.0f; 
+
+    drawingInstances.clear();
+    drawingInstances.reserve(4);
 
     // Move ship back to screen, once its true Position has left the Screen completely
     if(pos->x+halfRadius >= right)
@@ -23,43 +26,31 @@ void WrapAroundRenderer::updateDrawingInstances(olc::vf2d* pos, float shipRadius
     if(pos->y+halfRadius <= top)
         pos->y += height;
 
-
-    drawingInstances[0] = { pos->x, pos->y };
-    drawingInstanceCnt = 1;
+    drawingInstances.push_back({ pos->x, pos->y });
 
     // Left Screen border wrap arround
-    if(pos->x > right-shipRadius) {
-        drawingInstances[drawingInstanceCnt] = { pos->x - width, pos->y };
-        drawingInstanceCnt++;
-    }
+    if(pos->x > right-shipRadius) 
+        drawingInstances.push_back({ pos->x - width, pos->y });
 
     // Right Screen border
-    else if(pos->x < left + shipRadius) {
-        drawingInstances[drawingInstanceCnt] = { pos->x + width, pos->y };
-        drawingInstanceCnt++;
-    }
+    else if(pos->x < left + shipRadius) 
+        drawingInstances.push_back({ pos->x + width, pos->y });
 
     // Bottom Screen border
-    if(pos->y > bottom-shipRadius) {
-        drawingInstances[drawingInstanceCnt] = { pos->x, pos->y - height };
-        drawingInstanceCnt++;
-    }
+    if(pos->y > bottom-shipRadius) 
+        drawingInstances.push_back({ pos->x, pos->y - height });
 
     // Top Screen border
-    else if(pos->y < top + shipRadius) {
-        drawingInstances[drawingInstanceCnt] = { pos->x, pos->y + height };
-        drawingInstanceCnt++;
-    }
+    else if(pos->y < top + shipRadius) 
+        drawingInstances.push_back({ pos->x, pos->y + height });
 
     // Opposit Cornor wrap around (if there is a wrap around on both x and y axis, draw a
     // fourth ship on the opposit cornor of the screen, from where the true ship is
-    if(drawingInstanceCnt == 3) {
-        drawingInstances[drawingInstanceCnt] = {
+    if(drawingInstances.size() == 3) 
+        drawingInstances.push_back({
             drawingInstances[1].x
           , drawingInstances[2].y
-        };
-        drawingInstanceCnt++;
-    }
+        });
 }
 
 void WrapAroundRenderer::defineWrappingArea(int t, int r, int b, int l) {
@@ -72,14 +63,9 @@ void WrapAroundRenderer::defineWrappingArea(int t, int r, int b, int l) {
 }
 
 unsigned char WrapAroundRenderer::getInstanceCnt() {
-    return drawingInstanceCnt;
+    return drawingInstances.size(); 
 }
 
-olc::vf2d WrapAroundRenderer::getInstance(unsigned char index) {
-    if(index < 0 || index > 3)
-        index = 0;
-
-
-
-    return drawingInstances[index];
+std::vector<olc::vf2d> WrapAroundRenderer::getInstances() {
+    return drawingInstances;
 }
