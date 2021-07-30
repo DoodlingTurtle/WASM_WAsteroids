@@ -94,8 +94,9 @@ There is a lot to be done, before it reaches a playable state.
       - Score counter
       - available upgrades
         - Shields
-        - Reactors components
-
+        - ~~Reactors components~~ (done)
+     - tweak reactor/generator values
+     - 
 - Add support for different window formats and resolutions
 - Add Touch controls
 - Store highscores and Settings via LocalStorage in the Browser

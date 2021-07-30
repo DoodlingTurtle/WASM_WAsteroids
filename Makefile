@@ -1,6 +1,5 @@
 CPP:=em++
 
-ASSETSDIR:=assets
 RELEASEDIR:=release
 
 
@@ -11,13 +10,13 @@ OBJFILES:=$(patsubst %.cpp,%.cpp.o,$(CPPSOURCEFILES))
 
 TARGET:=main
 FLAGS:=-std=c++17 
-LINKERFLAGS:= -s EXPORTED_RUNTIME_METHODS=ccall,cwrap,getValue,setValue,stringToUTF8,UTF8ToString -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s ALLOW_MEMORY_GROWTH=1 -s MAX_WEBGL_VERSION=2 -s MIN_WEBGL_VERSION=2 -s USE_LIBPNG=1
+LINKERFLAGS:= -s --preload-file ./assets EXPORTED_RUNTIME_METHODS=ccall,cwrap,getValue,setValue,stringToUTF8,UTF8ToString -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ALLOW_MEMORY_GROWTH=1 -s MAX_WEBGL_VERSION=2 -s MIN_WEBGL_VERSION=2 -s USE_LIBPNG=1
 
 $(TARGET).html:$(OBJFILES)
-	$(CPP) $^ -O1 -o $@ $(LINKERFLAGS) --emrun --preload-file ./assets $(FLAGS)
+	$(CPP) $^ -g -o $@ $(LINKERFLAGS) -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK --emrun  $(FLAGS)
 
 $(TARGET).js:$(OBJFILES)	
-	$(CPP) $^ -O3 -o $@ $(LINKERFLAGS) --preload-file ./assets $(FLAGS)
+	$(CPP) $^ -O3 -o $@ $(LINKERFLAGS) $(FLAGS)
 
 run:$(TARGET).html
 	emrun index.html --port 8080

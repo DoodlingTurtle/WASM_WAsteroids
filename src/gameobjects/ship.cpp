@@ -26,6 +26,18 @@ Ship::Ship()
     decShip = new olc::Decal(sprShip);    
 
     this->bIsAlive = true;
+
+    stats = new ShipStats();
+    stats->generatorcapacity = 90;
+    stats->generator = 90;
+    stats->shotenergyconsumption = 30;
+    stats->thrustenergyconsumption = 120;
+    stats->generatorrecovery = 30;
+    stats->shielduses = 0;
+    stats->generatorlock = 2;
+    stats->generatorunlock = 25;
+    stats->generatorhalt = false;
+
     reset();
 }
 
@@ -99,14 +111,16 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
             return nullptr;
         }; 
     }
-
 //TODO: Redo Controlls
     std::vector<SpaceObj*>* ret = nullptr;
 
     if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_FIRE]).bPressed) {
-        Shots::Shot* s = shots.spawnShot(ang, &pos);
-        ret = new std::vector<SpaceObj*>();
-        ret->push_back(s);
+        if(!stats->generatorhalt && stats->generator >= stats->shotenergyconsumption) {
+            Shots::Shot* s = shots.spawnShot(ang, &pos);
+            ret = new std::vector<SpaceObj*>();
+            ret->push_back(s);
+            stats->generator -= stats->shotenergyconsumption;
+        }
     } 
     if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_TURNRIGHT]).bHeld)
         setAngleRel(angRes*deltaTime);
@@ -114,9 +128,15 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
     if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_TURNLEFT]).bHeld)
         setAngleRel(-angRes*deltaTime);
 
+    thrusting = false;
+    bool allowgeneratoregen = true;
     if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_ACCELERATE]).bHeld) {
-        thrusting = true;
-        shipEngine.accelerate(deltaTime * 10.0f);
+        float consumption = stats->thrustenergyconsumption * deltaTime;
+        if(!stats->generatorhalt && stats->generator >= consumption) {
+            thrusting = true;
+            stats->generator -= consumption;
+        }
+        else allowgeneratoregen = false;
         /*TODO: Redo sound
          * if(thrust_sound == 0) {
             thrustSoundTimer  = 0.00;
@@ -133,24 +153,33 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
         */
     }
     else {
-        thrusting = false;
-        shipEngine.decerlerate(1);
         //mmEffectCancel(thrust_sound);
         //thrust_sound = 0;
 
-    }
+    } 
+    
+    if(thrusting) 
+        shipEngine.accelerate(deltaTime * 15.0f);
+    else
+        shipEngine.decerlerate(1);
 
+    if(stats->generator <= stats->generatorlock)
+        stats->generatorhalt = true;
+
+    if(stats->generator >= stats->generatorunlock)
+        stats->generatorhalt = false;
 
 // Activate new upgrades
     for(int a = 0; a < newUpgrades.size(); a++)
         upgrades.push_back(newUpgrades.at(a));
 
     newUpgrades.clear();
-
 // Genrator Recovery
-    stats->generator += deltaTime * stats->generatorrecovery;
-    if(stats->generator > stats->generatorcapacity)
-        stats->generator = stats->generatorcapacity;
+    if(allowgeneratoregen) {
+        stats->generator += deltaTime * stats->generatorrecovery;
+        if(stats->generator > stats->generatorcapacity)
+            stats->generator = stats->generatorcapacity;
+    }
 
 // Update upgrades
     ShipUpgrade* upgrade;
@@ -191,10 +220,13 @@ void Ship::onDraw(olc::PixelGameEngine* pge)
         );
     });
     pge->SetDrawTarget(nullptr);
-   
+
     int barheight = (int)((stats->generator / stats->generatorcapacity) * 164.0f);
-    //RGNDS::GL2D::glRectFilled(240, 28 + (164 - barheight), 16, barheight, 0xffff) ;
-    //RGNDS::GL2D::glRectFilled(240, 192, 16, barheight, 0xffff);
+
+    olc::Pixel c = stats->generatorhalt ? olc::RED : olc::WHITE;
+
+    pge->FillRect(240, 28 + (164 - barheight), 16, barheight, c) ;
+    pge->FillRect(240, 192, 16, barheight, c) ;
 }
 
 bool Ship::shieldIsActive() {

@@ -5,8 +5,13 @@ struct ShipStats {
     
     float generatorcapacity;
     float generator;
+    float generatorlock;
+    float generatorunlock;
     float shotenergyconsumption;
+    float thrustenergyconsumption;
     float generatorrecovery;
+    
+    bool generatorhalt;
     int shielduses;
 
 };

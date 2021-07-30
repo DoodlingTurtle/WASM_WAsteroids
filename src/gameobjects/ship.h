@@ -35,8 +35,6 @@ class Ship : public SpaceObj {
         bool shieldIsActive();
 
         int* controls;
-        
-        ShipStats* stats;
 
     protected:
         ShipUpgrade_Shield* currentShield;
@@ -44,6 +42,7 @@ class Ship : public SpaceObj {
         ShipEngine                  shipEngine;
         ShipUpgrade_ShieldGenerator shieldgenerator;
         Shots                       shots;
+        ShipStats*                  stats;
 
     private:
 
