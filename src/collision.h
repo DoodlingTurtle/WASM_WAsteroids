@@ -7,7 +7,12 @@ namespace RGNDS {
     class Collision
     {
         public:
-
+    
+            struct Circle {
+                float x;
+                float y;
+                float radius;
+            };
 
             /** \brief tells if a collision between 2 Circles has happened
              *  \param pos1 center of the first circle
@@ -23,17 +28,33 @@ namespace RGNDS {
              *  \return - true if both circles are
              */
             static bool checkCircleOnCircle(
-                    olc::vf2d* const pos1, 
-                    float radius1, 
+                olc::vf2d* const pos1, 
+                float radius1, 
 
-                    olc::vf2d* const pos2, 
-                    float radius2, 
+                olc::vf2d* const pos2, 
+                float radius2, 
 
-                    Collision* overlapdata=nullptr
-                );
+                Collision* overlapdata=nullptr
+            );
 
 
+            static bool checkCircleOnCircle(
+                float, float, float,
+                float, float, float,
+                Collision* overlapdata=nullptr 
+            );
 
+            static bool checkCircleOnCircle(
+                Circle*, 
+                Circle*,
+                Collision* overlapdata=nullptr 
+            );
+
+            static bool checkCircleOnCircle(
+                Circle, 
+                std::vector<Circle>,
+                Collision* overlapdata=nullptr
+            );
 
        // Propertys have different meaning depenging, on which function filled them in
             float C2COverlapDist;

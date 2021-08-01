@@ -107,6 +107,8 @@ void Asteroids::Asteroid::bringBackToLife(
     bIsAlive = true;
     killOnNextUpdate = false;
 
+    updatePosition(0.0f);
+
 }
 std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
 
@@ -154,6 +156,10 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
     return nullptr;
 }
 
+void Asteroids::Asteroid::moveInDirection(float dist) {
+    Transform::moveInDirection(dist);
+    updatePosition(0.0f);
+}
 
 Asteroids::SIZES Asteroids::Asteroid::getSize() {
     return size;
@@ -170,6 +176,16 @@ void Asteroids::Asteroid::onDraw(olc::PixelGameEngine* pge) {
     });
     pge->SetDrawTarget(nullptr);
 }
+
+std::vector<RGNDS::Collision::Circle> Asteroids::Asteroid::getColliders() {
+    std::vector<RGNDS::Collision::Circle> r;
+
+    for(auto t : renderer.getInstances())
+        r.push_back({t.x, t.y, 28*scale});
+
+    return r;
+}
+
 Asteroids::Asteroid::~Asteroid() { 
     delete decal;
     delete sprite;
@@ -258,6 +274,19 @@ Asteroids::Asteroid* Asteroids::isAsteroid(void* go) {
     
     return ret;
 }
+
+std::vector<RGNDS::Collision::Circle> Asteroids::getActiveColliders() {
+    std::vector<RGNDS::Collision::Circle> c;
+
+	for(int a = 0; a < MAX_ASTEROIDS; a++) {
+        if(asteroids[a].isAlive()) {
+            std::vector<RGNDS::Collision::Circle> ac = asteroids[a].getColliders();
+            c.insert(c.end(), ac.begin(), ac.end());
+        }
+    }
+
+    return c;
+};
 
 void Asteroids::killall() {
     Debug("Killall asteroids" << asteroids);

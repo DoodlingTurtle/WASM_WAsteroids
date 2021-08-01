@@ -4,6 +4,7 @@
 #include "../config.h"
 #include "../olcPixelGameEngine.h"
 #include "../spaceobj.h"
+#include "../collision.h"
 
 #include "shot.h"
 
@@ -39,6 +40,10 @@ public:
         void markAsHit();
 
         Asteroids::SIZES getSize();
+
+        std::vector<RGNDS::Collision::Circle> getColliders();
+
+        void moveInDirection( float distance ) override;
 
      protected:
         // Objects for Asteroid to keep track of
@@ -81,6 +86,8 @@ public:
 
     std::vector<Asteroid*> getLiveAsteroids();
     void markDirty();
+
+    std::vector<RGNDS::Collision::Circle> getActiveColliders();
 
 private:
 	// reserve Memory to store all asteroids in the game

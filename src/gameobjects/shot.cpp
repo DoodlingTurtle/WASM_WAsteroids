@@ -24,6 +24,9 @@ void Shots::Shot::revive(
     moveInDirection(8.0);
     bIsAlive = true;
     decal = spr;
+    updatePosition(0.0f);
+    velocity.x = dir.x * 64.0f;
+    velocity.y = dir.y * 64.0f;
 }
 
 void Shots::Shot::onDraw(olc::PixelGameEngine* pge) {
@@ -40,22 +43,23 @@ void Shots::Shot::onDraw(olc::PixelGameEngine* pge) {
 
 std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
 
-    lifetime -= deltaTime * 250;        // 1000 / 4 = 4 Seconds of lifetime    
+    lifetime -= deltaTime * 250;    
     if(lifetime <= 0) {
         this->bIsAlive = false;
     }
     else {
-        moveInDirection(64.0f * deltaTime);
         updatePosition(deltaTime);
+           
+
 
         std::vector<Asteroids::Asteroid*> asteroids = Global::asteroids->getLiveAsteroids();
 
         for(auto a : asteroids) {
             if(RGNDS::Collision::checkCircleOnCircle(
-                &a->pos
-              , a->scale * 26 
-              , &this->pos, 3
-            )) {
+                ((RGNDS::Collision::Circle){
+                    pos.x, pos.y, 2.0f
+                }), a->getColliders())
+              ){
                 a->markAsHit();
                 this->kill();
                 //TODO: Redo audio

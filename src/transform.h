@@ -17,7 +17,7 @@ namespace RGNDS {
         Transform(float x=0, float y=0);
         virtual ~Transform();
 
-        void moveInDirection( float distance );
+        virtual void moveInDirection( float distance );
 
         void translate(olc::vf2d* in, olc::vf2d* out, Transform* parent = nullptr);
 

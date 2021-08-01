@@ -31,7 +31,7 @@ Ship::Ship()
     stats->generatorcapacity = 90;
     stats->generator = 90;
     stats->shotenergyconsumption = 30;
-    stats->thrustenergyconsumption = 120;
+    stats->thrustenergyconsumption = 45;
     stats->generatorrecovery = 30;
     stats->shielduses = 0;
     stats->generatorlock = 2;
@@ -96,21 +96,21 @@ void Ship::reset()
     //Engine_Log("Generator-Cap: " << stats->generatorcapacity);
 }
 
+RGNDS::Collision::Circle Ship::getCollider() {
+    return {pos.x, pos.y, 14.0f*scale};
+    //return (RGNDS::Collision::Circle){pos.x, pos.y, 14.0f*scale};
+}
+
 std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 //check asteroids collision
+    if(RGNDS::Collision::checkCircleOnCircle(
+        getCollider(), 
+        Global::asteroids->getActiveColliders()
+    )){
+        this->kill();
+        return nullptr;
+    }; 
 
-    std::vector<Asteroids::Asteroid*> ast = Global::asteroids->getLiveAsteroids();
-    for(auto a : ast) {
-        if(RGNDS::Collision::checkCircleOnCircle(
-            &pos,
-            16,
-            &(a->pos),
-            a->scale * 28
-        )) {
-            this->kill();
-            return nullptr;
-        }; 
-    }
 //TODO: Redo Controlls
     std::vector<SpaceObj*>* ret = nullptr;
 

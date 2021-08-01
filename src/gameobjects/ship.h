@@ -15,6 +15,7 @@
 #include "ship/shipengine.h"
 #include "ship/shipupgrade_shield.h"
 #include "ship/shipupgrade_shieldgenerator.h"
+#include "../collision.h"
 
 class Ship : public SpaceObj {
     public:
@@ -35,6 +36,8 @@ class Ship : public SpaceObj {
         bool shieldIsActive();
 
         int* controls;
+
+        RGNDS::Collision::Circle getCollider();
 
     protected:
         ShipUpgrade_Shield* currentShield;

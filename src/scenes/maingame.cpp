@@ -37,8 +37,16 @@ void MainGameScreen::onStart() {
     std::vector<Asteroids::Asteroid*>* spawnedAsteroids = Global::asteroids->spawnAsteroids(
            (int)game_difficulty, Asteroids::SIZE_LARGE);
 
+    ship->scale = 2.0f;
+    RGNDS::Collision::Circle sc = ship->getCollider();
+    ship->scale = 1.0f;
+
     for(auto ast : *spawnedAsteroids) {
-        ast->moveInDirection(64);
+        while(RGNDS::Collision::checkCircleOnCircle(sc, ast->getColliders())) {
+            Debug("ship hit before game started " << ast->pos.x << " " << ast->pos.y);
+            ast->moveInDirection(32);
+        }
+
         newGameObjects->push_back(ast);
     }
     delete spawnedAsteroids;
