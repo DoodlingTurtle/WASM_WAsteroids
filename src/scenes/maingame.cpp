@@ -18,42 +18,57 @@ MainGameScreen::MainGameScreen()
     scorelocation.pos.x = 5;
     scorelocation.pos.y = 5;
     scorelocation.scale = 2;
-    scoreTimer = 0.0f;
+    reset();
+}
+
+void MainGameScreen::reset() {
+    state = MainGameScreen::STATE_LOST;
     game_difficulty = 1.0f;
     shipSurvived = true;
+    scoreTimer = 0.0f;
+    onEnd();
 }
 
 void MainGameScreen::onStart() {
+    if(state != MainGameScreen::STATE_RUNNING) {
+        if(game_difficulty>8.0f)
+            game_difficulty = 8.0f;
 
-    if(game_difficulty>8.0f)
-        game_difficulty = 8.0f;
+    // Initialize the Ship
+        ship = new Ship();
+        shipSurvived = true;
+        newGameObjects->push_back(ship);
 
-// Initialize the Ship
-    ship = new Ship();
-    shipSurvived = true;
-    newGameObjects->push_back(ship);
+    // Initialize the asteroids
+        std::vector<Asteroids::Asteroid*>* spawnedAsteroids = Global::asteroids->spawnAsteroids(
+               (int)game_difficulty, Asteroids::SIZE_LARGE);
 
-// Initialize the asteroids
-    std::vector<Asteroids::Asteroid*>* spawnedAsteroids = Global::asteroids->spawnAsteroids(
-           (int)game_difficulty, Asteroids::SIZE_LARGE);
+        ship->scale = 2.0f;
+        RGNDS::Collision::Circle sc = ship->getCollider();
+        ship->scale = 1.0f;
 
-    ship->scale = 2.0f;
-    RGNDS::Collision::Circle sc = ship->getCollider();
-    ship->scale = 1.0f;
+        for(auto ast : *spawnedAsteroids) {
+            while(RGNDS::Collision::checkCircleOnCircle(sc, ast->getColliders())) {
+                Debug("ship hit before game started " << ast->pos.x << " " << ast->pos.y);
+                ast->moveInDirection(32);
+            }
 
-    for(auto ast : *spawnedAsteroids) {
-        while(RGNDS::Collision::checkCircleOnCircle(sc, ast->getColliders())) {
-            Debug("ship hit before game started " << ast->pos.x << " " << ast->pos.y);
-            ast->moveInDirection(32);
+            newGameObjects->push_back(ast);
         }
-
-        newGameObjects->push_back(ast);
+        delete spawnedAsteroids;
     }
-    delete spawnedAsteroids;
+    state = MainGameScreen::STATE_RUNNING;
 }
 
 void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    
+
+// Check for Pause Key
+    if(pge->GetKey(GameKeyMap[KEYPAD_SELECT]).bPressed) {
+        exit();
+        return;
+    }
+
+
 // score countdown
     if(Global::score > 0) {
         scoreTimer += 1000.0f * deltaTime;
@@ -105,13 +120,14 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
 // Check win condition
     if(!hasAsteroids || !shipSurvived) {
+        state = (shipSurvived) 
+            ? (MainGameScreen::STATE_WON) 
+            : (MainGameScreen::STATE_LOST); 
         exit();
         return;
     }
 
-//TODO: Rewrite Update all GameObject-Managers/Factorys
-//TODO: Move into score spawn logic into asteroid update onUpdate
-    //ScorePopup::refreshInstanceList();
+    ScorePopup::refreshInstanceList();
 
 // Send out an update heartbeat to all attached objects
     std::vector<SpaceObj*>* so;
@@ -151,26 +167,30 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
     std::string s(buffer);
     
     pge->DrawString(
-            scorelocation.pos.x, scorelocation.pos.y, 
-            s, olc::Pixel(32, 32, 196), 
-            scorelocation.scale
+        scorelocation.pos.x, scorelocation.pos.y, 
+        s, olc::Pixel(32, 32, 196), 
+        scorelocation.scale
     ); 
 }
 
 void MainGameScreen::onEnd() {
-    /*if(shipexp != nullptr)
-        delete shipexp;
-    
-    shipexp = nullptr;
-    */
-    ScorePopup::cleanup();
-    
-    Global::asteroids->killall();
-    delete ship;
+    if(state != MainGameScreen::STATE_RUNNING) {
+        /*if(shipexp != nullptr)
+            delete shipexp;
+        
+        shipexp = nullptr;
+        */
+        ScorePopup::cleanup();
+        Global::asteroids->killall();
 
-    gameObjects->clear();
-    prevGameObjects->clear();
-    newGameObjects->clear();
+        if(ship != nullptr)
+            delete ship;
+        ship = nullptr;
+
+        gameObjects->clear();
+        prevGameObjects->clear();
+        newGameObjects->clear();
+    }
 }
 
-bool MainGameScreen::gameWasWon() { return shipSurvived; }
+MainGameScreen::GAME_STATE MainGameScreen::getState() { return state; }

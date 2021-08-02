@@ -6,6 +6,7 @@
 #include "scenes/titlescreen.h"
 #include "scenes/creditsscreen.h"
 #include "scenes/maingame.h"
+#include "scenes/pausescreen.h"
 
 #include "gameobjects/asteroids.h"
 #include "particles/asteroid_particles.h"
@@ -30,6 +31,7 @@ public:
         currentScene = nullptr;
         
         // setup layers
+        layer_blackout = CreateLayer();
         layer_ship  = CreateLayer();
         layer_asteroids = CreateLayer();
         layer_shots = CreateLayer();
@@ -60,6 +62,11 @@ public:
         Clear(olc::BLANK);
         EnableLayer(layer_ship, true);
 
+        SetDrawTarget(layer_blackout);
+        SetPixelMode(olc::Pixel::ALPHA);
+        Clear((olc::Pixel){0, 0, 0, 128});
+        SetPixelMode(olc::Pixel::NORMAL);
+
         SetDrawTarget(nullptr);
 
         // Define Particles
@@ -87,9 +94,7 @@ public:
             if(currentScene->isActive()) {
                 // draw a new frame
                 Clear(olc::BLANK);
-                SetPixelMode(olc::Pixel::ALPHA); 
                 currentScene->onDraw(this);
-                SetPixelMode(olc::Pixel::NORMAL); 
             }
             else {
                 // else switch to the next scene
@@ -120,7 +125,6 @@ public:
                 case 0: { // new Game
                     Global::score = 0;                       //reset score
                     Global::shipStats->resetToLV1();
-                    mainGameScreen.game_difficulty = 1.0f;   //reset difficulty
                     next = &mainGameScreen; 
                     break; }
                         
@@ -134,13 +138,32 @@ public:
             next = &titleScreen;
         }
         else if(currentScene == (Scene*)&mainGameScreen) {
-            if(mainGameScreen.gameWasWon()) {
-                mainGameScreen.game_difficulty+=0.66f;
+            switch(mainGameScreen.getState()) {
+                case MainGameScreen::STATE_WON:
+                    mainGameScreen.game_difficulty+=0.66f;
+                    next = &mainGameScreen;
+                    break;
+
+                case MainGameScreen::STATE_RUNNING:
+                    next = &pauseScreen;
+                    break;
+
+                case MainGameScreen::STATE_LOST: 
+                    //TODO: add GameOver-Screen
+                default:
+                    next = &titleScreen; 
+                    break;
+
+            }
+        }
+        else if(currentScene == (Scene*)&pauseScreen) {
+            if(pauseScreen.endGame()) {
+                mainGameScreen.reset();
+                next = &titleScreen;
+            } else 
                 next = &mainGameScreen;
-            } else next = &titleScreen;
         }
 
-        Debug("Asteroids spawned " << Global::asteroids);
         // Hook up global ressources and restart the new scene
         if(next != nullptr)
             next->restart();
@@ -153,6 +176,7 @@ public:
     TitleScreen     titleScreen;
     CreditsScreen   creditsScreen;
     MainGameScreen  mainGameScreen;
+    PauseScreen     pauseScreen = PauseScreen(&mainGameScreen);
 
 };
 

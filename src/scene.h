@@ -11,8 +11,10 @@ public:
 	virtual ~Scene();
 
     void restart();
+
 	virtual	void onUpdate(olc::PixelGameEngine* pge, float deltaTime);
 	virtual void onDraw(olc::PixelGameEngine* pge);
+
 
 	bool isActive();
 

@@ -34,11 +34,15 @@ Ship::Ship()
 
 Ship::~Ship() 
 {
+    Debug("Delete ship spr");
     delete sprShip;
+    Debug("Delete ship dec");
     delete decShip;
 
+    Debug("Kill shots");
     shots.killall();
 
+    Debug("clear upgrades");
     clearUpgrades();
     /*
     mmUnloadEffect(SFX_SFX_LASER1);
