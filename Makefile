@@ -1,15 +1,12 @@
 CPP:=em++
-
 RELEASEDIR:=release
-
-
-
-CPPSOURCEFILES:=$(wildcard ./*/*/*/*.cpp) $(wildcard ./*/*/*.cpp) $(wildcard */*.cpp) 
-
-OBJFILES:=$(patsubst %.cpp,%.cpp.o,$(CPPSOURCEFILES)) 
 
 TARGET:=main
 FLAGS:=-std=c++17 
+FLAGS:= $(FLAGS) -DDEBUG_BUILD
+
+CPPSOURCEFILES:=$(wildcard ./*/*/*/*.cpp) $(wildcard ./*/*/*.cpp) $(wildcard */*.cpp) 
+OBJFILES:=$(patsubst %.cpp,%.cpp.o,$(CPPSOURCEFILES)) 
 LINKERFLAGS:= -s --preload-file ./assets EXPORTED_RUNTIME_METHODS=ccall,cwrap,getValue,setValue,stringToUTF8,UTF8ToString -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ALLOW_MEMORY_GROWTH=1 -s MAX_WEBGL_VERSION=2 -s MIN_WEBGL_VERSION=2 -s USE_LIBPNG=1
 
 $(TARGET).html:$(OBJFILES)
@@ -25,7 +22,7 @@ debug:$(TARGET).html
 	emrun $(TARGET).html --port 8080
 
 %.cpp.o:%.cpp
-	$(CPP) $^ -o $@ -c $(FLAGS)
+	$(CPP) $^ -o $@ -c $(FLAGS)  
 
 
 .PHONY: clean, emsetup, release

@@ -21,8 +21,12 @@
 
 #define RandF() ((float)rand() / (float)RAND_MAX)
 
+#ifdef DEBUG_BUILD
 #include <iostream>
 #define Debug(msg) std::cout << msg << std::endl
+#else
+#define Debug(msg) /**/
+#endif
 
 enum GameInput {
     GAMEINPUT_ACCELERATE,
