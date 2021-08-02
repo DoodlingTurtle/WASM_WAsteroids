@@ -9,6 +9,9 @@
 
 #include "gameobjects/asteroids.h"
 #include "particles/asteroid_particles.h"
+
+#include "gameobjects/ship/shipstats.h"
+
 #include <ctime>
 
 #include "global.h"
@@ -116,6 +119,7 @@ public:
                         
                 case 0: { // new Game
                     Global::score = 0;                       //reset score
+                    Global::shipStats->resetToLV1();
                     mainGameScreen.game_difficulty = 1.0f;   //reset difficulty
                     next = &mainGameScreen; 
                     break; }
@@ -155,12 +159,14 @@ public:
 int main()
 {
 //Setup global ressources
-    Asteroids asteroids;
-    ParticleSystem particleSystem;
+    Asteroids       asteroids;
+    ParticleSystem  particleSystem;
+    ShipStats       shipStats;
 
     Global::score = 0;
     Global::asteroids = &asteroids;
     Global::particleSystem = &particleSystem;
+    Global::shipStats = &shipStats;
 
 //Setup PGE 
     WAsteroids app;

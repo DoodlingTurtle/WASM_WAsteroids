@@ -4,6 +4,8 @@
 olc::PixelGameEngine* Global::pge = nullptr;
 Asteroids* Global::asteroids = nullptr;
 ParticleSystem* Global::particleSystem = nullptr;
+ShipStats* Global::shipStats = nullptr;
+
 int Global::score = 0;
 
 olc::Key Global::gamecontrols[5] = {

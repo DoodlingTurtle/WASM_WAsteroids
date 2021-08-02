@@ -4,6 +4,7 @@
 #include "olcPixelGameEngine.h"
 #include "gameobjects/asteroids.h"
 #include "particles.h"
+#include "gameobjects/ship/shipstats.h"
 
 class Global {
 public:
@@ -11,6 +12,7 @@ public:
     static olc::Key gamecontrols[5];
     static Asteroids* asteroids;
     static ParticleSystem* particleSystem;
+    static ShipStats* shipStats;
 
     static int score;
 

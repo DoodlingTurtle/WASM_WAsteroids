@@ -41,12 +41,5 @@ namespace RGNDS {
         dir.y = pos.y / dist;
     }
 
-    void Transform::toTransform2D(float ox, float oy, olc::GFX2D::Transform2D* tra) {
-        tra->Translate(-ox, -oy);
-        tra->Rotate(-ang);
-        tra->Scale(scale, scale);
-        tra->Translate(pos.x, pos.y);
-    }
-
 }
 #endif // __RGNDS_TRANSFORM_CPP__

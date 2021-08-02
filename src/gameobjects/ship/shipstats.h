@@ -1,8 +1,11 @@
 #ifndef __ShipStats_H__
 #define __ShipStats_H__
 
-struct ShipStats {
-    
+class ShipStats {
+public: 
+    ShipStats();
+
+
     float generatorcapacity;
     float generator;
     float generatorlock;
@@ -13,6 +16,8 @@ struct ShipStats {
     
     bool generatorhalt;
     int shielduses;
+
+    void resetToLV1();
 
 };
 

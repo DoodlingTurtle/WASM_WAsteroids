@@ -2,7 +2,6 @@
 #define __RGNDS_TRANSFORM_H__ 1
 
 #include "olcPixelGameEngine.h"
-#include "olcPGEX_Graphics2D.h"
 
 namespace RGNDS {
 
@@ -29,7 +28,6 @@ namespace RGNDS {
         float ang = 0.0;
         olc::vf2d dir = {1.0f, 0.0f};
 
-        void toTransform2D(float ox, float oy, olc::GFX2D::Transform2D* transform);
     };
 
 }

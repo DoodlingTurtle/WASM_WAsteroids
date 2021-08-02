@@ -27,16 +27,7 @@ Ship::Ship()
 
     this->bIsAlive = true;
 
-    stats = new ShipStats();
-    stats->generatorcapacity = 90;
-    stats->generator = 90;
-    stats->shotenergyconsumption = 30;
-    stats->thrustenergyconsumption = 45;
-    stats->generatorrecovery = 30;
-    stats->shielduses = 0;
-    stats->generatorlock = 2;
-    stats->generatorunlock = 25;
-    stats->generatorhalt = false;
+    stats = Global::shipStats;
 
     reset();
 }
@@ -210,9 +201,6 @@ void Ship::onDraw(olc::PixelGameEngine* pge)
 {
     pge->SetDrawTarget(layer_ship);
     SpaceObj::draw([this](Transform* tr) {
-        olc::GFX2D::Transform2D tra;
-        tr->toTransform2D(16, 16, &tra);
-
         Global::pge->DrawPartialRotatedDecal(
             tr->pos, decShip, tr->ang,  
             {sprShip->height / 2.0f, sprShip->height / 2.0f},
