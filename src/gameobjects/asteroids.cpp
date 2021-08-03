@@ -132,17 +132,11 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
         spa->push_back(ScorePopup::spawn(100/scale, pos.x, pos.y));
         
         //Spawn AsteroidExplosion at go->pos
-        Asteroid_Particle_Emitter* e 
-            = new Asteroid_Particle_Emitter(this->pos.x, this->pos.y, this->scale);
-        Asteroid_Particle* p = new Asteroid_Particle(e);
-        if(!Global::particleSystem->assign(e, p)) {
-            Debug("Failed to assign PS");
-            delete e;
-            delete p;
-        }
-        else {
-            spa->push_back(e);
-        }
+        AsteroidExplosion* e = new AsteroidExplosion(
+                this->pos.x, this->pos.y, this->scale
+        );
+        e->spawnNewParticles(16);
+        spa->push_back(e);
         
         this->kill();
         Global::asteroids->markDirty();

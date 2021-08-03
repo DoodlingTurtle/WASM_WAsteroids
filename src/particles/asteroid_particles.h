@@ -6,29 +6,33 @@
 #include "../transform.h"
 #include "../olcPixelGameEngine.h"
 
-class Asteroid_Particle_Emitter 
-: public ParticleSystem::Emitter 
+#include "spaceobj_emitter.h"
+
+class Asteroid_Particle;
+
+typedef SpaceObj_Emitter<Asteroid_Particle> Asteroid_Particle_Emitter;
+typedef ParticleSystem<Asteroid_Particle_Emitter, Asteroid_Particle> t_AsteroidExplosion;
+
+class AsteroidExplosion 
+: public t_AsteroidExplosion 
 , public SpaceObj {
 public:
-    Asteroid_Particle_Emitter(int x, int y, float scale);
-
-    void onParticleAssign(ParticleSystem::Particle*) override;
-    void onNoParticlesLeft() override;
+    AsteroidExplosion(int x, int y, float scale);
 
     std::vector<SpaceObj*>* onUpdate(float) override;  
     void onDraw(olc::PixelGameEngine*) override;
-
-};
+    bool allowDeleteAfterDeath() override; 
+} ;
 
 class Asteroid_Particle 
-: public ParticleSystem::Particle
+: public AsteroidExplosion::Particle
 , protected RGNDS::Transform
 {
 public:
     Asteroid_Particle();
     Asteroid_Particle(Asteroid_Particle_Emitter*);
 
-    Particle* spawnNewParticle(); 
+    Asteroid_Particle* spawnNewParticle(Asteroid_Particle_Emitter*); 
     bool onParticleUpdate(float deltaTime);
     void onParticleDraw(olc::PixelGameEngine*);
 

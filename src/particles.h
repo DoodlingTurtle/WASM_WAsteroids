@@ -2,73 +2,101 @@
 #define __PARTICLES_H__ 
 
 #include "olcPixelGameEngine.h"
+#include "config.h"
 #include <vector>
 
+template <typename Em, typename Pa>
 class ParticleSystem {
-
 public:
     class Particle {
     public:
         virtual ~Particle(){};
-        virtual Particle* spawnNewParticle() = 0;
+        virtual Pa* spawnNewParticle(Em* e) = 0;
         virtual bool onParticleUpdate(float deltaTime) = 0;
         virtual void onParticleDraw(olc::PixelGameEngine*) = 0;
     };
 
     class Emitter {
     public:
-        Emitter();
-        virtual ~Emitter();
+        virtual ~Emitter(){
+            Debug("ParticleSystem::Emitter::~Emitter");
+            for(auto p : particles)
+                delete p;
 
-        virtual void onParticleAssign(Particle*) {}
-        virtual void onParticleDeath(Particle* particle){}; // Called, when one of the particles has reached its max lifetime
+            particles.clear();
+        }
+
+        virtual void onParticleDeath(Pa* particle){}; // Called, when one of the particles has reached its max lifetime
         virtual void onNoParticlesLeft()                 = 0; // Called, once all particles in the list have reached its max lifetime
 
-        virtual int  spawnNewParticles(int cnt=1) final;
-        virtual void updateParticles(float deltaTime) final;
-        virtual void drawParticles(olc::PixelGameEngine*) final;
+        virtual void updateParticles(float deltaTime) final {
+            Pa* p;
+            int a;
+            
+            for(a = particles.size()-1; a >= 0; a--) {
+                
+                p = particles.at(a);    
 
-        virtual int cntActiveParticles() final;
+                if(!p->onParticleUpdate(deltaTime)) {
+                    onParticleDeath(p);
+                    delete p;
+                    particles.erase(particles.begin() + a);
+                }
+            }
+
+            if(particles.size() == 0)
+                onNoParticlesLeft();
+        };
+        virtual void drawParticles(olc::PixelGameEngine* pge) final{
+            for(auto p : particles)
+                p->onParticleDraw(pge);
+        }
 
     private:
-        Particle* _proto;
-
-        std::vector<Particle*> particles;
-
-        friend class ParticleSystem;
+        std::vector<Pa*> particles;
+        friend class ParticleSystem<Em, Pa>;
     };
 
-    ParticleSystem();
-    ~ParticleSystem();
+    ParticleSystem(Em* e, Pa* p) {
+        if(!std::is_base_of<ParticleSystem::Particle, Pa>())
+            throw "given Particle is not instanceOf ParticleSystem::Particle";
 
-    template <typename E, typename P>
-    bool assign(E* em, P* pa){
-        Particle* particle = dynamic_cast<Particle*>(pa);
-        if(particle == nullptr)
-            return false;
-        
-        Emitter* emitter = dynamic_cast<Emitter*>(em);
-        if(emitter == nullptr)
-            return false;
-
-        if(emitter->_proto == nullptr)
-            emitters->push_back(emitter);
-
-        emitter->_proto = particle;
-
-        em->onParticleAssign(particle);
-
-        return true; 
+        if(!std::is_base_of<ParticleSystem::Emitter, Em>())
+            throw "given Emitter is not instanceOf ParticleSystem::Emitter";
+       
+        this->emitter = e;
+        this->particle = p;
+    }
+    ~ParticleSystem() {
+        delete this->emitter;
+        delete this->particle;
     }
 
-    void destroyFinished();
+    virtual int spawnNewParticles(int cnt=1) final {
 
+        Debug("Spawn Particles " << cnt);
+
+        int attempts = 1000;
+        int spawned = 0;
+        for(int a = 0; a < cnt && attempts > 0; a++) {
+            auto p = particle->spawnNewParticle(emitter);
+            if(p != nullptr) {
+                emitter->particles.push_back(p);
+                spawned++;
+            }
+            else {
+                delete p;
+                a--;
+                attempts--;
+            }
+        }
+
+        return spawned;
+    }
 
 protected:
-
-    
-private:
-    std::vector<Emitter*>* emitters;
+    Em* emitter;
+    Pa* particle;
 
 };
 

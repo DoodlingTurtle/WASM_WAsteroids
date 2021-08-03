@@ -83,9 +83,6 @@ public:
 
     bool OnUserUpdate(float fElapsedTime) override {
 
-        // Remove all unused Partice emitters
-        Global::particleSystem->destroyFinished();
-
         if(currentScene != nullptr) {
         // Update logic
             currentScene->onUpdate(this, fElapsedTime);
@@ -184,12 +181,10 @@ int main()
 {
 //Setup global ressources
     Asteroids       asteroids;
-    ParticleSystem  particleSystem;
     ShipStats       shipStats;
 
     Global::score = 0;
     Global::asteroids = &asteroids;
-    Global::particleSystem = &particleSystem;
     Global::shipStats = &shipStats;
 
 //Setup PGE 

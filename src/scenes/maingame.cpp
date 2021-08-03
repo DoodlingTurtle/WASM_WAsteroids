@@ -103,7 +103,11 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         }
         else if(go == (SpaceObj*)ship)
             shipSurvived = false;
-        else Debug("Remove dead SO: " << go);
+        else {
+            Debug("Delete dead SO: " << go << ": " << go->allowDeleteAfterDeath());
+            if(go->allowDeleteAfterDeath())
+                delete go;
+        }
     } 
 
 // Add new SpaceObjects to the cycle 

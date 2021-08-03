@@ -29,9 +29,9 @@ public:
 
     //Adds On update can respond with nullptr or vector<SpaceObj*>
     virtual std::vector<SpaceObj*>* onUpdate(float deltaTime) { return nullptr; };
+    virtual bool allowDeleteAfterDeath() { return false; }
     
     virtual void onDraw(olc::PixelGameEngine* pge ){};
-    virtual short getScoreValue() { return 0; }
 
     virtual void kill();
     virtual bool isAlive();

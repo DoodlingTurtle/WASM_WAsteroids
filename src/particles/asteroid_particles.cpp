@@ -2,26 +2,23 @@
 #include "../config.h"
 
 /*#############################################################################
- * Asteroid_Particle_Emitter
+ * AsteroidExplosion
  *###########################################################################*/
-Asteroid_Particle_Emitter::Asteroid_Particle_Emitter(int x, int y, float scale)
-:SpaceObj(64)
-{
-    bIsAlive = true;
-    pos.x = x;
-    pos.y = y;
-    this->scale = scale;
-}
+AsteroidExplosion::AsteroidExplosion(int x, int y, float scale)
+: ParticleSystem<Asteroid_Particle_Emitter, Asteroid_Particle>(
+        new Asteroid_Particle_Emitter(x, y, scale, this), 
+        new Asteroid_Particle())
+, SpaceObj(64)
+{ 
+    bIsAlive = true; }
 
-void Asteroid_Particle_Emitter::onParticleAssign(ParticleSystem::Particle* p) { 
-    spawnNewParticles(16); }
-void Asteroid_Particle_Emitter::onNoParticlesLeft() { kill(); }
-
-std::vector<SpaceObj*>* Asteroid_Particle_Emitter::onUpdate(float deltaTime) { 
-    updateParticles(deltaTime);
+std::vector<SpaceObj*>* AsteroidExplosion::onUpdate(float deltaTime) { 
+    emitter->updateParticles(deltaTime);
     return nullptr;
 }
-void Asteroid_Particle_Emitter::onDraw(olc::PixelGameEngine* pge) { drawParticles(pge); }
+
+void AsteroidExplosion::onDraw(olc::PixelGameEngine* pge) { emitter->drawParticles(pge); }
+bool AsteroidExplosion::allowDeleteAfterDeath() { return true; }
 
 
 /*#############################################################################
@@ -51,7 +48,7 @@ void Asteroid_Particle::deinit() {
 }
 
 
-ParticleSystem::Particle* Asteroid_Particle::spawnNewParticle(){
+Asteroid_Particle* Asteroid_Particle::spawnNewParticle(Asteroid_Particle_Emitter* em){
 
     Asteroid_Particle* p = new Asteroid_Particle(this->em);
 
@@ -59,8 +56,9 @@ ParticleSystem::Particle* Asteroid_Particle::spawnNewParticle(){
     p->pos.y = ((RandF() * 56.0f) - 28.0f) * em->scale;
     p->directionFromPositionVector();
     p->lifetime = 1500 + RandF()*500;
+    p->em = em;
 
-    return (ParticleSystem::Particle*)p;
+    return p;
 
 }
 

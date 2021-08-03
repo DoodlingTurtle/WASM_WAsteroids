@@ -72,7 +72,7 @@ void Ship::addUpgrade(ShipUpgrade *upgrade) {
 
 void Ship::reset() 
 {
-    std::printf("ship reset\n");
+    Debug("ship reset");
     pos.x = APP_SCREEN_WIDTH/2;
     pos.y = APP_SCREEN_HEIGHT/4;
     
@@ -87,13 +87,12 @@ void Ship::reset()
     addUpgrade(&shieldgenerator);
 
     objRadius = 24;
+    stats->generator = stats->generatorcapacity;
 
-    //Engine_Log("Generator-Cap: " << stats->generatorcapacity);
 }
 
 RGNDS::Collision::Circle Ship::getCollider() {
     return {pos.x, pos.y, 14.0f*scale};
-    //return (RGNDS::Collision::Circle){pos.x, pos.y, 14.0f*scale};
 }
 
 std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {

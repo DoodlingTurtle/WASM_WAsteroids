@@ -11,7 +11,6 @@ public:
     static olc::PixelGameEngine* pge;
     static olc::Key gamecontrols[5];
     static Asteroids* asteroids;
-    static ParticleSystem* particleSystem;
     static ShipStats* shipStats;
 
     static int score;
