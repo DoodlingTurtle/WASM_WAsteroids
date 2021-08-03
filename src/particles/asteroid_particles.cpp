@@ -13,7 +13,7 @@ AsteroidExplosion::AsteroidExplosion(int x, int y, float scale)
     bIsAlive = true; }
 
 std::vector<SpaceObj*>* AsteroidExplosion::onUpdate(float deltaTime) { 
-    emitter->updateParticles(deltaTime);
+    emitter->updateEmitter(deltaTime);
     return nullptr;
 }
 

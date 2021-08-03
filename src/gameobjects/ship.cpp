@@ -224,25 +224,10 @@ bool Ship::shieldIsActive() {
     return currentShield != nullptr;
 }
 
-bool Ship::gotHit(SpaceObj* culprit) {
-    if(currentShield != nullptr) {
-        currentShield->gotHit();
-        return false;
-    }
-    else {
-        //Engine_Log("Ship " << this << " got killed by " << culprit);
-        /*mmEffect(SFX_S_EXP); 
-        if(thrust_sound)
-            mmEffectCancel(thrust_sound);
-        */
-        kill(); 
-        return true;
-    }
+olc::vf2d Ship::getPassiveVelocity() { return this->velocity; }
+float     Ship::getTravelDistance(float deltaTime) { 
+    return sqrt(velocity.x * velocity.x + velocity.y * velocity.y); 
 }
-
-
-
-
 
 
 

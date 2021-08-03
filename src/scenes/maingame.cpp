@@ -18,6 +18,7 @@ MainGameScreen::MainGameScreen()
     scorelocation.pos.x = 5;
     scorelocation.pos.y = 5;
     scorelocation.scale = 2;
+    shipexp = nullptr;
     reset();
 }
 
@@ -26,6 +27,7 @@ void MainGameScreen::reset() {
     game_difficulty = 1.0f;
     shipSurvived = true;
     scoreTimer = 0.0f;
+
     onEnd();
 }
 
@@ -101,8 +103,15 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
             gameObjects->push_back(go);
             hasAsteroids |= (ast != nullptr);
         }
-        else if(go == (SpaceObj*)ship)
+        else if(go == (SpaceObj*)ship) {
             shipSurvived = false;
+            shipexp = new ShipExplosion(
+                ship->pos.x, ship->pos.y,
+                ship->getPassiveVelocity(),
+                ship->getTravelDistance(deltaTime)  
+            );
+            newGameObjects->push_back(shipexp);
+        }
         else {
             Debug("Delete dead SO: " << go << ": " << go->allowDeleteAfterDeath());
             if(go->allowDeleteAfterDeath())
@@ -112,7 +121,6 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
 // Add new SpaceObjects to the cycle 
     for(SpaceObj* go : *newGameObjects)
-        
         if(go != nullptr && go->isAlive()) {
             Debug("add new SO " << go);
             if(Global::asteroids->isAsteroid(go) != nullptr)
@@ -123,7 +131,7 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     newGameObjects->clear();
 
 // Check win condition
-    if(!hasAsteroids || !shipSurvived) {
+    if(!hasAsteroids || (!shipSurvived && !shipexp->isAlive())) {
         state = (shipSurvived) 
             ? (MainGameScreen::STATE_WON) 
             : (MainGameScreen::STATE_LOST); 
@@ -144,20 +152,6 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
             delete so;
         }
     }
-    
-
-// TODO: If Ship is dead, exit game 
-/*
-    if(!ship.isAlive() and shipexp == nullptr) {
-        Asteroid::ship = nullptr;
-
-        shipexp = new ShipExplosion(&ship);
-        newGameObjects->push_back(shipexp);
-    }
-    else if(shipexp != nullptr and !shipexp->isAlive()) {
-        exit();
-    }
-*/
 }
 
 void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
@@ -179,21 +173,28 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
 
 void MainGameScreen::onEnd() {
     if(state != MainGameScreen::STATE_RUNNING) {
-        /*if(shipexp != nullptr)
+
+        Debug("remove ship exp");
+        if(shipexp != nullptr)
             delete shipexp;
-        
         shipexp = nullptr;
-        */
+
+        Debug("clear score popup");
         ScorePopup::cleanup();
+        Debug("clear Asteroids");
         Global::asteroids->killall();
 
+        Debug("delete ship");
         if(ship != nullptr)
             delete ship;
         ship = nullptr;
 
+        Debug("clear gameobjects");
         gameObjects->clear();
         prevGameObjects->clear();
         newGameObjects->clear();
+
+        Debug("MainGameScreen::onEnd finished");
     }
 }
 

@@ -37,7 +37,7 @@ public:
     virtual bool isAlive();
 
 protected:
-    olc::vd2d velocity;
+    olc::vf2d velocity;
 
     WrapAroundRenderer renderer;
     float objRadius;

@@ -27,17 +27,15 @@ class Ship : public SpaceObj {
 
         void addUpgrade(ShipUpgrade* upgrade);
 
-        std::function<void(int, void*)> heartbeat;
-
         std::vector<SpaceObj*>* onUpdate(float deltaTime);
         void onDraw(olc::PixelGameEngine*);
 
-        bool gotHit(SpaceObj* culprit);
         bool shieldIsActive();
 
-        int* controls;
-
         RGNDS::Collision::Circle getCollider();
+
+        olc::vf2d getPassiveVelocity();
+        float getTravelDistance(float dt);
 
     protected:
         ShipUpgrade_Shield* currentShield;

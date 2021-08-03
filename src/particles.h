@@ -10,7 +10,9 @@ class ParticleSystem {
 public:
     class Particle {
     public:
-        virtual ~Particle(){};
+        virtual ~Particle(){
+            Debug("ParticleSystem::Particle::~Particle");
+        };
         virtual Pa* spawnNewParticle(Em* e) = 0;
         virtual bool onParticleUpdate(float deltaTime) = 0;
         virtual void onParticleDraw(olc::PixelGameEngine*) = 0;
@@ -26,10 +28,13 @@ public:
             particles.clear();
         }
 
+        virtual void onEmitterUpdate(float deltaTime) {}
         virtual void onParticleDeath(Pa* particle){}; // Called, when one of the particles has reached its max lifetime
         virtual void onNoParticlesLeft()                 = 0; // Called, once all particles in the list have reached its max lifetime
 
-        virtual void updateParticles(float deltaTime) final {
+        virtual void updateEmitter(float deltaTime) final {
+            onEmitterUpdate(deltaTime); 
+
             Pa* p;
             int a;
             
@@ -52,12 +57,19 @@ public:
                 p->onParticleDraw(pge);
         }
 
+
     private:
         std::vector<Pa*> particles;
+
+        virtual void addParticle(Pa* p) final { particles.push_back(p); }
+
         friend class ParticleSystem<Em, Pa>;
     };
 
     ParticleSystem(Em* e, Pa* p) {
+        this->emitter = nullptr;
+        this->particle = nullptr;
+
         if(!std::is_base_of<ParticleSystem::Particle, Pa>())
             throw "given Particle is not instanceOf ParticleSystem::Particle";
 
@@ -81,7 +93,7 @@ public:
         for(int a = 0; a < cnt && attempts > 0; a++) {
             auto p = particle->spawnNewParticle(emitter);
             if(p != nullptr) {
-                emitter->particles.push_back(p);
+                emitter->addParticle(p);
                 spawned++;
             }
             else {

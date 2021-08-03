@@ -5,6 +5,7 @@
 #include "../scene.h"
 #include "../gameobjects/asteroids.h"
 #include "../gameobjects/ship.h"
+#include "../particles/ship_explosion.h"
 
 class MainGameScreen : public Scene {
 
@@ -24,8 +25,6 @@ public:
     
     float game_difficulty;        // difficulty goes from 1 to 16;
 
-    void addSpaceObj(SpaceObj*);
-
     GAME_STATE getState();
 
 protected:
@@ -39,7 +38,9 @@ private:
     float scoreTimer;
 
     Ship* ship;
+
     bool shipSurvived;
+    ShipExplosion* shipexp; 
 };
 
 #endif
