@@ -71,9 +71,8 @@ public:
      * \param maxLifetime - how many seconds the particle will exist at full opacity
      */
     SpriteDissolve_Particle(
-            olc::vf2d startCoords, 
-            int pxx, int pxy, float alpha, 
-            SpriteDissolve_Emitter* em,
+            olc::vf2d startCoords, olc::vf2d emitterPosition, 
+            olc::Pixel, 
             float speed=10.0f, float maxLifetime=1.0f);
 
     SpriteDissolve_Particle* spawnNewParticle(SpriteDissolve_Emitter* e);
@@ -83,9 +82,9 @@ public:
 protected:
     float lifetime;
     olc::vf2d px;
-    SpriteDissolve_Emitter* em; 
     float speed;
     float maxLifetime;
+    olc::Pixel pixel;
 };
 
 #endif

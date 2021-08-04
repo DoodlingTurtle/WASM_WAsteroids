@@ -45,6 +45,8 @@ public:
 
         void moveInDirection( float distance ) override;
 
+        olc::Sprite* getSprite(); 
+
      protected:
         // Objects for Asteroid to keep track of
         //static std::vector<Shot*> shots;

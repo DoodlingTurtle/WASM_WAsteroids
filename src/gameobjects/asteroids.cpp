@@ -9,10 +9,8 @@
 using namespace std;
 
 Asteroids::Asteroid::Asteroid() : SpaceObj(32.0f)
-{ 
-    sprite = new olc::Sprite(64, 64); 
-    killOnNextUpdate = false;
-}
+, sprite(nullptr), decal(nullptr), killOnNextUpdate(false)
+{}
 
 void Asteroids::Asteroid::markAsHit() { killOnNextUpdate = true; }
 
@@ -23,6 +21,9 @@ float _getradius() {
 
 void Asteroids::Asteroid::generateShape() {
     olc::PixelGameEngine* pge = Global::pge;
+
+    if(sprite == nullptr)
+        sprite = new olc::Sprite(64, 64);
 
 	pge->SetDrawTarget(sprite);
 
@@ -62,10 +63,11 @@ void Asteroids::Asteroid::generateShape() {
         }
 
 	pge->SetDrawTarget(nullptr);
-    if(decal == nullptr)
-        decal = new olc::Decal(sprite);
-    else
-        decal->UpdateSprite();
+
+    if(decal != nullptr)
+        delete decal;
+
+    decal = new olc::Decal(sprite);
 }
 
 
@@ -132,10 +134,7 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
         spa->push_back(ScorePopup::spawn(100/scale, pos.x, pos.y));
         
         //Spawn AsteroidExplosion at go->pos
-        AsteroidExplosion* e = new AsteroidExplosion(
-                this->pos.x, this->pos.y, this->scale
-        );
-        e->spawnNewParticles(16);
+        AsteroidExplosion* e = new AsteroidExplosion(this);
         spa->push_back(e);
         
         this->kill();
@@ -160,6 +159,11 @@ Asteroids::SIZES Asteroids::Asteroid::getSize() {
 }
 
 void Asteroids::Asteroid::onDraw(olc::PixelGameEngine* pge) {
+    if(decal == nullptr || sprite == nullptr) {
+        Debug("WARNING: Asteroid " << this << " is missing sprite or decal");
+        return;
+    }
+
     pge->SetDrawTarget(layer_asteroids);
     SpaceObj::draw([this](RGNDS::Transform* tr){
         Global::pge->DrawRotatedDecal( 
@@ -180,9 +184,18 @@ std::vector<RGNDS::Collision::Circle> Asteroids::Asteroid::getColliders() {
     return r;
 }
 
+olc::Sprite* Asteroids::Asteroid::getSprite() { 
+    if(sprite == nullptr) {
+        Debug("WARNING: Asteroid " << this << " is missing sprite");
+        return nullptr;
+    }
+
+    return sprite;
+}
+
 Asteroids::Asteroid::~Asteroid() { 
-    delete decal;
-    delete sprite;
+    if(decal != nullptr)  delete decal;
+    if(sprite != nullptr) delete sprite;
 }
 
 

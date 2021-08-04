@@ -70,10 +70,6 @@ public:
 
         SetDrawTarget(nullptr);
 
-        // Define Particles
-        Asteroid_Particle::init(this);
-        //ShipExplosion_Particle::init(this);
-
 
         // Load first scene
         nextScene();
@@ -107,8 +103,6 @@ public:
     }
 
     bool OnUserDestroy() override {
-        Asteroid_Particle::deinit();
-        //ShipExplosion_Particle::deinit();
         return true;
     }
 
