@@ -18,7 +18,11 @@ std::vector<SpaceObj*>* AsteroidExplosion::onUpdate(float deltaTime) {
 }
 
 void AsteroidExplosion::onDraw(olc::PixelGameEngine* pge) 
-{ SpriteDissolve::onDraw(pge); }
+{ 
+    pge->SetDrawTarget(layer_particles);
+    SpriteDissolve::onDraw(pge); 
+    pge->SetDrawTarget(nullptr);
+}
 
 bool AsteroidExplosion::allowDeleteAfterDeath() { 
     return true; }

@@ -49,18 +49,18 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
     }
     else {
         updatePosition(deltaTime);
-           
-
 
         std::vector<Asteroids::Asteroid*> asteroids = Global::asteroids->getLiveAsteroids();
+        RGNDS::Collision c;
 
         for(auto a : asteroids) {
             if(RGNDS::Collision::checkCircleOnCircle(
                 ((RGNDS::Collision::Circle){
                     pos.x, pos.y, 2.0f
-                }), a->getColliders())
-              ){
-                a->markAsHit();
+                }), a->getColliders(),
+                &c
+            )){
+                a->markAsHit(&c);
                 this->kill();
                 //TODO: Redo audio
                 //mmEffect(sounds[(int)(Engine_RandF() * 4)]);

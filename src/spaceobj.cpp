@@ -21,7 +21,6 @@ void SpaceObj::getCollisionSphere(olc::vf2d *pos, float *radius) {
 }
 
 void SpaceObj::draw(std::function<void(RGNDS::Transform*)> drawingLambda) {
-
     olc::vf2d posOrig = this->pos;
 
     for(olc::vf2d p : renderer.getInstances()) { 

@@ -36,6 +36,7 @@ public:
         layer_ship  = CreateLayer();
         layer_asteroids = CreateLayer();
         layer_shots = CreateLayer();
+        layer_particles = CreateLayer();
         layer_stars= CreateLayer();
 
         // initialize Layers
@@ -50,6 +51,8 @@ public:
             );
         }
         EnableLayer(layer_stars, true);
+
+        EnableLayer(layer_particles, true);
 
         SetDrawTarget(layer_shots);
         Clear(olc::BLANK);
@@ -89,6 +92,9 @@ public:
         // if the scene is activate after the logic update
             if(currentScene->isActive()) {
                 // draw a new frame
+                SetDrawTarget(layer_particles);
+                    Clear(olc::BLANK);
+                SetDrawTarget(nullptr);
                 Clear(olc::BLANK);
                 currentScene->onDraw(this);
             }

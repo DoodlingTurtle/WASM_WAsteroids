@@ -22,3 +22,4 @@ int layer_shots = 0;
 int layer_stars = 0;
 int layer_ship = 0;
 int layer_blackout = 0;
+int layer_particles = 0;

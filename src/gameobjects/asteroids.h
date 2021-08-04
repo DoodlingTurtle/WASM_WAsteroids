@@ -32,12 +32,18 @@ public:
 
         static std::function<void(int, void*)> onShipAction;
 
-        void bringBackToLife(olc::vf2d pos, bool generateNewShape, Asteroids::SIZES size);
+        void bringBackToLife(
+            olc::vf2d pos, 
+            bool generateNewShape, 
+            Asteroids::SIZES size,
+            olc::vf2d velocity = {0, 0},
+            float angle = 0
+        );
 
         void onDraw(olc::PixelGameEngine* pge) override;
         std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
 
-        void markAsHit();
+        void markAsHit(const RGNDS::Collision*);
 
         Asteroids::SIZES getSize();
 
@@ -77,7 +83,9 @@ public:
     std::vector<Asteroid*>* spawnAsteroids( 
         int nr, 
         Asteroids::SIZES size = SIZE_RANDOM, 
-        int x = 0, int y = 0
+        int x = 0, int y = 0, 
+        olc::vf2d velocity ={0, 0},
+        float angle = 0
     );
 
     // remove all Asteroids from the playfield

@@ -61,3 +61,4 @@ extern int layer_shots;
 extern int layer_stars;
 extern int layer_ship;
 extern int layer_blackout;
+extern int layer_particles;
