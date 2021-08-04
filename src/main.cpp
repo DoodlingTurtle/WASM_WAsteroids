@@ -71,6 +71,7 @@ public:
         SetDrawTarget(nullptr);
 
 
+
         // Load first scene
         nextScene();
 
@@ -118,6 +119,7 @@ public:
                         
                 case 0: { // new Game
                     Global::score = 0;                       //reset score
+                    mainGameScreen.reset();
                     Global::shipStats->resetToLV1();
                     next = &mainGameScreen; 
                     break; }
