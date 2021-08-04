@@ -1,6 +1,4 @@
 #include "ship_explosion.h"
-#include "../particles.h"
-#include "../config.h"
 
 /*#############################################################################
  * ShipExplosion

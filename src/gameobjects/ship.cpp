@@ -10,7 +10,7 @@
 
 Ship::Ship() 
 : SpaceObj(SHIP_DEFAULT_RADIUS)
-  , angRes(PI/2)
+  , angRes(PI)
   , thrusting(false)
   , shieldIsUp(false)
   , sprShip(nullptr)
