@@ -105,11 +105,7 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         }
         else if(go == (SpaceObj*)ship) {
             shipSurvived = false;
-            shipexp = new ShipExplosion(
-                ship->pos.x, ship->pos.y,
-                ship->getPassiveVelocity(),
-                ship->getTravelDistance(deltaTime)  
-            );
+            shipexp = new ShipExplosion(ship);
             newGameObjects->push_back(shipexp);
         }
         else {

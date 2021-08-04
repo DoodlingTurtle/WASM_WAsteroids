@@ -22,8 +22,13 @@ Ship::Ship()
     mmLoadEffect(SFX_S_THRUST);
     */
 
+    sprDissolve = new olc::Sprite(32, 32);
     sprShip = new olc::Sprite("./assets/ship.png");
     decShip = new olc::Decal(sprShip);    
+
+    Global::pge->SetDrawTarget(sprDissolve);
+    Global::pge->DrawPartialSprite({ 0, 0 }, sprShip, { 32, 0 }, { 32, 32 });
+    Global::pge->SetDrawTarget(nullptr);
 
     this->bIsAlive = true;
 
@@ -34,6 +39,8 @@ Ship::Ship()
 
 Ship::~Ship() 
 {
+    Debug("Delete ship dissolveSpr");
+    delete sprDissolve;
     Debug("Delete ship spr");
     delete sprShip;
     Debug("Delete ship dec");
@@ -230,81 +237,4 @@ float     Ship::getTravelDistance(float deltaTime) {
 }
 
 
-
-//static float thrustSoundTimer;
-//ShipExplosionParticle ShipExplosionParticle::proto = ShipExplosionParticle();
-
-/*ShipExplosionParticle::ShipExplosionParticle() : ParticleSystem::Particle() 
-{
-    pos.x = Engine_RandF() * 16 - 8;
-    pos.y = Engine_RandF() * 16 - 8;
-
-    velocity = Engine_RandF() * 64+32;
-    lifetime = Engine_RandF() * 1000+1000;
-
-    directionFromPositionVector();
-    
-}
-ShipExplosionParticle::~ShipExplosionParticle() {}
-
-bool ShipExplosionParticle::update(float deltatime) 
-{
-    lifetime -= deltatime*1000.0f;
-    if(lifetime <= 0) return false;
-
-    moveInDirection(velocity*deltatime);
-    velocity *= 0.90;
-
-    return true;
-}
-void ShipExplosionParticle::attachToVector(float deltaTime, int index, std::vector<RGNDS::Point<double>>* vec) 
-{
-    RGNDS::Point<double> d;
-    d.x = pos.x-1;
-    d.y = pos.y-1;
-
-    vec->push_back(d);
-    
-    d.x += 3;
-    vec->push_back(d);
-    d.x -= 3;
-
-    d.y += 3;
-    vec->push_back(d);
-}
-ShipExplosionParticle* ShipExplosionParticle::getNewInstance(int index) 
-{
-    return new ShipExplosionParticle();
-}
-
-
-
-ShipExplosion::ShipExplosion(Ship* ship) : ParticleSystem::Emitter(ship->pos.x, ship->pos.y, 20, &ShipExplosionParticle::proto)
-{
-    velocity.x = ship->velocity.x / 4;
-    velocity.y = ship->velocity.y / 4;
-    pos.x = transform.pos.x;
-    pos.y = transform.pos.y;
-
-    bIsAlive = true;
-
-
-
-}
-ShipExplosion::~ShipExplosion(){};
-
-void ShipExplosion::onUpdate(SpaceObj::MainGameUpdateData* data)
-{
-    SpaceObj::updatePosition();
-    transform.pos.x = pos.x;
-    transform.pos.y = pos.y;
-
-    ParticleSystem::Emitter::update(data->deltaTime);
-}
-void ShipExplosion::onDraw(SpaceObj::MainGameDrawData* data) 
-{
-    ParticleSystem::Emitter::draw(COLOR_SHIP, 31, 2);
-}
-void ShipExplosion::onNoParticlesLeft() { SpaceObj::kill(); }
-*/
-
+olc::Sprite* Ship::getSprite() { return sprDissolve; }

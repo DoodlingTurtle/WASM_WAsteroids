@@ -37,6 +37,8 @@ class Ship : public SpaceObj {
         olc::vf2d getPassiveVelocity();
         float getTravelDistance(float dt);
 
+        olc::Sprite* getSprite();
+
     protected:
         ShipUpgrade_Shield* currentShield;
 
@@ -57,6 +59,7 @@ class Ship : public SpaceObj {
         std::vector<ShipUpgrade*> upgrades;
         std::vector<ShipUpgrade*> newUpgrades; 
 
+        olc::Sprite* sprDissolve;
         olc::Sprite* sprShip;
         olc::Decal*  decShip;
 };

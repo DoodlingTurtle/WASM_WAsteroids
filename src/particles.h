@@ -10,9 +10,7 @@ class ParticleSystem {
 public:
     class Particle {
     public:
-        virtual ~Particle(){
-            Debug("ParticleSystem::Particle::~Particle");
-        };
+        virtual ~Particle(){ };
         virtual Pa* spawnNewParticle(Em* e) = 0;
         virtual bool onParticleUpdate(float deltaTime) = 0;
         virtual void onParticleDraw(olc::PixelGameEngine*) = 0;
@@ -30,7 +28,7 @@ public:
 
         virtual void onEmitterUpdate(float deltaTime) {}
         virtual void onParticleDeath(Pa* particle){}; // Called, when one of the particles has reached its max lifetime
-        virtual void onNoParticlesLeft()                 = 0; // Called, once all particles in the list have reached its max lifetime
+        virtual void onNoParticlesLeft() =0; // Called, once all particles in the list have reached its max lifetime
 
         virtual void updateEmitter(float deltaTime) final {
             onEmitterUpdate(deltaTime); 
@@ -57,12 +55,12 @@ public:
                 p->onParticleDraw(pge);
         }
 
-
-    private:
+    protected:
         std::vector<Pa*> particles;
 
-        virtual void addParticle(Pa* p) final { particles.push_back(p); }
+    private:
 
+        virtual void addParticle(Pa* p) final { particles.push_back(p); }
         friend class ParticleSystem<Em, Pa>;
     };
 

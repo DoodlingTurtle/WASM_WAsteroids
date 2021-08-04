@@ -41,5 +41,20 @@ namespace RGNDS {
         dir.y = pos.y / dist;
     }
 
+    void Transform::translate(olc::vf2d* in, olc::vf2d* out) {
+        
+        /*
+        +-  -+   +--                  --+   +-  -+
+        |out.x| = | cos(ang), - sin(ang) | * |in.x|
+        |out.y|   | sin(ang),   cos(ang) |   |in.y|
+        +-  -+   +--                  --+   +-  -+
+        */
+        out->x = dir.x * in->x + -dir.y * in->y;
+        out->y = dir.y * in->x + dir.x * in->y; 
+
+        *out *= scale;
+        *out += pos;
+    }
+
 }
 #endif // __RGNDS_TRANSFORM_CPP__
