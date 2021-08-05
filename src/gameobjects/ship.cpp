@@ -24,7 +24,7 @@ Ship::Ship()
     */
 
     sprDissolve = new olc::Sprite(32, 32);
-    sprShip = new olc::Sprite("./assets/ship.png");
+    sprShip = new olc::Sprite("./assets/sprites/ship.png");
     decShip = new olc::Decal(sprShip);    
 
     Global::pge->SetDrawTarget(sprDissolve);
@@ -85,6 +85,8 @@ void Ship::addUpgrade(ShipUpgrade *upgrade) {
     ShipUpgrade_Shield* shieldPtr = dynamic_cast<ShipUpgrade_Shield*>(upgrade);
     if(shieldPtr != nullptr)
         currentShield = shieldPtr;
+
+    Debug("add ship upgrade " << upgrade);
 }
 
 
@@ -211,7 +213,6 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 
 // Update upgrades
     ShipUpgrade* upgrade;
-    Debug("ship upgrade update " << upgrades.size());
     for(int a = upgrades.size()-1; a >= 0; a--) {
         upgrade = upgrades.at(a);
         if(!upgrade->update(stats, this, deltaTime, ret)) {

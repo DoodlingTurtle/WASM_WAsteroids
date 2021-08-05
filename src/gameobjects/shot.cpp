@@ -76,7 +76,7 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
  *###########################################################################*/
 
 Shots::Shots() { 
-    sprShot = new olc::Sprite("./assets/shot.png"); 
+    sprShot = new olc::Sprite("./assets/sprites/shot.png"); 
     decShot = new olc::Decal(sprShot);
 }
 Shots::~Shots(){ 

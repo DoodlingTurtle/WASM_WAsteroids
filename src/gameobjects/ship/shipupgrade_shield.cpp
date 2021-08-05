@@ -6,7 +6,7 @@ olc::Sprite* ShipUpgrade_Shield::sprite = nullptr;
 olc::Decal*  ShipUpgrade_Shield::decal = nullptr;
 
 void ShipUpgrade_Shield::init(olc::PixelGameEngine* pge) {
-    sprite = new olc::Sprite("assets/shield.png");
+    sprite = new olc::Sprite("assets/sprites/shield.png");
     decal = new olc::Decal(sprite);
 }
 
