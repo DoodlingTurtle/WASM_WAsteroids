@@ -9,8 +9,7 @@
 #include "scenes/pausescreen.h"
 
 #include "gameobjects/asteroids.h"
-#include "particles/asteroid_particles.h"
-#include "particles/ship_explosion.h"
+#include "gameobjects/ship/shipupgrade_shield.h"
 
 #include "gameobjects/ship/shipstats.h"
 
@@ -73,7 +72,8 @@ public:
 
         SetDrawTarget(nullptr);
 
-
+        // Load other Sprites
+        ShipUpgrade_Shield::init(this);
 
         // Load first scene
         nextScene();
@@ -110,6 +110,7 @@ public:
     }
 
     bool OnUserDestroy() override {
+        ShipUpgrade_Shield::deinit();
         return true;
     }
 

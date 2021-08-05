@@ -6,6 +6,9 @@
 #include "shipstats.h"
 #include "shipupgrade.h"
 
+#include "../asteroids.h"
+#include "../../collision.h"
+
 class Ship;
 
 class ShipUpgrade_Shield: public ShipUpgrade 
@@ -14,23 +17,30 @@ public:
     ShipUpgrade_Shield();
     ~ShipUpgrade_Shield();
 
-    bool init(ShipStats *shipstats, int* controls);
-    void draw(RGNDS::Transform& ship);
-    bool update(ShipStats* shipstats, Ship* ship, float deltaTime, int keys_held, int keys_up, int keys_justpressed);
+    bool init(ShipStats *shipstats) override;
+
+    void draw(olc::PixelGameEngine*, RGNDS::Transform& ship) override;
+    bool update(
+            ShipStats* shipstats, Ship* ship 
+          , float deltaTime
+          , std::vector<SpaceObj*>* newSpaceObjects
+    ) override;
 
     virtual float getRadius();
 
-    void gotHit();
+    void gotHit( Asteroids::Asteroid*, RGNDS::Collision*, olc::vf2d velocity );
 
-//    RGNDS::GL2D::PolyShape* circle;
+    static olc::Sprite* sprite;
+    static olc::Decal*  decal;
 
-//    glImage* gfx;
+    static void init(olc::PixelGameEngine* pge);
+    static void deinit();
 
 private:
     float lifetime;
-
     float lastHitTime;
-
+    double ang; 
+    float rotspeed;
 };
 
 #endif

@@ -55,7 +55,6 @@ class Ship : public SpaceObj {
         bool thrusting;
         bool shieldIsUp;
 
-
         std::vector<ShipUpgrade*> upgrades;
         std::vector<ShipUpgrade*> newUpgrades; 
 
@@ -65,43 +64,4 @@ class Ship : public SpaceObj {
 };
 
 
-
-
-
-
-
-//#include "./particles.h"
-/*class ShipExplosionParticle 
-  : public ParticleSystem::Particle
-  , public RGNDS::Transform 
-{
-public:
-    static ShipExplosionParticle proto;
-
-    ShipExplosionParticle();
-    ~ShipExplosionParticle();
-
-    bool update(float deltaTime);
-    void attachToVector(float deltaTime, int renderIndex, std::vector<RGNDS::Point<double>>*);
-    ShipExplosionParticle* getNewInstance(int index);
-
-
-protected:
-    float lifetime;
-    float velocity;
-
-};
-*/
-/*
-class ShipExplosion : public ParticleSystem::Emitter, public SpaceObj {
-public:
-    ShipExplosion(Ship* ship);
-    ~ShipExplosion();
-
-    void onUpdate(SpaceObj::MainGameUpdateData*);
-    void onDraw(SpaceObj::MainGameDrawData*);
-
-    void onNoParticlesLeft();
-};
-*/
 #endif // SHIP_H

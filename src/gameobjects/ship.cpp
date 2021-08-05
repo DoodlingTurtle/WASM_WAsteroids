@@ -5,6 +5,7 @@
 #include "../config.h"
 #include "../global.h"
 #include "../collision.h"
+#include "ship/shipupgrade_shield.h"
 
 #define SHIP_DEFAULT_RADIUS 16.0f
 
@@ -35,6 +36,10 @@ Ship::Ship()
     stats = Global::shipStats;
 
     reset();
+
+    this->addUpgrade(new ShipUpgrade_Shield());
+
+
 }
 
 Ship::~Ship() 
@@ -60,6 +65,12 @@ Ship::~Ship()
 
 void Ship::clearUpgrades() 
 {
+    for(ShipUpgrade* su : upgrades)
+        delete su;
+
+    for(ShipUpgrade* su : newUpgrades)
+        delete su;
+
     currentShield = nullptr;
     upgrades.clear();
     newUpgrades.clear();
@@ -68,7 +79,7 @@ void Ship::clearUpgrades()
 void Ship::addUpgrade(ShipUpgrade *upgrade) {
 
     if(upgrade->init(stats))
-        upgrades.push_back(upgrade);
+        newUpgrades.push_back(upgrade);
 
     // If upgrade is instanceOf ShipUpgrade_Shield, the register as currentShield
     ShipUpgrade_Shield* shieldPtr = dynamic_cast<ShipUpgrade_Shield*>(upgrade);
@@ -91,7 +102,7 @@ void Ship::reset()
 
     clearUpgrades();
 
-    addUpgrade(&shieldgenerator);
+    //addUpgrade(&shieldgenerator);
 
     objRadius = 24;
     stats->generator = stats->generatorcapacity;
@@ -99,26 +110,43 @@ void Ship::reset()
 }
 
 RGNDS::Collision::Circle Ship::getCollider() {
-    return {pos.x, pos.y, 14.0f*scale};
+    float radius = 14.0f;
+
+    if(currentShield != nullptr)
+        radius = currentShield->getRadius();
+
+    return {pos.x, pos.y, radius * scale};
 }
 
 std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
+
 //check asteroids collision
-    if(RGNDS::Collision::checkCircleOnCircle(
-        getCollider(), 
-        Global::asteroids->getActiveColliders()
-    )){
-        this->kill();
-        return nullptr;
-    }; 
+    std::vector<Asteroids::Asteroid*> asteroids = Global::asteroids->getLiveAsteroids();
+    RGNDS::Collision c;
+    for(auto asteroid : asteroids) {
+        if(RGNDS::Collision::checkCircleOnCircle(
+            getCollider(), 
+            asteroid->getColliders(),
+            &c
+        )){
+            if(currentShield != nullptr) {
+                currentShield->gotHit(asteroid, &c, velocity);
+                velocity *= {0.5f, 0.5f};
+                //mmEffect(SFX_A_BOUNCE);
+            }
+            else {
+                this->kill();
+                return nullptr;
+            }
+        }
+    }
 
 //TODO: Redo Controlls
-    std::vector<SpaceObj*>* ret = nullptr;
+    auto ret = new std::vector<SpaceObj*>();
 
     if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_FIRE]).bPressed) {
         if(!stats->generatorhalt && stats->generator >= stats->shotenergyconsumption) {
             Shots::Shot* s = shots.spawnShot(ang, &pos);
-            ret = new std::vector<SpaceObj*>();
             ret->push_back(s);
             stats->generator -= stats->shotenergyconsumption;
         }
@@ -170,11 +198,6 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
     if(stats->generator >= stats->generatorunlock)
         stats->generatorhalt = false;
 
-// Activate new upgrades
-    for(int a = 0; a < newUpgrades.size(); a++)
-        upgrades.push_back(newUpgrades.at(a));
-
-    newUpgrades.clear();
 // Genrator Recovery
     if(allowgeneratoregen) {
         stats->generator += deltaTime * stats->generatorrecovery;
@@ -182,17 +205,22 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
             stats->generator = stats->generatorcapacity;
     }
 
+// Add new Upgrades
+    upgrades.insert(upgrades.end(), newUpgrades.begin(), newUpgrades.end());
+    newUpgrades.clear();
+
 // Update upgrades
     ShipUpgrade* upgrade;
+    Debug("ship upgrade update " << upgrades.size());
     for(int a = upgrades.size()-1; a >= 0; a--) {
         upgrade = upgrades.at(a);
-        if(!upgrade->update(stats, this, deltaTime)) {
-            Debug("remove ship upgrage " << upgrade);
-            
+        if(!upgrade->update(stats, this, deltaTime, ret)) {
             if(upgrade == currentShield) {
                 currentShield = nullptr;
-                objRadius = SHIP_DEFAULT_RADIUS;
+            //    objRadius = SHIP_DEFAULT_RADIUS;
             }
+            Debug("remove ship upgrade " << upgrade);
+            delete upgrade;
 
             upgrades.erase(upgrades.begin()+a);
         }
@@ -204,6 +232,11 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 // Update Position based on Screen-Borders
     updatePosition(deltaTime);
 
+// Check if there is data to be returned
+    if(ret->size() <= 0) {
+        delete ret;
+        ret = nullptr;
+    }
     return ret;
 }
 
@@ -216,12 +249,16 @@ void Ship::onDraw(olc::PixelGameEngine* pge)
             {sprShip->height / 2.0f, sprShip->height / 2.0f},
             {(1-thrusting)*32.0f, 0}, {(float)sprShip->height, (float)sprShip->height}
         );
+        
+        for(auto upgrade : upgrades)
+            upgrade->draw(Global::pge, *tr);
     });
     pge->SetDrawTarget(nullptr);
 
     int barheight = (int)((stats->generator / stats->generatorcapacity) * 164.0f);
 
     olc::Pixel c = stats->generatorhalt ? olc::RED : olc::WHITE;
+    c.a = 128;
 
     pge->FillRect(240, 28 + (164 - barheight), 16, barheight, c) ;
     pge->FillRect(240, 192, 16, barheight, c) ;

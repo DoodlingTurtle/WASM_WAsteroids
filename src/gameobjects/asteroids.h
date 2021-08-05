@@ -53,6 +53,8 @@ public:
 
         olc::Sprite* getSprite(); 
 
+        void changeVelocity(olc::vf2d velocity);
+
      protected:
         // Objects for Asteroid to keep track of
         //static std::vector<Shot*> shots;

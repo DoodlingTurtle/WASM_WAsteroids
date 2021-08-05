@@ -33,10 +33,9 @@ void Shots::Shot::onDraw(olc::PixelGameEngine* pge) {
     pge->SetDrawTarget(layer_shots);
     SpaceObj::draw([this](RGNDS::Transform *tr){
         Global::pge->DrawRotatedDecal(
-                tr->pos, 
-                decal, 
-                tr->ang, 
-                {tr->scale, tr->scale});
+                tr->pos, decal, 
+                tr->ang, {tr->scale, tr->scale}
+        );
     });
     pge->SetDrawTarget(nullptr); 
 }

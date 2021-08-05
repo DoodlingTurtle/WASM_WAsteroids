@@ -10,7 +10,7 @@ ShipUpgrade_ShieldGenerator::ShipUpgrade_ShieldGenerator() {}
 ShipUpgrade_ShieldGenerator::~ShipUpgrade_ShieldGenerator() {}
 
 
-void ShipUpgrade_ShieldGenerator::draw(RGNDS::Transform& ship) {
+void ShipUpgrade_ShieldGenerator::draw(olc::PixelGameEngine* pge, RGNDS::Transform& ship) {
 
     RGNDS::Transform tra;
     tra.scale = 0.25f;
@@ -36,7 +36,11 @@ bool ShipUpgrade_ShieldGenerator::init(ShipStats *stats) {
     return false;
 }
 
-bool ShipUpgrade_ShieldGenerator::update(ShipStats *shipstats, Ship *ship, float deltaTime) {
+bool ShipUpgrade_ShieldGenerator::update(
+        ShipStats* shipstats, Ship* ship 
+      , float deltaTime
+      , std::vector<SpaceObj*>* newSpaceObjects
+) {
 
     //TODO: port over to olcPGE
     //deployShield |= (uses > 0 && keys_justpressed&GameKeyMap[controls[GAMEINPUT_SHIELD]] && !ship->shieldIsActive());
@@ -44,8 +48,7 @@ bool ShipUpgrade_ShieldGenerator::update(ShipStats *shipstats, Ship *ship, float
 
     if(deployShield) {
         (*uses)--;
-        //FIXME:
-        //ship->addUpgrade(&shield);
+        ship->addUpgrade(&shield);
         deployShield = false;
     }
 

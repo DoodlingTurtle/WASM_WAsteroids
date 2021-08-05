@@ -12,11 +12,15 @@ public:
     ShipUpgrade_ShieldGenerator();
     virtual~ShipUpgrade_ShieldGenerator();
 
-    bool init(ShipStats* stats); 
-    bool update(ShipStats* shipstats, Ship* ship, float deltaTime);
-    void draw(RGNDS::Transform& ship); 
+    bool init(ShipStats* stats) override; 
+    bool update(
+            ShipStats* shipstats, Ship* ship 
+          , float deltaTime
+          , std::vector<SpaceObj*>* newSpaceObjects
+    ) override;
+    void draw(olc::PixelGameEngine*, RGNDS::Transform& ship) override; 
 
-//    static ShipUpgrade_Shield shield;
+    static ShipUpgrade_Shield shield;
 
 protected:
 

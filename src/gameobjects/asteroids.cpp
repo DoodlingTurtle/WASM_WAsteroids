@@ -129,6 +129,11 @@ void Asteroids::Asteroid::bringBackToLife(
     updatePosition(0.0f);
 
 }
+
+void Asteroids::Asteroid::changeVelocity(olc::vf2d v) {
+    velocity = v;
+}
+
 std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
 
     if(killOnNextUpdate) {
