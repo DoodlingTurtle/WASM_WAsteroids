@@ -7,7 +7,7 @@ FLAGS:= $(FLAGS) -DDEBUG_BUILD
 
 CPPSOURCEFILES:=$(wildcard ./*/*/*/*.cpp) $(wildcard ./*/*/*.cpp) $(wildcard */*.cpp) 
 OBJFILES:=$(patsubst %.cpp,%.cpp.o,$(CPPSOURCEFILES)) 
-LINKERFLAGS:= -s --preload-file ./assets EXPORTED_RUNTIME_METHODS=ccall,cwrap,getValue,setValue,stringToUTF8,UTF8ToString -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ALLOW_MEMORY_GROWTH=1 -s MAX_WEBGL_VERSION=2 -s MIN_WEBGL_VERSION=2 -s USE_LIBPNG=1
+LINKERFLAGS:= --preload-file ./assets -s EXPORTED_RUNTIME_METHODS=ccall,cwrap,getValue,setValue,stringToUTF8,UTF8ToString -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ALLOW_MEMORY_GROWTH=1 -s MAX_WEBGL_VERSION=2 -s MIN_WEBGL_VERSION=2 -s USE_OGG=1 -s USE_SDL_MIXER=1 -s USE_LIBPNG=1
 
 $(TARGET).html:$(OBJFILES)
 	$(CPP) $^ -g -o $@ $(LINKERFLAGS) -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK --emrun  $(FLAGS)
