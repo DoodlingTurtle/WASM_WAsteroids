@@ -15,9 +15,9 @@
 #include "ship/shipupgrade.h"
 #include "ship/shipstats.h"
 #include "ship/shipengine.h"
-#include "ship/shipupgrade_shield.h"
-#include "ship/shipupgrade_shieldgenerator.h"
 #include "../collision.h"
+
+class ShipUpgrade_Shield;
 
 class Ship : public SpaceObj {
     public:
@@ -45,7 +45,6 @@ class Ship : public SpaceObj {
 
         // Ship Sub functions
         ShipEngine                  shipEngine;
-        Shots                       shots;
         ShipStats*                  stats;
 
     private:

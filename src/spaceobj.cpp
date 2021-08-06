@@ -34,9 +34,13 @@ void SpaceObj::getCollisionSphere(olc::vf2d *pos, float *radius) {
         *radius = scale * objRadius;
 }
 
+void SpaceObj::movePixelDistance(float px) {
+    pos += (moveDirection * px);
+    renderer.updateDrawingInstances(&(this->pos), objRadius * scale);
+}
+
 void SpaceObj::updatePosition(float deltaTime) {
     pos += (moveDirection * moveVelocity) * deltaTime;
-
     renderer.updateDrawingInstances(&(this->pos), objRadius * scale);
 }
 

@@ -18,7 +18,9 @@ public:
     void setAngle(float radiants);
     void setDirection(olc::vf2d directionVector);
     void setRandomDirection();
+
     void updatePosition(float deltaTime);
+    void movePixelDistance(float px);
 
     // Getters
     float getAngle();

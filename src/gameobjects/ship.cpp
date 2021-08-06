@@ -5,7 +5,9 @@
 #include "../config.h"
 #include "../global.h"
 #include "../collision.h"
+
 #include "ship/shipupgrade_shield.h"
+#include "ship/shipupgrade_cannon.h"
 
 #define SHIP_DEFAULT_RADIUS 16.0f
 
@@ -36,6 +38,7 @@ Ship::Ship()
 
     reset();
     this->addUpgrade(new ShipUpgrade_Shield());
+    this->addUpgrade(new ShipUpgrade_Cannon());
 }
 
 Ship::~Ship() {
@@ -56,9 +59,6 @@ Ship::~Ship() {
     delete sprShip;
     Debug("Delete ship dec");
     delete decShip;
-
-    Debug("Kill shots");
-    shots.killall();
 
 }
 
@@ -150,13 +150,6 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 //TODO: Redo Controlls
     auto ret = new std::vector<SpaceObj*>();
 
-    if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_FIRE]).bPressed) {
-        if(!stats->generatorhalt && stats->generator >= stats->shotenergyconsumption) {
-            Shots::Shot* s = shots.spawnShot(ang, &pos);
-            ret->push_back(s);
-            stats->generator -= stats->shotenergyconsumption;
-        }
-    } 
     if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_TURNRIGHT]).bHeld)
         setAngleRel(angRes*deltaTime);
 

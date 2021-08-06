@@ -12,10 +12,10 @@ Asteroids::Asteroid::Asteroid() : SpaceObj(32.0f)
 , sprite(nullptr), decal(nullptr), killOnNextUpdate(false)
 {}
 
-void Asteroids::Asteroid::markAsHit(
-        const RGNDS::Collision* c
-) { killOnNextUpdate = true; }
-
+void Asteroids::Asteroid::markAsHit( const RGNDS::Collision* c) { 
+    setDirection(c->overlapDir ); 
+    killOnNextUpdate = true;
+}
 
 float _getradius() {
     return 22 + rand()%10;
@@ -82,6 +82,8 @@ void Asteroids::Asteroid::bringBackToLife(
 
     if(direction.x == 0 && direction.y == 0) 
         setRandomDirection();
+    else 
+        setDirection(direction);
 
     if(velocity < 0.00) moveVelocity = (float)(rand()%7 + 3);
     else                moveVelocity = velocity;
@@ -122,7 +124,6 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
     if(killOnNextUpdate) {
 
         std::vector<SpaceObj*>* spa;
-        std::vector<SpaceObj*>* ast2;
 
         Global::asteroids->playSFX();
         if(this->size != Asteroids::SIZE_SMALL) {
@@ -144,9 +145,9 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
             );
             spa->insert(spa->end(), ast2->begin(), ast2->end());
 
-            for(SpaceObj* a : *spa) { 
-                a->moveInDirection(24.0f*this->scale); 
-            }
+            for(SpaceObj* a : *spa) 
+                a->movePixelDistance(28.0f * scale);
+            
         }
         else spa = new std::vector<SpaceObj*>();
 

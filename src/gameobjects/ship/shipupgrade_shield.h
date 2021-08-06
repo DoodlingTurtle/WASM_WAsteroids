@@ -10,8 +10,7 @@
 
 #include "../asteroids.h"
 #include "../../collision.h"
-
-class Ship;
+#include "../ship.h"
 
 class ShipUpgrade_Shield: public ShipUpgrade 
 {

@@ -71,9 +71,25 @@ void ShipUpgrade_Shield::draw(
 
 // Methods
 void ShipUpgrade_Shield::gotHit( Asteroids::Asteroid* a, Ship* s, RGNDS::Collision* c) {
-    Debug("Bump: " << c->overlapDir.x << " " << c->overlapDir.y);
 
-    a->setDirection(c->overlapDir);
+    // Get needed variables
+    olc::vf2d invHit = c->overlapDir * (-1.0f);
+    olc::vf2d aDir = a->getDirection();
+    olc::vf2d sDir = s->getDirection();
+
+    float dot = aDir.x * invHit.x + aDir.y * invHit.y;
+    float dotSA = aDir.x * sDir.x + aDir.y * sDir.y; 
+    float aVel = a->moveVelocity;
+
+    // move Asteroid to the exact intersection point
+    a->movePixelDistance(c->C2COverlapImpact);
+  
+    // set Asteroids direction to the hit direction
+    a->setDirection(invHit);
+
+    // calculate new velocity
+    a->moveVelocity *= 0.90;                    // remove 10% of the velocity (because impact to the ship)
+    a->moveVelocity += s->moveVelocity * dotSA; // Add ships velocity according to Dot product / influence 
 
     this->lastHitTime = 1000.0f;
 

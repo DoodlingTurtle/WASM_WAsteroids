@@ -215,6 +215,10 @@ int main()
     };
          
     Mix_FreeChunk(wave);  // Free/Delete asset if no longer needed
+    while( Mix_Playing(-1) ); // wait until other channels have stopped playing
+    Mix_HaltChannel(channel); // to stop a specific channel
+    Mix_HaltChannel(-1); // to stop all chennels
+
     */
     if(run) {
     //Setup global ressources
