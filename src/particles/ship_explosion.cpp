@@ -5,7 +5,7 @@
  *###########################################################################*/
 ShipExplosion::ShipExplosion(Ship* ship)
 : SpaceObj(64.0f)
-, SpriteDissolve(ship->getSprite(), ship)
+, SpriteDissolve(ship->getSprite(), ship, 16.0f, 1.5f)
 { this->bIsAlive = true; }
 
 void ShipExplosion::onEmitterFinished() {

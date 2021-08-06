@@ -1,6 +1,8 @@
 #ifndef __ShipUpgrade_Shield_H__
 #define __ShipUpgrade_Shield_H__
 
+#include <SDL/SDL_mixer.h>
+
 #include "../../transform.h"
 
 #include "shipstats.h"
@@ -28,10 +30,11 @@ public:
 
     virtual float getRadius();
 
-    void gotHit( Asteroids::Asteroid*, RGNDS::Collision*, olc::vf2d velocity );
+    void gotHit( Asteroids::Asteroid*, Ship* s, RGNDS::Collision*);
 
     static olc::Sprite* sprite;
     static olc::Decal*  decal;
+    static Mix_Chunk*   sfxBump;
 
     static void init(olc::PixelGameEngine* pge);
     static void deinit();

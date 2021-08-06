@@ -8,41 +8,40 @@
 
 class SpaceObj : public RGNDS::Transform {
 public:
-    struct MainGameUpdateData {
-        float deltaTime; 
-        int keys_held; 
-        int keys_up; 
-        int keys_justpressed; 
-    };
-
-    struct MainGameDrawData {
-        float deltaTime;
-    };
 
     SpaceObj();
     SpaceObj(float objectRadius);
 
-    void updatePosition(float deltaTime);
-    void getCollisionSphere(olc::vf2d *pos, float *radius);
+    float moveVelocity;
 
+    // Setters 
+    void setAngle(float radiants);
+    void setDirection(olc::vf2d directionVector);
+    void setRandomDirection();
+    void updatePosition(float deltaTime);
+
+    // Getters
+    float getAngle();
+    olc::vf2d getDirection();
+    void getCollisionSphere(olc::vf2d *pos, float *radius);
     void draw(std::function<void(RGNDS::Transform*)> drawingLambda);
 
-    //Adds On update can respond with nullptr or vector<SpaceObj*>
+    // Virtual functionn
     virtual std::vector<SpaceObj*>* onUpdate(float deltaTime) { return nullptr; };
     virtual bool allowDeleteAfterDeath() { return false; }
-    
     virtual void onDraw(olc::PixelGameEngine* pge ){};
-
     virtual void kill();
     virtual bool isAlive();
 
-protected:
-    olc::vf2d velocity;
 
+protected:
     WrapAroundRenderer renderer;
     float objRadius;
     bool bIsAlive;
 
+private:
+    float moveAngle;
+    olc::vf2d moveDirection;
 
 };
 

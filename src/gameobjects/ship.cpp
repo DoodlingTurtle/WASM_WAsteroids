@@ -13,37 +13,43 @@ Ship::Ship()
 : SpaceObj(SHIP_DEFAULT_RADIUS)
   , angRes(PI)
   , thrusting(false)
-  , shieldIsUp(false)
   , sprShip(nullptr)
   , decShip(nullptr)
+  , sfxThrust(nullptr)
+  , sfxExplode(nullptr)
+  , chaThrust(-1)
 {
-    /*TODO: redo all audio
-    mmLoadEffect(SFX_SFX_LASER1);
-    mmLoadEffect(SFX_S_EXP);
-    mmLoadEffect(SFX_S_THRUST);
-    */
-
-    sprDissolve = new olc::Sprite(32, 32);
     sprShip = new olc::Sprite("./assets/sprites/ship.png");
     decShip = new olc::Decal(sprShip);    
 
+    sprDissolve = new olc::Sprite(32, 32);
     Global::pge->SetDrawTarget(sprDissolve);
     Global::pge->DrawPartialSprite({ 0, 0 }, sprShip, { 32, 0 }, { 32, 32 });
     Global::pge->SetDrawTarget(nullptr);
 
-    this->bIsAlive = true;
+    sfxThrust  = Mix_LoadWAV("assets/sfx/cc0_nocredit/loop_ambient_01.ogg");
+    sfxExplode = Mix_LoadWAV("assets/sfx/sci-fi_sounds/explosionCrunch_004.ogg");
 
+
+    this->bIsAlive = true;
     stats = Global::shipStats;
 
     reset();
-
     this->addUpgrade(new ShipUpgrade_Shield());
-
-
 }
 
-Ship::~Ship() 
-{
+Ship::~Ship() {
+    Debug("clear upgrades");
+    clearUpgrades();
+
+    Debug("clear sfx");
+    if(chaThrust != -1) {
+        Mix_HaltChannel(chaThrust);
+        chaThrust = -1;
+    }
+    if(sfxThrust != nullptr)
+        Mix_FreeChunk(sfxThrust);
+
     Debug("Delete ship dissolveSpr");
     delete sprDissolve;
     Debug("Delete ship spr");
@@ -54,24 +60,17 @@ Ship::~Ship()
     Debug("Kill shots");
     shots.killall();
 
-    Debug("clear upgrades");
-    clearUpgrades();
-    /*
-    mmUnloadEffect(SFX_SFX_LASER1);
-    mmUnloadEffect(SFX_S_EXP);
-    mmUnloadEffect(SFX_S_THRUST);
-    */
 }
 
-void Ship::clearUpgrades() 
-{
+void Ship::clearUpgrades() {
+    currentShield = nullptr;
+
     for(ShipUpgrade* su : upgrades)
         delete su;
 
     for(ShipUpgrade* su : newUpgrades)
         delete su;
 
-    currentShield = nullptr;
     upgrades.clear();
     newUpgrades.clear();
 }
@@ -90,22 +89,19 @@ void Ship::addUpgrade(ShipUpgrade *upgrade) {
 }
 
 
-void Ship::reset() 
-{
+void Ship::reset() {
     Debug("ship reset");
     pos.x = APP_SCREEN_WIDTH/2;
     pos.y = APP_SCREEN_HEIGHT/4;
     
     scale = 1;
     setAngleRel(PI/2);
-    velocity.x = 0;
-    velocity.y = 0;
+    SpaceObj::setDirection(olc::vf2d((float)cos(PI/2), (float)sin(PI/2)));
+    moveVelocity = 0.0f;
     bIsAlive = true;
 
     clearUpgrades();
-
-    //addUpgrade(&shieldgenerator);
-
+    
     objRadius = 24;
     stats->generator = stats->generatorcapacity;
 
@@ -120,6 +116,15 @@ RGNDS::Collision::Circle Ship::getCollider() {
     return {pos.x, pos.y, radius * scale};
 }
 
+void Ship::kill() {
+    if(chaThrust != -1) {
+        Mix_HaltChannel(chaThrust);
+        chaThrust = -1;
+    }
+    Mix_PlayChannel(-1, sfxExplode, 0);
+    SpaceObj::kill();
+}
+
 std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 
 //check asteroids collision
@@ -132,9 +137,8 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
             &c
         )){
             if(currentShield != nullptr) {
-                currentShield->gotHit(asteroid, &c, velocity);
-                velocity *= {0.5f, 0.5f};
-                //mmEffect(SFX_A_BOUNCE);
+                currentShield->gotHit(asteroid, this, &c);
+                moveVelocity *= 0.5f;
             }
             else {
                 this->kill();
@@ -168,31 +172,21 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
             stats->generator -= consumption;
         }
         else allowgeneratoregen = false;
-        /*TODO: Redo sound
-         * if(thrust_sound == 0) {
-            thrustSoundTimer  = 0.00;
-            thrust_sound = mmEffect(SFX_S_THRUST);
-        }
-        else {
-            thrustSoundTimer += 1000.0f * deltaTime;
-            if(thrustSoundTimer >= 1000) {
-                thrustSoundTimer = 0;
-                mmEffectCancel(thrust_sound);
-                thrust_sound = mmEffect(SFX_S_THRUST);
-            }
-        }
-        */
     }
-    else {
-        //mmEffectCancel(thrust_sound);
-        //thrust_sound = 0;
-
-    } 
     
-    if(thrusting) 
+    if(thrusting) {
         shipEngine.accelerate(deltaTime * 15.0f);
-    else
+        if(chaThrust == -1 || !Mix_Playing(chaThrust)) {
+            chaThrust = Mix_PlayChannel(-1, sfxThrust, -1);
+        }
+    } 
+    else {
         shipEngine.decerlerate(1);
+        if(chaThrust > -1) {
+            Mix_HaltChannel(chaThrust);
+            chaThrust = -1;
+        }
+    }
 
     if(stats->generator <= stats->generatorlock)
         stats->generatorhalt = true;
@@ -228,7 +222,12 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
     }
 
 // Update Position based on physics
-    velocity += dir * shipEngine.acceleration;
+    olc::vf2d moveDirection = getDirection();
+    float dot   = moveDirection.x * dir.x + moveDirection.y * dir.y;
+    if(thrusting)
+        setDirection(moveDirection + (dir - moveDirection)*deltaTime);
+    
+    moveVelocity += dot * shipEngine.acceleration;
     
 // Update Position based on Screen-Borders
     updatePosition(deltaTime);
@@ -241,8 +240,7 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
     return ret;
 }
 
-void Ship::onDraw(olc::PixelGameEngine* pge) 
-{
+void Ship::onDraw(olc::PixelGameEngine* pge) {
     pge->SetDrawTarget(layer_ship);
     SpaceObj::draw([this](Transform* tr) {
         Global::pge->DrawPartialRotatedDecal(
@@ -263,16 +261,17 @@ void Ship::onDraw(olc::PixelGameEngine* pge)
 
     pge->FillRect(240, 28 + (164 - barheight), 16, barheight, c) ;
     pge->FillRect(240, 192, 16, barheight, c) ;
+
+#ifdef DEBUG_BUILD
+    olc::vf2d moveDirection = getDirection();
+    pge->DrawLine(pos, pos+moveDirection*16.0f, olc::BLUE);
+    pge->DrawLine(pos, pos+dir*28.0f, olc::GREEN);
+#endif
+
 }
 
 bool Ship::shieldIsActive() {
     return currentShield != nullptr;
 }
-
-olc::vf2d Ship::getPassiveVelocity() { return this->velocity; }
-float     Ship::getTravelDistance(float deltaTime) { 
-    return sqrt(velocity.x * velocity.x + velocity.y * velocity.y); 
-}
-
 
 olc::Sprite* Ship::getSprite() { return sprDissolve; }

@@ -1,9 +1,11 @@
 #ifndef SHIP_H
 #define SHIP_H 
 
+#include <vector>
+#include <SDL/SDL_mixer.h>
+
 #include "ship/shipstats.h"
 
-#include <vector>
 
 #include "../wraparoundrenderer.h"
 #include "../spaceobj.h"
@@ -22,38 +24,36 @@ class Ship : public SpaceObj {
 
         Ship();
         ~Ship();
-
         void reset();
 
+        // Implement SpaceObj
+        std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
+        void onDraw(olc::PixelGameEngine*) override;
+
+        // Getters
+        RGNDS::Collision::Circle getCollider();
+        olc::Sprite* getSprite();  // Gets a sprite representing the ship
+
+        // Upgrade related stuff
         void addUpgrade(ShipUpgrade* upgrade);
-
-        std::vector<SpaceObj*>* onUpdate(float deltaTime);
-        void onDraw(olc::PixelGameEngine*);
-
         bool shieldIsActive();
 
-        RGNDS::Collision::Circle getCollider();
-
-        olc::vf2d getPassiveVelocity();
-        float getTravelDistance(float dt);
-
-        olc::Sprite* getSprite();
+        void kill() override;
 
     protected:
-        ShipUpgrade_Shield* currentShield;
+        ShipUpgrade_Shield* currentShield;    // keeps track, which updgrade is the current shield
 
+        // Ship Sub functions
         ShipEngine                  shipEngine;
-        ShipUpgrade_ShieldGenerator shieldgenerator;
         Shots                       shots;
         ShipStats*                  stats;
 
     private:
 
-        void clearUpgrades();
+        void clearUpgrades(); // removes and deletes all installed upgrades
 
-        float angRes;
-        bool thrusting;
-        bool shieldIsUp;
+        float angRes;      // defines how fast the ship can turn per sec.
+        bool  thrusting;   // defines if the ship is accelerating
 
         std::vector<ShipUpgrade*> upgrades;
         std::vector<ShipUpgrade*> newUpgrades; 
@@ -61,6 +61,10 @@ class Ship : public SpaceObj {
         olc::Sprite* sprDissolve;
         olc::Sprite* sprShip;
         olc::Decal*  decShip;
+
+        Mix_Chunk*   sfxExplode;   // SDL_Mixer SFX asset
+        Mix_Chunk*   sfxThrust;    // SDL_Mixer SFX asset
+        int          chaThrust;    // keeps track on what channel the thrusting sound is playing
 };
 
 

@@ -1,4 +1,6 @@
 #include "olcPixelGameEngine.h"
+#include <SDL/SDL_mixer.h>
+
 #include "config.h"
 #include "scene.h"
 #include "particles.h"
@@ -44,9 +46,9 @@ public:
         for(int a = 0; a < CNT_STARS; a++) {
             uint8_t i = 96 + (rand()%64);
             Draw(
-                    rand()%APP_SCREEN_WIDTH, 
-                    rand()%APP_SCREEN_HEIGHT, 
-                    olc::Pixel(i, i, i, 255)
+                rand()%APP_SCREEN_WIDTH, 
+                rand()%APP_SCREEN_HEIGHT, 
+                olc::Pixel(i, i, i, 255)
             );
         }
         EnableLayer(layer_stars, true);
@@ -96,6 +98,7 @@ public:
                     Clear(olc::BLANK);
                 SetDrawTarget(nullptr);
                 Clear(olc::BLANK);
+
                 currentScene->onDraw(this);
             }
             else {
@@ -110,6 +113,10 @@ public:
     }
 
     bool OnUserDestroy() override {
+        //Stop all SFX from playing
+        Mix_HaltChannel(-1);
+
+        // Destroy loaded graphics
         ShipUpgrade_Shield::deinit();
         return true;
     }
@@ -185,23 +192,53 @@ public:
 
 int main()
 {
-//Setup global ressources
-    Asteroids       asteroids;
-    ShipStats       shipStats;
+// Setup SDL_Mixer
+    bool run = true;
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
+        Debug("failed to init audio device");
+        run = false;
+    }
 
-    Global::score = 0;
-    Global::asteroids = &asteroids;
-    Global::shipStats = &shipStats;
+    /*
+    Mix_Chunk* wave = Mix_LoadWAV("./assets/bg.ogg");
+    if(wave == nullptr)
+        run = false;
 
-//Setup PGE 
-    WAsteroids app;
-    Global::pge = &app; 
-    if (app.Construct(
-        APP_SCREEN_WIDTH, 
-        APP_SCREEN_HEIGHT, 
-        APP_SCREEN_SCALE, 
-        APP_SCREEN_SCALE
-    )) app.Start();
+    int channel = Mix_PlayChannel(
+        -1,   // next free channel 
+        wave, // Mix_Chunk to play
+        -1    // Loops (-1 = infinite)
+    );
+       
+    while( Mix_Playing(channel) != 0 ) {
+        //To stuff, while channel is playing
+    };
+         
+    Mix_FreeChunk(wave);  // Free/Delete asset if no longer needed
+    */
+    if(run) {
+    //Setup global ressources
+        Asteroids       asteroids;
+        ShipStats       shipStats;
+    
+        Global::score = 0;
+        Global::asteroids = &asteroids;
+        Global::shipStats = &shipStats;
+    
+    //Setup PGE 
+        WAsteroids app;
+        Global::pge = &app; 
+        if (run && app.Construct(
+            APP_SCREEN_WIDTH, 
+            APP_SCREEN_HEIGHT, 
+            APP_SCREEN_SCALE, 
+            APP_SCREEN_SCALE
+        )) app.Start();
+    
+    // Close SDL_Mixer
+        Mix_CloseAudio();
+        Mix_Quit();
+    }
 
     return 0;
 }

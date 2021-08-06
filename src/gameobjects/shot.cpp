@@ -6,8 +6,6 @@ Shots::Shot::Shot() : SpaceObj(3.0f)
 {
     scale=1;
     bIsAlive = false;
-    velocity.x = 0;
-    velocity.y = 0;
 }
 
 Shots::Shot::~Shot() {}
@@ -19,14 +17,15 @@ void Shots::Shot::revive(
 ) {
     this->pos.x = pos->x;
     this->pos.y = pos->y;
-    setAngle(ang);
+    RGNDS::Transform::setAngle(ang);
     lifetime = 1000;
     moveInDirection(8.0);
     bIsAlive = true;
     decal = spr;
     updatePosition(0.0f);
-    velocity.x = dir.x * 64.0f;
-    velocity.y = dir.y * 64.0f;
+
+    SpaceObj::setDirection(dir);
+    SpaceObj::moveVelocity = 64.0f;
 }
 
 void Shots::Shot::onDraw(olc::PixelGameEngine* pge) {
@@ -61,8 +60,6 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
             )){
                 a->markAsHit(&c);
                 this->kill();
-                //TODO: Redo audio
-                //mmEffect(sounds[(int)(Engine_RandF() * 4)]);
             }
         }
 
@@ -75,20 +72,26 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
  * Shots
  *###########################################################################*/
 
-Shots::Shots() { 
+Shots::Shots()
+: sfx(nullptr)
+{ 
+    sfx     = Mix_LoadWAV("./assets/sfx/sci-fi_sounds/laserSmall_002.ogg");
     sprShot = new olc::Sprite("./assets/sprites/shot.png"); 
     decShot = new olc::Decal(sprShot);
 }
+
 Shots::~Shots(){ 
     delete decShot;
     delete sprShot; 
+    if(sfx != nullptr)
+        Mix_FreeChunk(sfx);
 }
 
 Shots::Shot* Shots::spawnShot(float ang, olc::vf2d *pos) {
 
     for(int a = 0; a < MAX_SHOT_CNT; a++) {
         if(shots[a].isAlive()) continue;
-
+        Mix_PlayChannel(-1, sfx, 0);
         Shot* shot = &shots[a];
         shot->revive(pos, ang, decShot);
 

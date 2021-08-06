@@ -1,6 +1,8 @@
 #ifndef __SHOT_H__
 #define __SHOT_H__
 
+#include <SDL/SDL_mixer.h>
+
 #include "../config.h"
 #include "../olcPixelGameEngine.h"
 #include "../spaceobj.h"
@@ -45,6 +47,7 @@ public:
     // Sprite, that is used to draw each shot
     olc::Sprite* sprShot;
     olc::Decal * decShot;
+    Mix_Chunk*   sfx;
 
 private:
     Shot shots[MAX_SHOT_CNT];

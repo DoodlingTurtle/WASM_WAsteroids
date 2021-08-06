@@ -14,12 +14,7 @@ Asteroids::Asteroid::Asteroid() : SpaceObj(32.0f)
 
 void Asteroids::Asteroid::markAsHit(
         const RGNDS::Collision* c
-) { 
-    float dst = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
-    this->velocity.x = dst * c->overlapDir.x;
-    this->velocity.y = dst * c->overlapDir.y;
-    killOnNextUpdate = true;
-}
+) { killOnNextUpdate = true; }
 
 
 float _getradius() {
@@ -81,23 +76,15 @@ void Asteroids::Asteroid::generateShape() {
 void Asteroids::Asteroid::bringBackToLife(
         olc::vf2d pos, bool generateNewShape, 
         Asteroids::SIZES size,
-        olc::vf2d vel, float angle
-) 
-{
-
+        olc::vf2d direction, float velocity
+) {
     Debug("revive Asteroid " << this);
 
-    if(angle == 0)
-        setAngle(RandF() * PI2);
-    else
-        setAngle(angle);
+    if(direction.x == 0 && direction.y == 0) 
+        setRandomDirection();
 
-    if(vel.x == 0 && vel.y == 0) 
-        velocity = {
-            (float)(rand()%20 - 10),
-            (float)(rand()%20 - 10)
-        };
-    else velocity = vel;
+    if(velocity < 0.00) moveVelocity = (float)(rand()%7 + 3);
+    else                moveVelocity = velocity;
 
     spinSpeed = (RandF() * 0.5 + 0.5) * 0.0625; // Spin by 360� every 16 Seconds (at max spinspeed)
 
@@ -130,10 +117,6 @@ void Asteroids::Asteroid::bringBackToLife(
 
 }
 
-void Asteroids::Asteroid::changeVelocity(olc::vf2d v) {
-    velocity = v;
-}
-
 std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
 
     if(killOnNextUpdate) {
@@ -141,18 +124,23 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
         std::vector<SpaceObj*>* spa;
         std::vector<SpaceObj*>* ast2;
 
+        Global::asteroids->playSFX();
         if(this->size != Asteroids::SIZE_SMALL) {
 
             Asteroids::SIZES size = static_cast<Asteroids::SIZES>( static_cast<int>(this->size)-1);
 
+            olc::vf2d moveDirection = getDirection();
+
             spa = (std::vector<SpaceObj*>*)Global::asteroids->spawnAsteroids( 
-                    1, size,  this->pos.x, this->pos.y,
-                   {velocity.y, -velocity.x } 
+                    1, size,  
+                    this->pos.x, this->pos.y,
+                    {moveDirection.y, -moveDirection.x}, moveVelocity
             );
            
             std::vector<SpaceObj*>* ast2 = (std::vector<SpaceObj*>*)Global::asteroids->spawnAsteroids( 
-                    1, size,  this->pos.x, this->pos.y,
-                   {-velocity.y, velocity.x } 
+                    1, size,  
+                    this->pos.x, this->pos.y,
+                    {-moveDirection.y, moveDirection.x}, moveVelocity
             );
             spa->insert(spa->end(), ast2->begin(), ast2->end());
 
@@ -206,6 +194,10 @@ void Asteroids::Asteroid::onDraw(olc::PixelGameEngine* pge) {
         );
     });
     pge->SetDrawTarget(nullptr);
+#ifdef DEBUG_BUILD
+    olc::vf2d moveDirection = getDirection();
+    Global::pge->DrawLine(pos, pos+(moveDirection*moveVelocity), olc::GREEN);
+#endif
 }
 
 std::vector<RGNDS::Collision::Circle> Asteroids::Asteroid::getColliders() {
@@ -238,7 +230,19 @@ Asteroids::Asteroid::~Asteroid() {
 
 Asteroids::Asteroids() 
 : dirty(true)
-{}
+{
+    sfx[0] = Mix_LoadWAV("assets/sfx/cc0_nocredit/explosion_01.ogg");
+    sfx[1] = Mix_LoadWAV("assets/sfx/cc0_nocredit/explosion_02.ogg");
+}
+
+Asteroids::~Asteroids() {
+    Mix_FreeChunk(sfx[0]);
+    Mix_FreeChunk(sfx[1]);
+}
+
+void Asteroids::playSFX() {
+    Mix_PlayChannel(-1, sfx[rand()%2], 0);
+}
 
 void Asteroids::update(float deltaTime) {
 	for(int a = 0; a < MAX_ASTEROIDS; a++) 
@@ -273,15 +277,14 @@ vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
         int nr, 
         Asteroids::SIZES size, 
         int x, int y,
-        olc::vf2d velocity,
-        float angle
+        olc::vf2d direction, float velocity
     ) {
 
 
     Debug(this << " spawns " << nr << " asteroid(s) ");
 
     int spawned = 0;
-    vector<Asteroids::Asteroid*>* list = new vector<Asteroids::Asteroid*>();
+    auto list = new vector<Asteroids::Asteroid*>();
     float sx=x, sy=y;
 
     if(nr > MAX_ASTEROIDS) 
@@ -295,9 +298,9 @@ vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
             if(y == 0)              sy = (rand()%APP_SCREEN_HEIGHT);
 
             asteroids[a].bringBackToLife( 
-                    {sx, sy}, 
-                    true, 
-                    size, velocity, angle
+                    {sx, sy}, true, 
+                    size, 
+                    direction, velocity
             );
             list->push_back(&asteroids[a]);
             spawned++;
