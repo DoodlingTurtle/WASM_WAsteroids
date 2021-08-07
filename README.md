@@ -10,6 +10,7 @@ The target platform is WebAssembly. So this will run on every platform that has
 a half decent modern Web Browser.
 
 
+---
 ## The Plan
 The goal is to create a roughlite Asteroids game, that allows the player to 
 purchase "upgrades" in-between levels.
@@ -21,6 +22,7 @@ So each game will turn out slightly different.
 The main objective of the game is, to reach the highest score possible, 
 in the shortest amount of time.
 
+---
 ## Controling the Game
 Right now the control scheme is limited to the original Nintendo DS project.
 That means Keyboard inputs only.
@@ -37,7 +39,7 @@ J = R (Right shoulder)
 RETURN/ENTER = Start (confirm)\
 BACK/BACKSPACE = Select
 
-
+---
 ## How to build
 If you want to download the source code, make changes or whatever, then be my guest.
 
@@ -66,39 +68,45 @@ With that out of the way, here is how you setup the build environment for the pr
    necessary evil.
 
 6. After that, you can use ` make ` to build the project into a main.html file.
+
 7. You can use ` make run ` to start a preview server and open the project in your default browser.
    
    You will have to manually stop the server by pressing "Ctrl + C" in your terminal
-
-8. Or you can use ` make debug ` to do the same as ` make run `, but the shown site has a Javascript console attached.
-  
    
-9. If you are ready to release, you can use ` make release ` to rebuild the 
+8. If you are ready to release, you can use ` make release ` to rebuild the 
    project in a more optimized way and copy everything to the 'release' folder.
 
+9. `DEBUG_BUILD`: inside your C++ Code you can check for the definition of `DEBUG_BUILD` to define C++ code, that will be ignored, when using 
+` make release `
+```cpp
+Example:
+#ifdef DEBUG_BUILD
+   std::cout << "I am only shown in debug builds" << std::endl
+#endif
+```
 
-
+---
 ## Current TODOs     
-Right now this port is pretty much a work in progess.
+A the game is missing its roughlite element, but is otherwise playable already.
 
-There is a lot to be done, before it reaches a playable state.
-
-
+There are a lot more things todo behind the scenes however.
 - Bring over the other Gamestates
   - Credits/License screen
-  - Pause screen
+  - Shop/Upgrade Screen
   - GameOver screen
   - Main Game screen
     - requires other Game components
-      - Ship
-      - Score counter
+      - ~~Ship~~ (donw)
+      - ~~Score counter~~ (done)
       - available upgrades
-        - Shields
+        - ~~Shields~~ (done)
         - ~~Reactors components~~ (done)
      - tweak reactor/generator values
-     - 
+  - ~~Pause screen~~ (done)
+     
 - Add support for different window formats and resolutions
 - Add Touch controls
 - Store highscores and Settings via LocalStorage in the Browser
-- Add sound effects
+
+- ~~Add sound effects~~(done)
 
