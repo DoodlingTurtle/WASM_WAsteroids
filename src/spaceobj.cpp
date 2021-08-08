@@ -1,6 +1,7 @@
 #include "spaceobj.h"
 #include "config.h"
 
+
 SpaceObj::SpaceObj() : SpaceObj::SpaceObj(1.0f){}
 SpaceObj::SpaceObj( float radius ) {
     objRadius = radius;

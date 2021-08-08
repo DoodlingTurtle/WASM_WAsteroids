@@ -6,7 +6,7 @@
 #include "../particles/asteroid_particles.h"
 
 #include <stdio.h>
-using namespace std;
+    using namespace std;
 
 Asteroids::Asteroid::Asteroid() : SpaceObj(32.0f)
 , sprite(nullptr), decal(nullptr), killOnNextUpdate(false)
@@ -85,7 +85,7 @@ void Asteroids::Asteroid::bringBackToLife(
     else 
         setDirection(direction);
 
-    if(velocity < 0.00) moveVelocity = (float)(rand()%7 + 3);
+    if(velocity < 0.00) moveVelocity = (float)(rand()%21 + 9);
     else                moveVelocity = velocity;
 
     spinSpeed = (RandF() * 0.5 + 0.5) * 0.0625; // Spin by 360� every 16 Seconds (at max spinspeed)
@@ -281,7 +281,6 @@ vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
         olc::vf2d direction, float velocity
     ) {
 
-
     Debug(this << " spawns " << nr << " asteroid(s) ");
 
     int spawned = 0;
@@ -292,7 +291,6 @@ vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
         nr = MAX_ASTEROIDS;
     
     for(int a = 0; a < MAX_ASTEROIDS && spawned < nr; a++) {
-
         if(!asteroids[a].isAlive()) {
 
             if(x == 0)              sx = (rand()%APP_SCREEN_WIDTH);

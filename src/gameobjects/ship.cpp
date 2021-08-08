@@ -32,7 +32,6 @@ Ship::Ship()
     sfxThrust  = Mix_LoadWAV("assets/sfx/cc0_nocredit/loop_ambient_01.ogg");
     sfxExplode = Mix_LoadWAV("assets/sfx/sci-fi_sounds/explosionCrunch_004.ogg");
 
-
     this->bIsAlive = true;
     stats = Global::shipStats;
 
@@ -98,6 +97,7 @@ void Ship::reset() {
     setAngleRel(PI/2);
     SpaceObj::setDirection(olc::vf2d((float)cos(PI/2), (float)sin(PI/2)));
     moveVelocity = 0.0f;
+    setDirection({0.0f, 0.0f});
     bIsAlive = true;
 
     clearUpgrades();

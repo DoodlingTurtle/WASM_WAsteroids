@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        "**./cpp.o": true,
+        "**/*.wasm": true,
+        "**/*.data": true,
+        "main.html": true,
+        "**/main.js": true,
+        "src/tags": true,
+    }
+}
