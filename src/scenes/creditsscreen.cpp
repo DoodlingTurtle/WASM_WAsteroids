@@ -1,18 +1,27 @@
 #include "creditsscreen.h"
+#include "stdio.h"
 
 CreditsScreen::CreditsScreen() {
-    spr = nullptr;
+    lines = std::vector<std::string>();
+    
 }
-CreditsScreen::~CreditsScreen() {
-    if(spr != nullptr)
-        delete spr;
-}
+CreditsScreen::~CreditsScreen() {}
 
 void CreditsScreen::onStart() {
-    spr = new olc::Sprite("assets/credits.png");
+    FILE* text = fopen("./assets/credits.txt", "rb");
+
+    if(text) while( !feof(text) ) {
+        char buffer[1024]{ 0 };
+        fgets(buffer, 1024, text);
+        std::string str(buffer);
+
+        lines.push_back(str);
+    }
+    fclose(text);
+
 }
 void CreditsScreen::onEnd() {
-    delete spr;
+    lines.clear();
 }
 
 void CreditsScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
@@ -22,5 +31,12 @@ void CreditsScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 }
 
 void CreditsScreen::onDraw(olc::PixelGameEngine* pge) {
-    pge->DrawSprite(0, 0, spr);
+    float y = 9;
+    for(std::string s : lines) {
+        pge->DrawStringDecal({
+            8, y
+        }, s, olc::WHITE);
+
+        y += 10;
+    }
 }

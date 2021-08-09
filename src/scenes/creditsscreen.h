@@ -1,6 +1,9 @@
 #ifndef __CreditsScreen_H__
 #define __CreditsScreen_H__
 
+#include <vector>
+#include <string>
+
 #include "../olcPixelGameEngine.h"
 #include "../scene.h"
 
@@ -17,7 +20,8 @@ protected:
     void onEnd() override;
 
 private:
-    olc::Sprite* spr;
+    std::vector<std::string> lines;
+
 };
 
 #endif

@@ -178,6 +178,8 @@ public:
         if(next != nullptr)
             next->restart();
 
+        
+
         currentScene = next;
     }
 

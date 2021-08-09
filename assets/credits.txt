@@ -8,9 +8,9 @@ SFX from opengameart.org:
 (CC0 - LICENSE)
 
 
-Other SourceCode:
+Other SourceCode
 / Graphics:
-DoodlingTurtle
+ScribblingTurtle
 (@TurtleDoodling on Twitter)
 
 
