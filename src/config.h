@@ -28,6 +28,7 @@
 #define Debug(msg) /**/
 #endif
 
+/*
 enum GameInput {
     GAMEINPUT_ACCELERATE,
     GAMEINPUT_TURNLEFT,
@@ -35,22 +36,7 @@ enum GameInput {
     GAMEINPUT_FIRE,
     GAMEINPUT_SHIELD
 };
-
-enum KeyPadInput {
-    KEYPAD_LEFT,
-    KEYPAD_RIGHT,
-    KEYPAD_UP,
-    KEYPAD_DOWN,
-    KEYPAD_L,
-    KEYPAD_Y,
-    KEYPAD_A,
-    KEYPAD_X,
-    KEYPAD_B,
-    KEYPAD_R,
-    KEYPAD_SELECT
-};
-
-#endif
+*/
 
 extern olc::Key GameKeyMap[11];
 extern olc::Pixel pix_menubg;
@@ -62,3 +48,6 @@ extern int layer_stars;
 extern int layer_ship;
 extern int layer_blackout;
 extern int layer_particles;
+
+#endif
+

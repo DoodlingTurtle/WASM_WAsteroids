@@ -27,6 +27,10 @@ public:
 
     GAME_STATE getState();
 
+#ifdef DEBUG_BUILD
+    void endLevel();
+#endif
+    
 protected:
     void onStart() override;
     void onEnd() override;

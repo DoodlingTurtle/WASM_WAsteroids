@@ -19,6 +19,7 @@
         virtual~TextMenu();
         
         void addOption(const std::string txt);
+        void clearOptions();
       
         void selectNext();
         void selectPrev();

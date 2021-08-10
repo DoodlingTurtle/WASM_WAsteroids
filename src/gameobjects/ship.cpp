@@ -150,15 +150,15 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 //TODO: Redo Controlls
     auto ret = new std::vector<SpaceObj*>();
 
-    if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_TURNRIGHT]).bHeld)
+    if(Global::gameInput->held&KEYPAD_RIGHT)
         setAngleRel(angRes*deltaTime);
 
-    if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_TURNLEFT]).bHeld)
+    if(Global::gameInput->held&KEYPAD_LEFT)
         setAngleRel(-angRes*deltaTime);
 
     thrusting = false;
     bool allowgeneratoregen = true;
-    if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_ACCELERATE]).bHeld) {
+    if(Global::gameInput->held&KEYPAD_UP) {
         float consumption = stats->thrustenergyconsumption * deltaTime;
         if(!stats->generatorhalt && stats->generator >= consumption) {
             thrusting = true;

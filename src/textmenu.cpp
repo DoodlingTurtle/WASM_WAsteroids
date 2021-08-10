@@ -23,6 +23,10 @@
         options.push_back(txt);
     }
 
+    void TextMenu::clearOptions() {
+        options.clear();
+    }
+
     void TextMenu::draw(olc::PixelGameEngine* pge) {
         char buffer[maxlength+6];
 

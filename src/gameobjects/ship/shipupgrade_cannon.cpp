@@ -13,7 +13,7 @@ bool ShipUpgrade_Cannon::update(
       , float deltaTime
       , std::vector<SpaceObj*>* ret
 ) {
-    if(Global::pge->GetKey(Global::gamecontrols[GAMEINPUT_FIRE]).bPressed) {
+    if(Global::gameInput->pressed&KEYPAD_R) {
         if(!stats->generatorhalt && stats->generator >= stats->shotenergyconsumption) {
             Shots::Shot* s = shots.spawnShot(ship->ang, &(ship->pos));
             ret->push_back(s);

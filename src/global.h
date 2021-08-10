@@ -5,6 +5,7 @@
 #include "gameobjects/asteroids.h"
 #include "particles.h"
 #include "gameobjects/ship/shipstats.h"
+#include "gameinput.h"
 
 class Global {
 public:
@@ -12,6 +13,7 @@ public:
     static olc::Key gamecontrols[5];
     static Asteroids* asteroids;
     static ShipStats* shipStats;
+    static GameInput* gameInput;
 
     static int score;
 

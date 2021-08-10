@@ -11,18 +11,20 @@ PauseScreen::PauseScreen(Scene* backgroundProvider) {
      
     menu.addOption("Resume");
     menu.addOption("Exit");
+#ifdef DEBUG_BUILD
+    menu.addOption("[D] next Level");
+#endif
 }
 
 PauseScreen::~PauseScreen() {}
 
 void PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
-    if(pge->GetKey(GameKeyMap[KEYPAD_DOWN]).bPressed)
+    if(Global::gameInput->pressed&KEYPAD_DOWN)
         menu.selectNext();
-    else if(pge->GetKey(GameKeyMap[KEYPAD_UP]).bPressed)
+    else if(Global::gameInput->pressed&KEYPAD_UP)
         menu.selectPrev();
-    else if(pge->GetKey(olc::ENTER).bPressed 
-            || pge->GetKey(GameKeyMap[KEYPAD_A]).bPressed)
+    else if(Global::gameInput->pressed&(KEYPAD_START|KEYPAD_A))
         exit();
 
 }
@@ -41,6 +43,11 @@ void PauseScreen::onDraw(olc::PixelGameEngine* pge) {
 bool PauseScreen::endGame() {
     return menu.selected() == 1;
 }
+#ifdef DEBUG_BUILD
+bool PauseScreen::skipLevel() {
+    return menu.selected() == 2;
+}
+#endif
 
 void PauseScreen::onStart() { Global::pge->EnableLayer(layer_blackout, true); }
 void PauseScreen::onEnd() { Global::pge->EnableLayer(layer_blackout, false); }

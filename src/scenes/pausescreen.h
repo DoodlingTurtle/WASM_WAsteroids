@@ -15,6 +15,10 @@ public:
     void onStart() override;
     void onEnd() override;
 
+#ifdef DEBUG_BUILD
+    bool skipLevel();
+#endif
+
     bool endGame();
 
 protected:

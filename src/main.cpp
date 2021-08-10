@@ -3,12 +3,14 @@
 
 #include "config.h"
 #include "scene.h"
+#include "gameinput.h"
 #include "particles.h"
 
 #include "scenes/titlescreen.h"
 #include "scenes/creditsscreen.h"
 #include "scenes/maingame.h"
 #include "scenes/pausescreen.h"
+#include "scenes/upgradescreen.h"
 
 #include "gameobjects/asteroids.h"
 #include "gameobjects/ship/shipupgrade_shield.h"
@@ -86,6 +88,7 @@ public:
     }
 
     bool OnUserUpdate(float fElapsedTime) override {
+        Global::gameInput->updateInputs();
 
         if(currentScene != nullptr) {
         // Update logic
@@ -149,14 +152,8 @@ public:
         }
         else if(currentScene == (Scene*)&mainGameScreen) {
             switch(mainGameScreen.getState()) {
-                case MainGameScreen::STATE_WON:
-                    mainGameScreen.game_difficulty+=0.66f;
-                    next = &mainGameScreen;
-                    break;
-
-                case MainGameScreen::STATE_RUNNING:
-                    next = &pauseScreen;
-                    break;
+                case MainGameScreen::STATE_WON: next = &upgradeScreen; break;
+                case MainGameScreen::STATE_RUNNING: next = &pauseScreen; break;
 
                 case MainGameScreen::STATE_LOST: 
                     //TODO: add GameOver-Screen
@@ -170,8 +167,18 @@ public:
             if(pauseScreen.endGame()) {
                 mainGameScreen.reset();
                 next = &titleScreen;
-            } else 
+#ifdef DEBUG_BUILD
+            } else if(pauseScreen.skipLevel()) {
+                 mainGameScreen.endLevel();
+                 next = &upgradeScreen;
+#endif
+            } else {
                 next = &mainGameScreen;
+            }
+        }
+        else if(currentScene == (Scene*)&upgradeScreen) {
+            mainGameScreen.game_difficulty+=0.66f;
+            next = &mainGameScreen;
         }
 
         // Hook up global ressources and restart the new scene
@@ -189,6 +196,8 @@ public:
     CreditsScreen   creditsScreen;
     MainGameScreen  mainGameScreen;
     PauseScreen     pauseScreen = PauseScreen(&mainGameScreen);
+    UpgradeScreen   upgradeScreen = UpgradeScreen(
+            Global::shipStats, &Global::score, &mainGameScreen.game_difficulty);
 
 };
 
@@ -231,8 +240,13 @@ int main()
         Global::asteroids = &asteroids;
         Global::shipStats = &shipStats;
     
+        WAsteroids      app;
+
+    // Setup GameInput
+        GameInput       gameInput(&app);
+        Global::gameInput = &gameInput;
+
     //Setup PGE 
-        WAsteroids app;
         Global::pge = &app; 
         if (run && app.Construct(
             APP_SCREEN_WIDTH, 

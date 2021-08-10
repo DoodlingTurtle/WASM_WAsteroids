@@ -31,6 +31,13 @@ void MainGameScreen::reset() {
     onEnd();
 }
 
+#ifdef DEBUG_BUILD
+void MainGameScreen::endLevel() { 
+    state = MainGameScreen::STATE_WON;
+    exit(); 
+}
+#endif
+
 void MainGameScreen::onStart() {
     if(state != MainGameScreen::STATE_RUNNING) {
         if(game_difficulty>8.0f)
@@ -65,7 +72,7 @@ void MainGameScreen::onStart() {
 void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
 // Check for Pause Key
-    if(pge->GetKey(GameKeyMap[KEYPAD_SELECT]).bPressed) {
+    if(Global::gameInput->pressed&KEYPAD_SELECT){
         exit();
         return;
     }

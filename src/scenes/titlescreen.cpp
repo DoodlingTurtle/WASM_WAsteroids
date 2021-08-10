@@ -21,12 +21,11 @@ void TitleScreen::onStart() {
 void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     Global::asteroids->update(deltaTime);
 
-    if(pge->GetKey(GameKeyMap[KEYPAD_DOWN]).bPressed)
+    if(Global::gameInput->pressed&KEYPAD_DOWN)
         menu.selectNext();
-    else if(pge->GetKey(GameKeyMap[KEYPAD_UP]).bPressed)
+    else if(Global::gameInput->pressed&KEYPAD_UP)
         menu.selectPrev();
-    else if(pge->GetKey(olc::ENTER).bPressed 
-            || pge->GetKey(GameKeyMap[KEYPAD_A]).bPressed)
+    else if(Global::gameInput->pressed&(KEYPAD_A|KEYPAD_START))
         exit();
 }
 

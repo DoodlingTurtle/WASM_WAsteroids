@@ -1,6 +1,8 @@
 #include "creditsscreen.h"
 #include "stdio.h"
 
+#include "../global.h"
+
 CreditsScreen::CreditsScreen() {
     lines = std::vector<std::string>();
     
@@ -25,9 +27,8 @@ void CreditsScreen::onEnd() {
 }
 
 void CreditsScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    if(   pge->GetKey(olc::ENTER).bPressed
-       || pge->GetKey(GameKeyMap[KEYPAD_A]).bPressed
-    ) exit();
+    if(Global::gameInput->pressed&(KEYPAD_A|KEYPAD_START))
+        exit();
 }
 
 void CreditsScreen::onDraw(olc::PixelGameEngine* pge) {
