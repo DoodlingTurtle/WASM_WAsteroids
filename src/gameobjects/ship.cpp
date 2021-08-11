@@ -20,6 +20,7 @@ Ship::Ship()
   , sfxThrust(nullptr)
   , sfxExplode(nullptr)
   , chaThrust(-1)
+  , selectedComponent(0)
 {
     sprShip = new olc::Sprite("./assets/sprites/ship.png");
     decShip = new olc::Decal(sprShip);    
@@ -36,11 +37,23 @@ Ship::Ship()
     stats = Global::shipStats;
 
     reset();
+
+    stats->giveComponentsTo(&components);
+
+    for(int a = components.size()-1; a>=0; a--){
+        ShipComponent* comp = components.at(a);
+        if(!comp || !comp->initShipComponent(stats, this))
+            components.erase(components.begin() + a); 
+    }
+
     this->addUpgrade(new ShipUpgrade_Shield());
     this->addUpgrade(new ShipUpgrade_Cannon());
+
 }
 
 Ship::~Ship() {
+    stats->takeComponentsFrom(&components);
+
     Debug("clear upgrades");
     clearUpgrades();
 
@@ -147,15 +160,35 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
         }
     }
 
-//TODO: Redo Controlls
     auto ret = new std::vector<SpaceObj*>();
 
-    if(Global::gameInput->held&KEYPAD_RIGHT)
-        setAngleRel(angRes*deltaTime);
+    // Input Rotation
+    if(Global::gameInput->held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 
+    if(Global::gameInput->held&KEYPAD_LEFT) setAngleRel(-angRes*deltaTime); 
 
-    if(Global::gameInput->held&KEYPAD_LEFT)
-        setAngleRel(-angRes*deltaTime);
+    // Input Component selection
+    if(Global::gameInput->pressed&KEYPAD_X) selectedComponent--;
+    if(Global::gameInput->pressed&KEYPAD_Y) selectedComponent++;
 
+    int sz = selectableComponents.size()-1;
+    if(selectedComponent < 0)   selectedComponent = 0;
+    if(selectedComponent > sz)  selectedComponent = sz; 
+
+    // Activate component with A-Key (P on the Keybaord)
+    if(sz > -1 && Global::gameInput->pressed&KEYPAD_A) {
+        int index = selectableComponents.at(selectedComponent);
+        ShipComponent* c = components.at(index);
+        if(c) {
+            if(!c->invokeShipComponent(stats, this, ret)) {
+                delete c;
+                c = nullptr;
+            }
+        }
+        if(!c) components.erase(components.begin()+index);
+    }
+
+
+    // Input Thrusting
     thrusting = false;
     bool allowgeneratoregen = true;
     if(Global::gameInput->held&KEYPAD_UP) {
@@ -192,6 +225,20 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
         stats->generator += deltaTime * stats->generatorrecovery;
         if(stats->generator > stats->generatorcapacity)
             stats->generator = stats->generatorcapacity;
+    }
+
+// Update Components
+    for(int a = components.size()-1; a>=0; a--){ 
+        ShipComponent* comp = components.at(a);
+        if(comp) {
+            if(!comp->updateShipComponent(deltaTime)) {
+                delete comp;
+                comp = nullptr;
+            }
+        }
+
+        if(!comp)
+            components.erase(components.begin() + a); 
     }
 
 // Add new Upgrades
@@ -260,6 +307,23 @@ void Ship::onDraw(olc::PixelGameEngine* pge) {
     pge->DrawLine(pos, pos+moveDirection*16.0f, olc::BLUE);
     pge->DrawLine(pos, pos+dir*28.0f, olc::GREEN);
 #endif
+
+    selectableComponents.clear();
+    olc::vf2d pos(20, 40);
+    for(int a = 0; a < components.size(); a++) {
+        if(components.at(a)->drawShipComponent(
+            stats, this, pge, pos
+        )) {
+            selectableComponents.push_back(a);
+            pos.y += 12;
+        }
+    }
+
+    int sz = selectableComponents.size();
+    selectedComponent = sz < selectedComponent ? sz : selectedComponent;
+
+    if(sz > 0)
+        pge->FillRect({8, 40 + (10 * selectedComponent)}, {8, 8}, olc::RED);
 
 }
 

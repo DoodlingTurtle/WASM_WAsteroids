@@ -4,53 +4,34 @@
 
 #include "../../config.h"
 
-//ShipUpgrade_Shield ShipUpgrade_ShieldGenerator::shield;
+bool ShipUpgrade_ShieldGenerator::draw = true;
+int  ShipUpgrade_ShieldGenerator::cntInstances = 0;
 
-ShipUpgrade_ShieldGenerator::ShipUpgrade_ShieldGenerator() {}
-ShipUpgrade_ShieldGenerator::~ShipUpgrade_ShieldGenerator() {}
+ShipUpgrade_ShieldGenerator::ShipUpgrade_ShieldGenerator( ShipUpgrade_ShieldGenerator* ) { cntInstances++; }
+ShipUpgrade_ShieldGenerator::~ShipUpgrade_ShieldGenerator() { cntInstances--; }
 
+bool ShipUpgrade_ShieldGenerator::invokeShipComponent(
+        ShipStats* stats, Ship* ship, std::vector<SpaceObj*>* newSpaceObjectsToSpawn){
 
-void ShipUpgrade_ShieldGenerator::draw(olc::PixelGameEngine* pge, RGNDS::Transform& ship) {
+    ship->addUpgrade(new ShipUpgrade_Shield()); 
 
-    RGNDS::Transform tra;
-    tra.scale = 0.25f;
-    tra.pos.x = 229;
-    tra.pos.y = 32; 
+    return false;
+};    
 
-    for(unsigned char a = 0; a < *uses; a++) {
-        //TODO: replace RGNDS::GL2D::glSprite(0, shield.gfx, &tra, 3);
-        tra.pos.y += 12;
+bool ShipUpgrade_ShieldGenerator::drawShipComponent(ShipStats* stats, Ship* ship, 
+        olc::PixelGameEngine* pge, olc::vf2d coords) {
+    if(!draw) return false;
+
+    for(int a = 0; a < cntInstances; a++) {
+        pge->DrawCircle(ship->pos, 4, olc::BLUE);
     }
 
+    draw = false;
+
+
+    pge->DrawStringDecal(
+        { coords.x, coords.y } , "Shield", olc::WHITE, {1.0f, 1.0f});
+    return true;
 };
 
-bool ShipUpgrade_ShieldGenerator::init(ShipStats *stats) {
-
-    if(stats->shielduses > 0) {
-        uses = &stats->shielduses;
-        deployShield = true;
-        return true;
-    }
-
-    uses = 0;
-    return false;
-}
-
-bool ShipUpgrade_ShieldGenerator::update(
-        ShipStats* shipstats, Ship* ship 
-      , float deltaTime
-      , std::vector<SpaceObj*>* newSpaceObjects
-) {
-
-    //TODO: port over to olcPGE
-    //deployShield |= (uses > 0 && keys_justpressed&GameKeyMap[controls[GAMEINPUT_SHIELD]] && !ship->shieldIsActive());
-    
-
-    if(deployShield) {
-        (*uses)--;
-        ship->addUpgrade(&shield);
-        deployShield = false;
-    }
-
-    return (*uses > 0);
-}
+bool ShipUpgrade_ShieldGenerator::updateShipComponent(float deltaTime) { draw = true; return true; }

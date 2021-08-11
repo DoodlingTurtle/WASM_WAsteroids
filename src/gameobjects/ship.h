@@ -2,10 +2,9 @@
 #define SHIP_H 
 
 #include <vector>
-#include <SDL/SDL_mixer.h>
 
+#include "../olcPixelGameEngine.h"
 #include "ship/shipstats.h"
-
 
 #include "../wraparoundrenderer.h"
 #include "../spaceobj.h"
@@ -16,6 +15,8 @@
 #include "ship/shipstats.h"
 #include "ship/shipengine.h"
 #include "../collision.h"
+
+#include <SDL/SDL_mixer.h>
 
 class ShipUpgrade_Shield;
 
@@ -56,6 +57,7 @@ class Ship : public SpaceObj {
 
         std::vector<ShipUpgrade*> upgrades;
         std::vector<ShipUpgrade*> newUpgrades; 
+        std::vector<ShipComponent*> components;
 
         olc::Sprite* sprDissolve;
         olc::Sprite* sprShip;
@@ -64,6 +66,9 @@ class Ship : public SpaceObj {
         Mix_Chunk*   sfxExplode;   // SDL_Mixer SFX asset
         Mix_Chunk*   sfxThrust;    // SDL_Mixer SFX asset
         int          chaThrust;    // keeps track on what channel the thrusting sound is playing
+
+        std::vector<int> selectableComponents;  // A list of indexes in this->components, that is invoceable bz the plazer
+        int              selectedComponent;     // the currently selected component in selectableComponents
 };
 
 

@@ -4,31 +4,22 @@
 #include "../../transform.h"
 
 #include "shipstats.h"
-#include "shipupgrade.h"
+#include "ship_component.h"
 #include "shipupgrade_shield.h"
 
-class ShipUpgrade_ShieldGenerator : public ShipUpgrade {
+class ShipUpgrade_ShieldGenerator : public ShipComponent {
 public:
-    ShipUpgrade_ShieldGenerator();
-    virtual~ShipUpgrade_ShieldGenerator();
+    ShipUpgrade_ShieldGenerator(ShipUpgrade_ShieldGenerator* = nullptr);
+    virtual ~ShipUpgrade_ShieldGenerator();
 
-    bool init(ShipStats* stats) override; 
-    bool update(
-            ShipStats* shipstats, Ship* ship 
-          , float deltaTime
-          , std::vector<SpaceObj*>* newSpaceObjects
-    ) override;
-    void draw(olc::PixelGameEngine*, RGNDS::Transform& ship) override; 
-
-    static ShipUpgrade_Shield shield;
-
-protected:
+    bool invokeShipComponent(ShipStats*, Ship*, std::vector<SpaceObj*>* newSpaceObjectsToSpawn) override;    
+    bool updateShipComponent(float deltaTime) override;
+    
+    bool drawShipComponent(ShipStats* stats, Ship* ship, olc::PixelGameEngine* pge, olc::vf2d componentListIconCoordinates) override; 
 
 private:
-    int* uses;
-    int* controls;
-    bool deployShield;
-
+    static bool draw;
+    static int cntInstances; 
 };
 
 #endif

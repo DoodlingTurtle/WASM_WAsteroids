@@ -6,6 +6,8 @@
 
 #include "../global.h"
 
+#include "../gameobjects/ship/shipupgrade_shieldgenerator.h"
+
 #define ERROR_PRICE_TO_HIGH "You don't have enough points"
 
 #define NUM_TOTAL_UPGRADES 4
@@ -116,12 +118,16 @@ void UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
             *score -= cost;
 
             switch(selected) {
+                
                 case 0: // none 
                     break;
 
                 case 1: // shielduses 
+                    shipstats->registerNewComponent( new ShipUpgrade_ShieldGenerator() );
+                         
                     //TODO: Add ShipUpgrade_ShieldGenerator to Ship_InvokableComponents
                     //shipstats->shielduses += 1;
+                     
                     break;
 
                 case 2: // Generator capacity 
