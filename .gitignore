@@ -2,9 +2,11 @@
 *.html 
 *.js 
 *.wasm
+
 release/*.wasm
 release/*.js
 *.o
 ressource/*
 src/tags
 .vscode
+!docs/*
