@@ -23,3 +23,8 @@ int layer_stars = 0;
 int layer_ship = 0;
 int layer_blackout = 0;
 int layer_particles = 0;
+
+ScreenLayout screenLayouts[1] = {
+    { "Portrait", 256, 384, 1, {10, 88}, {32, 272} }
+};
+

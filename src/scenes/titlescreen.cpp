@@ -5,8 +5,7 @@
 
 TitleScreen::TitleScreen() 
 {
-    menu.transform.pos.y = 272;
-    menu.transform.pos.x = 32;
+    menu.transform.pos = Global::layout->titleScreen_menu_placement;
     menu.transform.scale = 2;
 
     menu.addOption("new game");
@@ -32,9 +31,10 @@ void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
     Global::asteroids->draw();
 
-    pge->DrawString(10, 88, "WASteroids", olc::WHITE, 3.0f);
+    pge->DrawString(Global::layout->titleScreen_title_placement, "WASteroids", olc::WHITE, 3.0f);
     pge->FillRect(
-            60, 270 + (20 * menu.selected()),
+            Global::layout->titleScreen_menu_placement.x+28, 
+            (Global::layout->titleScreen_menu_placement.y-2) + (20 * menu.selected()),
             134, 20,
             pix_menubg
     );

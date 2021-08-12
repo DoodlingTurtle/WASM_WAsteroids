@@ -34,46 +34,38 @@ public:
         // Initialize functions
         srand(time(nullptr));
         currentScene = nullptr;
-        
+
         // setup layers
-        layer_blackout = CreateLayer();
-        layer_ship  = CreateLayer();
-        layer_asteroids = CreateLayer();
-        layer_shots = CreateLayer();
-        layer_particles = CreateLayer();
-        layer_stars= CreateLayer();
+        auto _setupLayer = [this](bool en=true, std::function<void()> fnc = [](){}){
+            int ret = CreateLayer();
+            SetDrawTarget(ret);
+            Clear(olc::BLANK);
+            fnc();
+            EnableLayer(ret, en);
 
-        // initialize Layers
-        SetDrawTarget(layer_stars);
-        Clear(olc::BLANK);
-        for(int a = 0; a < CNT_STARS; a++) {
-            uint8_t i = 96 + (rand()%64);
-            Draw(
-                rand()%APP_SCREEN_WIDTH, 
-                rand()%APP_SCREEN_HEIGHT, 
-                olc::Pixel(i, i, i, 255)
-            );
-        }
-        EnableLayer(layer_stars, true);
+            return ret;
+        };
 
-        EnableLayer(layer_particles, true);
+        layer_blackout = _setupLayer(false, [this](){
+            SetPixelMode(olc::Pixel::ALPHA);
+            Clear((olc::Pixel){0, 0, 0, 128});
+            SetPixelMode(olc::Pixel::NORMAL);
+        });
 
-        SetDrawTarget(layer_shots);
-        Clear(olc::BLANK);
-        EnableLayer(layer_shots, true);
-
-        SetDrawTarget(layer_asteroids);
-        Clear(olc::BLANK);
-        EnableLayer(layer_asteroids, true);
-
-        SetDrawTarget(layer_ship);
-        Clear(olc::BLANK);
-        EnableLayer(layer_ship, true);
-
-        SetDrawTarget(layer_blackout);
-        SetPixelMode(olc::Pixel::ALPHA);
-        Clear((olc::Pixel){0, 0, 0, 128});
-        SetPixelMode(olc::Pixel::NORMAL);
+        layer_ship      = _setupLayer();
+        layer_asteroids = _setupLayer();
+        layer_shots     = _setupLayer();
+        layer_particles = _setupLayer();
+        layer_stars     = _setupLayer(true, [this](){
+            for(int a = 0; a < CNT_STARS; a++) {
+                uint8_t i = 96 + (rand()%64);
+                Draw(
+                    rand()%Global::layout->app_width, 
+                    rand()%Global::layout->app_height, 
+                    olc::Pixel(i, i, i, 255)
+                );
+            }
+        });
 
         SetDrawTarget(nullptr);
 
@@ -150,12 +142,13 @@ public:
             }
         }
         else if(
-                currentScene == (Scene*)&upgradeScreen || 
+                currentScene == (Scene*)&gameOverScreen || 
                 currentScene == (Scene*)&creditsScreen
         ) { 
             next = &titleScreen; 
         }
         else if(currentScene == (Scene*)&mainGameScreen) {
+            Debug("prev = mainGameScreen");
             switch(mainGameScreen.getState()) {
                 case MainGameScreen::STATE_WON: next = &upgradeScreen; break;
                 case MainGameScreen::STATE_RUNNING: next = &pauseScreen; break;
@@ -166,6 +159,7 @@ public:
             }
         }
         else if(currentScene == (Scene*)&pauseScreen) {
+            Debug("prev = pauseScreen");
             if(pauseScreen.endGame()) {
                 mainGameScreen.reset();
                 next = &titleScreen;
@@ -179,11 +173,10 @@ public:
             }
         }
         else if(currentScene == (Scene*)&upgradeScreen) {
+            Debug("prev = upgradeScreen");
             mainGameScreen.game_difficulty+=0.66f;
+            Global::asteroids->killall();
             next = &mainGameScreen;
-        }
-        else if(currentScene == (Scene*)&gameOverScreen) {
-            next = &titleScreen;
         }
 
         // Hook up global ressources and restart the new scene
@@ -238,8 +231,15 @@ int main()
     Mix_HaltChannel(-1); // to stop all chennels
 
     */
+
+
     if(run) {
     //Setup global ressources
+    // layout has to be set, in very first play, otherwise everything else explodes
+    // TODO: store and get layout via Browser localStorage
+        int screenLayout = 0;    
+        Global::layout = &screenLayouts[screenLayout];
+
         Asteroids       asteroids;
         ShipStats       shipStats;
     
@@ -256,12 +256,12 @@ int main()
     //Setup PGE 
         Global::pge = &app; 
         if (run && app.Construct(
-            APP_SCREEN_WIDTH, 
-            APP_SCREEN_HEIGHT, 
-            APP_SCREEN_SCALE, 
-            APP_SCREEN_SCALE
+            Global::layout->app_width,
+            Global::layout->app_height,
+            Global::layout->app_scale,
+            Global::layout->app_scale
         )) app.Start();
-    
+
     // Close SDL_Mixer
         Mix_CloseAudio();
         Mix_Quit();

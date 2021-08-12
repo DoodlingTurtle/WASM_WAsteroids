@@ -5,6 +5,7 @@ olc::PixelGameEngine* Global::pge = nullptr;
 Asteroids* Global::asteroids = nullptr;
 ShipStats* Global::shipStats = nullptr;
 GameInput* Global::gameInput = nullptr;
+ScreenLayout* Global::layout = nullptr;
 
 int Global::score = 0;
 

@@ -1,5 +1,6 @@
 #include "spaceobj.h"
 #include "config.h"
+#include "global.h"
 
 
 SpaceObj::SpaceObj() : SpaceObj::SpaceObj(1.0f){}
@@ -7,7 +8,7 @@ SpaceObj::SpaceObj( float radius ) {
     objRadius = radius;
     bIsAlive = false;
 
-    renderer.defineWrappingArea(0, APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT, 0);
+    renderer.defineWrappingArea(0, Global::layout->app_width, Global::layout->app_height, 0);
 
     moveVelocity = 0.0f;
     setRandomDirection();
