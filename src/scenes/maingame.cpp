@@ -49,6 +49,7 @@ void MainGameScreen::onStart() {
         newGameObjects->push_back(ship);
 
     // Initialize the asteroids
+        Global::asteroids->killall();
         std::vector<Asteroids::Asteroid*>* spawnedAsteroids = Global::asteroids->spawnAsteroids(
                (int)game_difficulty, Asteroids::SIZE_LARGE);
 
@@ -184,8 +185,6 @@ void MainGameScreen::onEnd() {
 
         Debug("clear score popup");
         ScorePopup::cleanup();
-        Debug("clear Asteroids");
-        Global::asteroids->killall();
 
         Debug("delete ship");
         if(ship != nullptr)

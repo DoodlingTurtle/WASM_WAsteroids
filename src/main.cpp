@@ -11,6 +11,7 @@
 #include "scenes/maingame.h"
 #include "scenes/pausescreen.h"
 #include "scenes/upgradescreen.h"
+#include "scenes/gameoverscreen.h"
 
 #include "gameobjects/asteroids.h"
 #include "gameobjects/ship/shipupgrade_shield.h"
@@ -141,25 +142,26 @@ public:
                     next = &mainGameScreen; 
                     break; }
                         
-                case 1:
+                case 1:   //TODO: Add more options
+
                 default: {
-                    next = &titleScreen; //TODO: add more Scenes (;.;)
+                    next = &titleScreen;
                 }
             }
         }
-        else if(currentScene == (Scene*)&creditsScreen) {
-            next = &titleScreen;
+        else if(
+                currentScene == (Scene*)&upgradeScreen || 
+                currentScene == (Scene*)&creditsScreen
+        ) { 
+            next = &titleScreen; 
         }
         else if(currentScene == (Scene*)&mainGameScreen) {
             switch(mainGameScreen.getState()) {
                 case MainGameScreen::STATE_WON: next = &upgradeScreen; break;
                 case MainGameScreen::STATE_RUNNING: next = &pauseScreen; break;
+                case MainGameScreen::STATE_LOST: next = &gameOverScreen; break;
 
-                case MainGameScreen::STATE_LOST: 
-                    //TODO: add GameOver-Screen
-                default:
-                    next = &titleScreen; 
-                    break;
+                default: next = &titleScreen; break;
 
             }
         }
@@ -180,6 +182,9 @@ public:
             mainGameScreen.game_difficulty+=0.66f;
             next = &mainGameScreen;
         }
+        else if(currentScene == (Scene*)&gameOverScreen) {
+            next = &titleScreen;
+        }
 
         // Hook up global ressources and restart the new scene
         if(next != nullptr)
@@ -197,7 +202,9 @@ public:
     MainGameScreen  mainGameScreen;
     PauseScreen     pauseScreen = PauseScreen(&mainGameScreen);
     UpgradeScreen   upgradeScreen = UpgradeScreen(
-            Global::shipStats, &Global::score, &mainGameScreen.game_difficulty);
+            Global::shipStats, &Global::score, 
+            &mainGameScreen.game_difficulty);
+    GameOverScreen  gameOverScreen;
 
 };
 
