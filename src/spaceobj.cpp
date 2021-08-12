@@ -23,7 +23,7 @@ void SpaceObj::setDirection(olc::vf2d dir) {
     moveDirection = dir;
     moveAngle = acos(dir.x);
 }
-void SpaceObj::setRandomDirection() { setAngle(RandF()); }
+void SpaceObj::setRandomDirection() { setAngle(RandF() * PI2); }
 void SpaceObj::setAngle(float radiants) {
     moveAngle = radiants;
     moveDirection = olc::vf2d(cos(moveAngle), sin(moveAngle));

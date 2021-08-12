@@ -37,9 +37,9 @@ static const char* files[NUM_TOTAL_UPGRADES] = {
  * UpgradeScreen
  *===========================================================================*/
 UpgradeScreen::UpgradeScreen(
-        ShipStats* stats, 
-        int* score,
-        float* game_difficulty
+    ShipStats* stats, 
+    int* score,
+    float* game_difficulty
 )
 :Scene(), shipstats(stats), score(score), game_difficulty(game_difficulty)
 {
@@ -76,7 +76,7 @@ void UpgradeScreen::onStart(){
         FILE* f = fopen(filename, "rb");
         if(f) {
             while(!feof(f)) {
-                char buffer[1024];
+                char buffer[1024] { 0 };
                 fgets(buffer, 1024, f);
                 
                 str += std::string(buffer);
@@ -112,7 +112,7 @@ void UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     else if(Global::gameInput->pressed&(KEYPAD_A|KEYPAD_START))
     {
         int selected = upgrade_data.at(selection.selected());
-        int cost = costs[selected];
+        int cost = costs[selected] * (*game_difficulty);
 
         if(*score >= cost) {
             *score -= cost;
@@ -124,10 +124,6 @@ void UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
                 case 1: // shielduses 
                     shipstats->registerNewComponent( new ShipUpgrade_ShieldGenerator() );
-                         
-                    //TODO: Add ShipUpgrade_ShieldGenerator to Ship_InvokableComponents
-                    //shipstats->shielduses += 1;
-                     
                     break;
 
                 case 2: // Generator capacity 
@@ -152,12 +148,14 @@ static void _printPGE(
     olc::PixelGameEngine* pge, 
     const olc::vf2d pos, 
     const char* buffer,
-    olc::Pixel pixel
+    olc::Pixel pixel,
+    olc::vf2d scale={1.0f, 1.0f}
 ) {
     std::string s(buffer);
     pge->DrawStringDecal(
             pos, s, 
-            pixel
+            pixel,
+            scale
     );
 }
 
@@ -170,14 +168,12 @@ void UpgradeScreen::onDraw(olc::PixelGameEngine* pge) {
     );
     selection.draw(pge);
 
-    if(showError) {
-        pge->DrawStringDecal(
-            { 308, 24 }, ERROR_PRICE_TO_HIGH, olc::RED);
-    }
+    if(showError)
+        _printPGE(pge, { 16, 116 }, ERROR_PRICE_TO_HIGH, olc::RED);
 
     char buffer[17]{ 0 };
     std::sprintf(buffer, "Score: % 8d", *score);
-    _printPGE(pge, scorelocation, buffer,olc::Pixel(0, 80, 255));
+    _printPGE(pge, scorelocation, buffer,olc::Pixel(0, 80, 255), { 2.0f, 2.0f });
 
     pge->DrawStringDecal(
             descriptionlocation, 
