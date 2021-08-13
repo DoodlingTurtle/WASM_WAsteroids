@@ -27,6 +27,9 @@ protected:
 private:
     TextMenu menu;
 
+    std::string help_text;
+    olc::vf2d   help_position;
+
 };
 
 #endif

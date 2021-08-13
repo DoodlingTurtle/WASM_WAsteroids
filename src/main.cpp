@@ -1,25 +1,28 @@
-#include "olcPixelGameEngine.h"
+#include "./olcPixelGameEngine.h"
 #include <SDL/SDL_mixer.h>
 
-#include "config.h"
-#include "scene.h"
 #include "gameinput.h"
 #include "particles.h"
 
+#include "scene.h"
 #include "scenes/titlescreen.h"
-#include "scenes/creditsscreen.h"
 #include "scenes/maingame.h"
 #include "scenes/pausescreen.h"
 #include "scenes/upgradescreen.h"
 #include "scenes/gameoverscreen.h"
+#include "scenes/textscene.h"
+//#include "scenes/helpscreen.h"
+//#include "scenes/creditsscreen.h"
 
 #include "gameobjects/asteroids.h"
 #include "gameobjects/ship/shipupgrade_shield.h"
 
 #include "gameobjects/ship/shipstats.h"
 
+#include <cstdlib>
 #include <ctime>
 
+#include "config.h"
 #include "global.h"
 
 //EMSCRIPTEN_KEEPALIVE int number = 0;
@@ -133,9 +136,11 @@ public:
                     Global::shipStats->resetToLV1();
                     next = &mainGameScreen; 
                     break; }
+                     
+                case 1: { // help
+                    next = &helpScreen; break; }
                         
-                case 1:   //TODO: Add more options
-
+                case 3:   //TODO: Add more options
                 default: {
                     next = &titleScreen;
                 }
@@ -143,7 +148,8 @@ public:
         }
         else if(
                 currentScene == (Scene*)&gameOverScreen || 
-                currentScene == (Scene*)&creditsScreen
+                currentScene == (Scene*)&creditsScreen ||
+                currentScene == (Scene*)&helpScreen
         ) { 
             next = &titleScreen; 
         }
@@ -188,12 +194,14 @@ public:
         currentScene = next;
     }
 
-    Scene*       currentScene;
+    Scene*          currentScene;
 
     TitleScreen     titleScreen;
-    CreditsScreen   creditsScreen;
+    
+    TextScene       creditsScreen = TextScene("credits.txt");
+    TextScene       helpScreen    = TextScene("help.txt");
     MainGameScreen  mainGameScreen;
-    PauseScreen     pauseScreen = PauseScreen(&mainGameScreen);
+    PauseScreen     pauseScreen   = PauseScreen(&mainGameScreen);
     UpgradeScreen   upgradeScreen = UpgradeScreen(
             Global::shipStats, &Global::score, 
             &mainGameScreen.game_difficulty);
@@ -250,7 +258,7 @@ int main()
         WAsteroids      app;
 
     // Setup GameInput
-        GameInput       gameInput(&app);
+        GameInput           gameInput(&app);
         Global::gameInput = &gameInput;
 
     //Setup PGE 

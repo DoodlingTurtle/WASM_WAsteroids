@@ -1,5 +1,5 @@
 CPP:=em++
-RELEASEDIR:=release
+RELEASEDIR:=docs
 
 TARGET:=main
 COMMON_FLAGS:=-std=c++17 

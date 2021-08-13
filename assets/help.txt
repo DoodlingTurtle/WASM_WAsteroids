@@ -1,0 +1,32 @@
+Menus:
+-----------------------
+W = up
+A = left
+S = right
+D = down 
+
+P = confirm
+
+
+Game:
+-----------------------
+A = turn left
+D = turn right
+
+W = accelerate
+
+J = shoot
+
+K = select next
+    activateable 
+    upgrade
+
+O = select previous
+    activateable
+    upgrade
+
+P = activate selected
+    upgrade
+    (if available)
+
+Backspace = Pause

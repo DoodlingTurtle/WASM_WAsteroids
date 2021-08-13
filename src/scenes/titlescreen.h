@@ -21,6 +21,9 @@ protected:
     void onEnd() override;
 
 private:
+    olc::vf2d help_placement;
+    std::string help_text;
+    std::string version_text;
     TextMenu menu;
 };
 

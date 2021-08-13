@@ -5,6 +5,7 @@
 #include "../olcPixelGameEngine.h"
 
 #include "../global.h"
+#include "../assets.h"
 
 #include "../gameobjects/ship/shipupgrade_shieldgenerator.h"
 
@@ -18,6 +19,7 @@ static int costs[NUM_TOTAL_UPGRADES] = {
     2050, 
     3500 
 };
+
 static const char* labels[NUM_TOTAL_UPGRADES] = {
     "none",
     "+1 Shield use",
@@ -26,10 +28,10 @@ static const char* labels[NUM_TOTAL_UPGRADES] = {
 };
 
 static const char* files[NUM_TOTAL_UPGRADES] = {
-    "./assets/upgrades/none.txt",
-    "./assets/upgrades/shield.txt",
-    "./assets/upgrades/gencap.txt",
-    "./assets/upgrades/genreg.txt"
+    "upgrades/none.txt",
+    "upgrades/shield.txt",
+    "upgrades/gencap.txt",
+    "upgrades/genreg.txt"
 };
 
 
@@ -90,7 +92,7 @@ void UpgradeScreen::onStart(){
 
     for(auto u : upgrade_data) {
         selection.addOption(labels[u]);
-        description.push_back(_readDescription(files[u]));
+        description.push_back(Assets::loadText(files[u]));
     }
 
     showError = false;

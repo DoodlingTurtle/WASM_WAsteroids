@@ -8,7 +8,10 @@ PauseScreen::PauseScreen(Scene* backgroundProvider) {
     menu.transform.pos.x = 48;
     menu.transform.pos.y = 80;
     menu.transform.scale = 2.0f;
-     
+
+    help_text = "W = up   S = down  P = confirm";
+    help_position = Global::layout->help_position;
+
     menu.addOption("Resume");
     menu.addOption("Exit");
 #ifdef DEBUG_BUILD
@@ -24,7 +27,7 @@ void PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         menu.selectNext();
     else if(Global::gameInput->pressed&KEYPAD_UP)
         menu.selectPrev();
-    else if(Global::gameInput->pressed&(KEYPAD_START|KEYPAD_A))
+    else if(Global::gameInput->pressed&(KEYPAD_A))
         exit();
 
 }
@@ -38,6 +41,8 @@ void PauseScreen::onDraw(olc::PixelGameEngine* pge) {
             pix_menubg
     );
     menu.draw(pge);
+
+    pge->DrawString(help_position, help_text, olc::WHITE);
 }
 
 bool PauseScreen::endGame() {

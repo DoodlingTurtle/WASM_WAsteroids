@@ -21,7 +21,7 @@ void GameOverScreen::onStart() {
 void GameOverScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     Global::asteroids->update(deltaTime);
 
-    if(Global::gameInput->released&KEYPAD_START)
+    if(Global::gameInput->released&KEYPAD_A)
         exit();
 
     // Advance Playhead
@@ -53,6 +53,7 @@ void GameOverScreen::onDraw(olc::PixelGameEngine* pge) {
         , 2
     );
 
-    pge->DrawString({ 40, 296}, "Press Enter", olc::WHITE, 2);
+    pge->DrawString({ 40, 296}, "  Press P  ", olc::WHITE, 2);
+    pge->DrawString({ 82, 312}, "to continue", olc::WHITE, 1);
 }
 

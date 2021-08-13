@@ -40,10 +40,14 @@ enum GameInput {
 
 struct ScreenLayout {
     std::string title;
-    int app_width, app_height, app_scale;
+    int app_width, 
+        app_height, 
+        app_scale;
 
     olc::vf2d titleScreen_title_placement,
               titleScreen_menu_placement;
+    
+    olc::vf2d help_position;
 };
 
 

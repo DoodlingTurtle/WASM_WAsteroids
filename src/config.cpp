@@ -25,6 +25,8 @@ int layer_blackout = 0;
 int layer_particles = 0;
 
 ScreenLayout screenLayouts[1] = {
-    { "Portrait", 256, 384, 1, {10, 88}, {32, 272} }
+//    title       screen   screen   pixel    title       title menu    help
+//                width    height   scale    location    location      position
+    { "Portrait", 256,     384,     1,       {10, 88},   {32, 248},    { 4, 360 }  }
 };
 

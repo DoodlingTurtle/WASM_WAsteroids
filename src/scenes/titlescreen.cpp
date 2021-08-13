@@ -8,8 +8,12 @@ TitleScreen::TitleScreen()
     menu.transform.pos = Global::layout->titleScreen_menu_placement;
     menu.transform.scale = 2;
 
+    help_placement = Global::layout->help_position;
+    help_text = std::string("W = up   S = down   P = confirm");
+    version_text = "alpha 0.1";
+
     menu.addOption("new game");
-    menu.addOption("options");
+    menu.addOption("help");
     menu.addOption("credits");
 }
 
@@ -24,7 +28,7 @@ void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         menu.selectNext();
     else if(Global::gameInput->pressed&KEYPAD_UP)
         menu.selectPrev();
-    else if(Global::gameInput->pressed&(KEYPAD_A|KEYPAD_START))
+    else if(Global::gameInput->pressed&(KEYPAD_A))
         exit();
 }
 
@@ -40,6 +44,9 @@ void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
     );
 
     menu.draw(pge);
+
+    pge->DrawStringDecal({4, 4}, version_text, olc::WHITE, { 0.75f, 0.75f });
+    pge->DrawString(help_placement, help_text);
 }
 void TitleScreen::onEnd() {
     Global::asteroids->killall();
@@ -48,4 +55,3 @@ void TitleScreen::onEnd() {
 int TitleScreen::selectedMenu(){
     return menu.selected();
 }
-

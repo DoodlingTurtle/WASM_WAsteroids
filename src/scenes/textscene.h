@@ -1,16 +1,15 @@
-#ifndef __CreditsScreen_H__
-#define __CreditsScreen_H__
+#ifndef __TextScene_H__
+#define __TextScene_H__
 
-#include <vector>
 #include <string>
 
 #include "../olcPixelGameEngine.h"
 #include "../scene.h"
 
-class CreditsScreen: public Scene {
+class TextScene: public Scene {
 public:
-    CreditsScreen();
-    ~CreditsScreen();
+    TextScene(std::string assetFileName);
+    ~TextScene();
 
     void onDraw(olc::PixelGameEngine*) override;
     void onUpdate(olc::PixelGameEngine*, float) override;
@@ -20,8 +19,12 @@ protected:
     void onEnd() override;
 
 private:
-    std::vector<std::string> lines;
-
+    olc::vf2d   text_position;
+    std::string text;
+    std::string fileName;
+    
+    std::string help_text;
+    olc::vf2d   help_position;
 };
 
 #endif
