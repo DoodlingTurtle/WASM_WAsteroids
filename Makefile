@@ -17,7 +17,7 @@ $(TARGET).html:$(OBJFILES)
 	$(CPP) $^ -g -o $@ $(LINKERFLAGS) -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK $(FLAGS)
 
 run: $(TARGET).html
-	emrun index.html
+	 emrun index.html &
 
 release: FLAGS:=$(RELEASE_FLAGS)
 release: clean $(TARGET).js
@@ -33,7 +33,8 @@ $(TARGET).js:$(OBJFILES)
 .PHONY: emsetup, clean
 	
 clean: 
-	$(shell rm -f $(TARGET).* $(OBJFILES))
+	rm -f ./**/*.o
+	rm -f ./$(TARGET).*
 
 emsetup:
 	$(CPP) src/main.cpp -o deleteme.* $(LINKERFLAGS) $(DEBUG_FLAGS)

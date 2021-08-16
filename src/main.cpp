@@ -11,6 +11,7 @@
 #include "scenes/upgradescreen.h"
 #include "scenes/gameoverscreen.h"
 #include "scenes/textscene.h"
+#include "scenes/soundtest.h"
 //#include "scenes/helpscreen.h"
 //#include "scenes/creditsscreen.h"
 
@@ -44,8 +45,7 @@ public:
             SetDrawTarget(ret);
             Clear(olc::BLANK);
             fnc();
-            EnableLayer(ret, en);
-
+            EnableLayer(ret, true);
             return ret;
         };
 
@@ -140,7 +140,7 @@ public:
                 case 1: { // help
                     next = &helpScreen; break; }
                         
-                case 3:   //TODO: Add more options
+                case 3: {  /*Soundtest*/ next = &soundTest; break; }
                 default: {
                     next = &titleScreen;
                 }
@@ -206,6 +206,7 @@ public:
             Global::shipStats, &Global::score, 
             &mainGameScreen.game_difficulty);
     GameOverScreen  gameOverScreen;
+    SoundTest       soundTest;
 
 };
 
@@ -217,6 +218,8 @@ int main()
         Debug("failed to init audio device");
         run = false;
     }
+
+    Debug("Main init");
 
     /*
     Mix_Chunk* wave = Mix_LoadWAV("./assets/bg.ogg");
@@ -269,6 +272,8 @@ int main()
             Global::layout->app_scale,
             Global::layout->app_scale
         )) app.Start();
+
+        Global::switchBGMusic(nullptr);
 
     // Close SDL_Mixer
         Mix_CloseAudio();

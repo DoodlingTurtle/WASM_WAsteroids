@@ -7,6 +7,7 @@
 #include "particles.h"
 #include "gameobjects/ship/shipstats.h"
 #include "gameinput.h"
+#include <SDL/SDL_mixer.h>
 
 class Global {
 public:
@@ -16,12 +17,11 @@ public:
     static ShipStats* shipStats;
     static GameInput* gameInput;
     static ScreenLayout* layout;
+    static Mix_Music* bgMusic;
+
+    static void switchBGMusic(const char* filename);
 
     static int score;
-
-protected:
-
-private:
 
 };
 

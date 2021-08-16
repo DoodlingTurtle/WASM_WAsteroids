@@ -232,6 +232,7 @@ Asteroids::Asteroid::~Asteroid() {
 Asteroids::Asteroids() 
 : dirty(true)
 {
+    Debug("Asteroids::Construct");
     sfx[0] = Mix_LoadWAV("assets/sfx/cc0_nocredit/explosion_01.ogg");
     sfx[1] = Mix_LoadWAV("assets/sfx/cc0_nocredit/explosion_02.ogg");
 }

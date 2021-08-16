@@ -1,5 +1,5 @@
 #ifndef __RGNDS_TRANSFORM_CPP__
-#define __RGNDS_TRANSFORM_CPP__ 1
+#define __RGNDS_TRANSFORM_CPP__
 
 #include "config.h"
 #include "transform.h"

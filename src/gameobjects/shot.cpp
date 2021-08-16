@@ -75,7 +75,7 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
 Shots::Shots()
 : sfx(nullptr)
 { 
-    sfx     = Mix_LoadWAV("./assets/sfx/sci-fi_sounds/laserSmall_002.ogg");
+    if(!sfx) sfx     = Mix_LoadWAV("./assets/sfx/sci-fi_sounds/laserSmall_002.ogg");
     sprShot = new olc::Sprite("./assets/sprites/shot.png"); 
     decShot = new olc::Decal(sprShot);
 }
@@ -83,8 +83,9 @@ Shots::Shots()
 Shots::~Shots(){ 
     delete decShot;
     delete sprShot; 
-    if(sfx != nullptr)
+    if(sfx)
         Mix_FreeChunk(sfx);
+    sfx = nullptr;
 }
 
 Shots::Shot* Shots::spawnShot(float ang, olc::vf2d *pos) {

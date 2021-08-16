@@ -1,10 +1,16 @@
 olc::PixelGameEngine by Javid9x
 and the OneLoneCoder community.
 (OLC-3 LICENSE)
-https://github.com/onelonecoder/olcpixelgameengine
+https://github.com
+   /onelonecoder
+   /olcpixelgameengine
 
 
 SFX from opengameart.org:
+(CC0 - LICENSE)
+
+
+Music from James Gargette
 (CC0 - LICENSE)
 
 

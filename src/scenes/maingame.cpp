@@ -27,8 +27,9 @@ void MainGameScreen::reset() {
     game_difficulty = 1.0f;
     shipSurvived = true;
     scoreTimer = 0.0f;
-
     onEnd();
+
+    Global::switchBGMusic("assets/music/james_gargette/oioioioioioi.mp3");
 }
 
 #ifdef DEBUG_BUILD

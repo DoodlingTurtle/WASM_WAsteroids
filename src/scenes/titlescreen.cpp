@@ -15,10 +15,14 @@ TitleScreen::TitleScreen()
     menu.addOption("new game");
     menu.addOption("help");
     menu.addOption("credits");
+#ifdef DEBUG_BUILD
+    menu.addOption("sound test");
+#endif
 }
 
 void TitleScreen::onStart() {
     Global::asteroids->spawnAsteroids(4);
+    Global::switchBGMusic("./assets/music/james_gargette/kuia.mp3");
 }
 
 void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
