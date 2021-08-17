@@ -10,7 +10,7 @@ TitleScreen::TitleScreen()
 
     help_placement = Global::layout->help_position;
     help_text = std::string("W = up   S = down   P = confirm");
-    version_text = "alpha 0.1";
+    version_text = "alpha 0.2";
 
     menu.addOption("new game");
     menu.addOption("help");
@@ -22,7 +22,6 @@ TitleScreen::TitleScreen()
 
 void TitleScreen::onStart() {
     Global::asteroids->spawnAsteroids(4);
-    Global::switchBGMusic("./assets/music/james_gargette/kuia.mp3");
 }
 
 void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {

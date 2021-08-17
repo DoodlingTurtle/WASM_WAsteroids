@@ -78,7 +78,8 @@ public:
 
         // Load first scene
         nextScene();
-
+        Global::switchBGMusic("./assets/music/james_gargette/kuia.mp3");
+        
         //TODO: Override GetFontSprite() with own Font set
 
         return true;

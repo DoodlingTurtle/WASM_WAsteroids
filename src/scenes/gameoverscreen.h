@@ -12,6 +12,7 @@ public:
     void onDraw(olc::PixelGameEngine* pge) override;
 
 protected:
+    void onEnd() override;
     void onStart() override;
 
 private:
