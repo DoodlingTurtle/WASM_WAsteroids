@@ -1,7 +1,7 @@
 clang++
--std=c++17
--I/root/DEV/emsdk/emscripten/main/system/include
--I/root/DEV/emsdk/emscripten/main/cache/sysroot/include/c++/v1
+%cpp -std=c++17
+-I/opt/emsdk/emscripten/main/system/include
+-I/opt/emsdk/emscripten/main/cache/sysroot/include/c++/v1
 -I/usr/include/c++/10
 -DDEBUG_BUILD
--DOLC_PLATFORM_ENSCRIPTEN
+-DOLC_PLATFORM_ENSCRIPTEk

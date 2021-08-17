@@ -45,7 +45,7 @@ public:
             SetDrawTarget(ret);
             Clear(olc::BLANK);
             fnc();
-            EnableLayer(ret, true);
+            EnableLayer(ret, en);
             return ret;
         };
 
@@ -69,6 +69,7 @@ public:
                 );
             }
         });
+
 
         SetDrawTarget(nullptr);
 
