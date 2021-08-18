@@ -4,7 +4,7 @@
 
 
 LoadScreen::LoadScreen()
-:msg("")
+:msg(" loading ... ")
 {}
 
 LoadScreen::~LoadScreen() {}

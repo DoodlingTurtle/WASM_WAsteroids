@@ -241,7 +241,10 @@ Asteroids::Asteroids()
 Asteroids::~Asteroids() { }
 
 void Asteroids::playSFX() {
-    Mix_PlayChannel(-1, sfx[rand()%2], 0);
+    switch(rand()%2) {
+        case 0: Mix_PlayChannel(-1, Assets::asteroid_hit_1, 0); break;
+        case 1: Mix_PlayChannel(-1, Assets::asteroid_hit_2, 0); break;
+    } 
 }
 
 void Asteroids::update(float deltaTime) {
