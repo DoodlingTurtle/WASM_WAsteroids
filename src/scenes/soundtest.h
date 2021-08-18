@@ -19,8 +19,8 @@ public:
     };
 
     union SDL_Sound {
-        Mix_Chunk* c;
-        Mix_Music* m;
+        Mix_Chunk** c;
+        Mix_Music** m;
     };
 
     struct Sound {

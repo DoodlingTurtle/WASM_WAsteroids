@@ -15,10 +15,22 @@ div.emscripten_border { border: none; }
 
 /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
 canvas.emscripten { border: 0px none; background-color: black; }
+
+        #loadmsg {
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 1cm;
+        }
+
         </style>
     </head>
     <body>
         <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+        <div id="loadmsg">
+            Loading ... 
+            <br /><small>Please be patient</small>
+        </div>
         <script type='text/javascript'>
 var Module = {
     preRun: [],
