@@ -2,6 +2,7 @@
 #include <vector>
 #include "../config.h"
 #include "../global.h"
+#include "../assets.h"
 
 #include "../gameobjects/scorepopup.h"
 
@@ -27,8 +28,9 @@ void MainGameScreen::reset() {
     game_difficulty = 1.0f;
     shipSurvived = true;
     scoreTimer = 0.0f;
-
     onEnd();
+
+    Global::switchBGMusic(Assets::bgmGame);
 }
 
 #ifdef DEBUG_BUILD

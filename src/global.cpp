@@ -6,8 +6,14 @@ Asteroids* Global::asteroids = nullptr;
 ShipStats* Global::shipStats = nullptr;
 GameInput* Global::gameInput = nullptr;
 ScreenLayout* Global::layout = nullptr;
+Mix_Music* Global::bgMusic   = nullptr;
 
 int Global::score = 0;
+
+void Global::switchBGMusic(Mix_Music* asset) {
+    Mix_HaltMusic();
+    if(asset) Mix_PlayMusic(asset, -1);
+}
 
 olc::Key Global::gamecontrols[5] = {
     GameKeyMap[KEYPAD_UP],

@@ -5,12 +5,14 @@
 #include "particles.h"
 
 #include "scene.h"
+#include "scenes/loadscreen.h"
 #include "scenes/titlescreen.h"
 #include "scenes/maingame.h"
 #include "scenes/pausescreen.h"
 #include "scenes/upgradescreen.h"
 #include "scenes/gameoverscreen.h"
 #include "scenes/textscene.h"
+#include "scenes/soundtest.h"
 //#include "scenes/helpscreen.h"
 //#include "scenes/creditsscreen.h"
 
@@ -23,6 +25,7 @@
 #include <ctime>
 
 #include "config.h"
+#include "assets.h"
 #include "global.h"
 
 //EMSCRIPTEN_KEEPALIVE int number = 0;
@@ -37,7 +40,7 @@ public:
         // Initialize functions
         srand(time(nullptr));
         currentScene = nullptr;
-
+        
         // setup layers
         auto _setupLayer = [this](bool en=true, std::function<void()> fnc = [](){}){
             int ret = CreateLayer();
@@ -45,7 +48,6 @@ public:
             Clear(olc::BLANK);
             fnc();
             EnableLayer(ret, en);
-
             return ret;
         };
 
@@ -70,14 +72,12 @@ public:
             }
         });
 
-        SetDrawTarget(nullptr);
 
-        // Load other Sprites
-        ShipUpgrade_Shield::init(this);
+        SetDrawTarget(nullptr);
 
         // Load first scene
         nextScene();
-
+        
         //TODO: Override GetFontSprite() with own Font set
 
         return true;
@@ -117,6 +117,8 @@ public:
 
         // Destroy loaded graphics
         ShipUpgrade_Shield::deinit();
+
+        Assets::deinit();
         return true;
     }
 
@@ -124,8 +126,14 @@ public:
         Debug("switch Scene:");
         Scene* next = nullptr;
         if(currentScene == nullptr)
-            next = &titleScreen;
+            next = &loadScreen;
+        else if(currentScene == (Scene*)&loadScreen) {
+            Debug("prev = loadScreen");
+            next = &titleScreen; 
+        }
+       
         else if(currentScene == (Scene*)&titleScreen) {
+            Debug("prev = titleScreen");
             switch(titleScreen.selectedMenu()) {
                 case 2: { // Credits
                     next = &creditsScreen; break; }
@@ -140,7 +148,7 @@ public:
                 case 1: { // help
                     next = &helpScreen; break; }
                         
-                case 3:   //TODO: Add more options
+                case 3: {  /*Soundtest*/ next = &soundTest; break; }
                 default: {
                     next = &titleScreen;
                 }
@@ -206,40 +214,21 @@ public:
             Global::shipStats, &Global::score, 
             &mainGameScreen.game_difficulty);
     GameOverScreen  gameOverScreen;
+    SoundTest       soundTest;
+    LoadScreen      loadScreen;
 
 };
 
 int main()
 {
+    Debug("main");
+
 // Setup SDL_Mixer
     bool run = true;
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
         Debug("failed to init audio device");
         run = false;
     }
-
-    /*
-    Mix_Chunk* wave = Mix_LoadWAV("./assets/bg.ogg");
-    if(wave == nullptr)
-        run = false;
-
-    int channel = Mix_PlayChannel(
-        -1,   // next free channel 
-        wave, // Mix_Chunk to play
-        -1    // Loops (-1 = infinite)
-    );
-       
-    while( Mix_Playing(channel) != 0 ) {
-        //To stuff, while channel is playing
-    };
-         
-    Mix_FreeChunk(wave);  // Free/Delete asset if no longer needed
-    while( Mix_Playing(-1) ); // wait until other channels have stopped playing
-    Mix_HaltChannel(channel); // to stop a specific channel
-    Mix_HaltChannel(-1); // to stop all chennels
-
-    */
-
 
     if(run) {
     //Setup global ressources
@@ -269,6 +258,8 @@ int main()
             Global::layout->app_scale,
             Global::layout->app_scale
         )) app.Start();
+
+        Global::switchBGMusic(nullptr);
 
     // Close SDL_Mixer
         Mix_CloseAudio();

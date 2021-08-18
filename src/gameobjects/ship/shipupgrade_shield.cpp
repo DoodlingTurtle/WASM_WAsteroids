@@ -1,22 +1,11 @@
 #include "shipupgrade_shield.h"
 #include "shipstats.h"
 #include "../../config.h"
+#include "../../assets.h"
 
 // Init statics
-olc::Sprite* ShipUpgrade_Shield::sprite = nullptr;
-olc::Decal*  ShipUpgrade_Shield::decal = nullptr;
-Mix_Chunk*   ShipUpgrade_Shield::sfxBump = nullptr;
-
-void ShipUpgrade_Shield::init(olc::PixelGameEngine* pge) {
-    sprite = new olc::Sprite("assets/sprites/shield.png");
-    decal = new olc::Decal(sprite);
-    sfxBump = Mix_LoadWAV("assets/sfx/sci-fi_sounds/laserLarge_002.ogg");
-}
-void ShipUpgrade_Shield::deinit() {
-    if(decal != nullptr)    delete decal;
-    if(sprite != nullptr)   delete sprite;
-    if(sfxBump != nullptr)  delete sfxBump;
-}
+void ShipUpgrade_Shield::init(olc::PixelGameEngine* pge) {}
+void ShipUpgrade_Shield::deinit() { } 
 
 // constructors
 ShipUpgrade_Shield::ShipUpgrade_Shield() {
@@ -63,9 +52,9 @@ void ShipUpgrade_Shield::draw(
     olc::Pixel tint(255, 255, 255, 178);
 
     pge->DrawPartialRotatedDecal(
-        ship.pos, decal, 
+        ship.pos, Assets::shields->Decal(), 
         ang, {37, 37},
-        {0, 0}, {(float)sprite->height, (float)sprite->height}, {0.66f, 0.66f}, tint
+        {0, 0}, {74.0f, 74.0f}, {0.66f, 0.66f}, tint
     );
 }
 
@@ -93,7 +82,7 @@ void ShipUpgrade_Shield::gotHit( Asteroids::Asteroid* a, Ship* s, RGNDS::Collisi
 
     this->lastHitTime = 1000.0f;
 
-    Mix_PlayChannel(-1, sfxBump, 0);
+    Mix_PlayChannel(-1, Assets::shieldBump, 0);
 }
 
 float ShipUpgrade_Shield::getRadius() {

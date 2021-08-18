@@ -59,12 +59,8 @@ class Ship : public SpaceObj {
         std::vector<ShipUpgrade*> newUpgrades; 
         std::vector<ShipComponent*> components;
 
+        olc::Decal* decShip;        // Reference to the ships decal (Stored in Assets::ship)
         olc::Sprite* sprDissolve;
-        olc::Sprite* sprShip;
-        olc::Decal*  decShip;
-
-        Mix_Chunk*   sfxExplode;   // SDL_Mixer SFX asset
-        Mix_Chunk*   sfxThrust;    // SDL_Mixer SFX asset
         int          chaThrust;    // keeps track on what channel the thrusting sound is playing
 
         std::vector<int> selectableComponents;  // A list of indexes in this->components, that is invoceable bz the plazer

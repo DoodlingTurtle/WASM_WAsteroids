@@ -10,11 +10,14 @@ TitleScreen::TitleScreen()
 
     help_placement = Global::layout->help_position;
     help_text = std::string("W = up   S = down   P = confirm");
-    version_text = "alpha 0.1";
+    version_text = "alpha 0.2";
 
     menu.addOption("new game");
     menu.addOption("help");
     menu.addOption("credits");
+#ifdef DEBUG_BUILD
+    menu.addOption("sound test");
+#endif
 }
 
 void TitleScreen::onStart() {

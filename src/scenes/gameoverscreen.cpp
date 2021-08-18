@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include "../global.h"
+#include "../assets.h"
 
 void GameOverScreen::onStart() { 
     
@@ -12,10 +13,10 @@ void GameOverScreen::onStart() {
     playhead = 0.0f;
     playtime = 1.5f;
 
-    //scoreAnimation.changeAnimatedObject(&scoreLocation);
-    //scoreAnimation.moveTo(&scoreTargetLocation, 1500);
+}
 
-    //scoreAnimation.play();
+void GameOverScreen::onEnd() {
+    Global::switchBGMusic(Assets::bgmMenu);
 }
 
 void GameOverScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
@@ -33,13 +34,6 @@ void GameOverScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         scoreLocation = scoreStartLocation - (scoreStartLocation-scoreTargetLocation) * (playhead/playtime);
     }
 
-     
-
-    //scoreAnimation.update(deltaTime);
-
-    //SpaceObj::MainGameUpdateData dat = { deltaTime };
-
-
 }
 void GameOverScreen::onDraw(olc::PixelGameEngine* pge) {
     Global::asteroids->draw();
@@ -56,4 +50,5 @@ void GameOverScreen::onDraw(olc::PixelGameEngine* pge) {
     pge->DrawString({ 40, 296}, "  Press P  ", olc::WHITE, 2);
     pge->DrawString({ 82, 312}, "to continue", olc::WHITE, 1);
 }
+
 

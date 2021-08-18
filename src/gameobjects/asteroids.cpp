@@ -4,6 +4,7 @@
 
 #include "scorepopup.h"
 #include "../particles/asteroid_particles.h"
+#include "../assets.h"
 
 #include <stdio.h>
     using namespace std;
@@ -232,14 +233,12 @@ Asteroids::Asteroid::~Asteroid() {
 Asteroids::Asteroids() 
 : dirty(true)
 {
-    sfx[0] = Mix_LoadWAV("assets/sfx/cc0_nocredit/explosion_01.ogg");
-    sfx[1] = Mix_LoadWAV("assets/sfx/cc0_nocredit/explosion_02.ogg");
+    Debug("Asteroids::Construct");
+    sfx[0] = Assets::asteroid_hit_1;
+    sfx[1] = Assets::asteroid_hit_2;
 }
 
-Asteroids::~Asteroids() {
-    Mix_FreeChunk(sfx[0]);
-    Mix_FreeChunk(sfx[1]);
-}
+Asteroids::~Asteroids() { }
 
 void Asteroids::playSFX() {
     Mix_PlayChannel(-1, sfx[rand()%2], 0);

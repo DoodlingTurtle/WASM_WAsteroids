@@ -9,29 +9,24 @@
 #include "ship/shipupgrade_shield.h"
 #include "ship/shipupgrade_cannon.h"
 
+#include "../assets.h"
+
 #define SHIP_DEFAULT_RADIUS 16.0f
 
 Ship::Ship() 
 : SpaceObj(SHIP_DEFAULT_RADIUS)
   , angRes(PI)
   , thrusting(false)
-  , sprShip(nullptr)
   , decShip(nullptr)
-  , sfxThrust(nullptr)
-  , sfxExplode(nullptr)
   , chaThrust(-1)
   , selectedComponent(0)
 {
-    sprShip = new olc::Sprite("./assets/sprites/ship.png");
-    decShip = new olc::Decal(sprShip);    
+    decShip = Assets::ship->Decal();
 
     sprDissolve = new olc::Sprite(32, 32);
     Global::pge->SetDrawTarget(sprDissolve);
-    Global::pge->DrawPartialSprite({ 0, 0 }, sprShip, { 32, 0 }, { 32, 32 });
+    Global::pge->DrawPartialSprite({ 0, 0 }, Assets::ship->Sprite(), { 32, 0 }, { 32, 32 });
     Global::pge->SetDrawTarget(nullptr);
-
-    sfxThrust  = Mix_LoadWAV("assets/sfx/cc0_nocredit/loop_ambient_01.ogg");
-    sfxExplode = Mix_LoadWAV("assets/sfx/sci-fi_sounds/explosionCrunch_004.ogg");
 
     this->bIsAlive = true;
     stats = Global::shipStats;
@@ -62,16 +57,9 @@ Ship::~Ship() {
         Mix_HaltChannel(chaThrust);
         chaThrust = -1;
     }
-    if(sfxThrust != nullptr)
-        Mix_FreeChunk(sfxThrust);
 
     Debug("Delete ship dissolveSpr");
     delete sprDissolve;
-    Debug("Delete ship spr");
-    delete sprShip;
-    Debug("Delete ship dec");
-    delete decShip;
-
 }
 
 void Ship::clearUpgrades() {
@@ -134,7 +122,7 @@ void Ship::kill() {
         Mix_HaltChannel(chaThrust);
         chaThrust = -1;
     }
-    Mix_PlayChannel(-1, sfxExplode, 0);
+    Mix_PlayChannel(-1, Assets::shipExplode, 0);
     SpaceObj::kill();
 }
 
@@ -203,7 +191,7 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
     if(thrusting) {
         shipEngine.accelerate(deltaTime * 15.0f);
         if(chaThrust == -1 || !Mix_Playing(chaThrust)) {
-            chaThrust = Mix_PlayChannel(-1, sfxThrust, -1);
+            chaThrust = Mix_PlayChannel(-1, Assets::shipThrust, -1);
         }
     } 
     else {
@@ -285,8 +273,8 @@ void Ship::onDraw(olc::PixelGameEngine* pge) {
     SpaceObj::draw([this](Transform* tr) {
         Global::pge->DrawPartialRotatedDecal(
             tr->pos, decShip, tr->ang,  
-            {sprShip->height / 2.0f, sprShip->height / 2.0f},
-            {(1-thrusting)*32.0f, 0}, {(float)sprShip->height, (float)sprShip->height}
+            {16.0f, 16.0f},
+            {(1-thrusting)*32.0f, 0}, {(float)32.0f, (float)32.0f}
         );
         
         for(auto upgrade : upgrades)

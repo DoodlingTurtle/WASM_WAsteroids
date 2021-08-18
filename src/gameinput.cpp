@@ -1,4 +1,4 @@
-#include "GameInput.h"
+#include "gameinput.h"
 #include "config.h"
 olc::Key GameInput::keyMap[NUM_KEYS] = {
     olc::A,

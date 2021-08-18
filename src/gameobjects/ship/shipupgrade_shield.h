@@ -31,10 +31,6 @@ public:
 
     void gotHit( Asteroids::Asteroid*, Ship* s, RGNDS::Collision*);
 
-    static olc::Sprite* sprite;
-    static olc::Decal*  decal;
-    static Mix_Chunk*   sfxBump;
-
     static void init(olc::PixelGameEngine* pge);
     static void deinit();
 

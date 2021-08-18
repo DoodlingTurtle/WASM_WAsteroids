@@ -3,8 +3,11 @@ A port of my
 [DSteroids](https://github.com/DoodlingTurtle/NDS_DSteroids)
 project for the Nintendo DS.
 The game is based on the 
-[OneLoneCoder PixelGameEngine](https://github.com/OneLoneCoder/olcPixelGameEngine)
-.
+[OneLoneCoder PixelGameEngine](https://github.com/OneLoneCoder/olcPixelGameEngine).
+
+
+
+The Game can be played here: [https://doodlingturtle.github.io/WASM_WAsteroids/](https://doodlingturtle.github.io/WASM_WAsteroids/)
 
 The target platform is WebAssembly. So this will run on every platform that has 
 a half decent modern Web Browser.
@@ -74,7 +77,7 @@ With that out of the way, here is how you setup the build environment for the pr
    You will have to manually stop the server by pressing "Ctrl + C" in your terminal
    
 8. If you are ready to release, you can use ` make release ` to rebuild the 
-   project in a more optimized way and copy everything to the 'release' folder.
+   project in a more optimized way and copy everything to the 'docs' folder.
 
 9. `DEBUG_BUILD`: inside your C++ Code you can check for the definition of `DEBUG_BUILD` to define C++ code, that will be ignored, when using 
 ` make release `
@@ -90,12 +93,19 @@ Example:
 A the game is missing its roughlite element, but is otherwise playable already.
 
 There are a lot more things todo behind the scenes however.
-- Bring over the other Gamestates
-  - Credits/License screen
-  - Shop/Upgrade Screen
-  - GameOver screen
-  - Main Game screen
-    - requires other Game components
+- Add support for different window formats and resolutions
+- Add Touch controls
+- Store highscores and Settings via LocalStorage in the Browser
+- Add more Upgrade options
+  - different kinds of bullets / cannons
+    - spreadshot, etc ...
+    - size modifiers
+    - speed modifiers
+  - score multiplyers / bonuses
+  
+- ~~Bring over the other Gamestates~~
+  - ~~Main Game screen~~ (done)
+    - ~~requires other Game component~~ (done)
       - ~~Ship~~ (donw)
       - ~~Score counter~~ (done)
       - available upgrades
@@ -103,10 +113,10 @@ There are a lot more things todo behind the scenes however.
         - ~~Reactors components~~ (done)
      - tweak reactor/generator values
   - ~~Pause screen~~ (done)
+  - ~~GameOver screen~~ (done)
+  - ~~Credits/License screen~~ (done)
+  - ~~Shop/Upgrade Screen~~ (done)
      
-- Add support for different window formats and resolutions
-- Add Touch controls
-- Store highscores and Settings via LocalStorage in the Browser
 
 - ~~Add sound effects~~(done)
 
