@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include "../global.h"
+#include "../assets.h"
 
 void GameOverScreen::onStart() { 
     
@@ -15,7 +16,7 @@ void GameOverScreen::onStart() {
 }
 
 void GameOverScreen::onEnd() {
-    Global::switchBGMusic("./assets/music/james_gargette/kuia.mp3");
+    Global::switchBGMusic(Assets::bgmMenu);
 }
 
 void GameOverScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {

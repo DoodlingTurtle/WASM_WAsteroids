@@ -3,44 +3,18 @@
 
 #define CNT_SNDS 7
 SoundTest::Sound SoundTest::sounds[CNT_SNDS] = {
-   {SoundTest::TYPE_SFX, "Ship fire"     , "assets/sfx/sci-fi_sounds/laserSmall_002.ogg"},
-   {SoundTest::TYPE_SFX, "Ship explosion", "assets/sfx/sci-fi_sounds/explosionCrunch_004.ogg"},
-   {SoundTest::TYPE_SFX, "Ship thrust"   , "assets/sfx/cc0_nocredit/loop_ambient_01.ogg"},
-   {SoundTest::TYPE_SFX, "asteroid hit 1", "assets/sfx/cc0_nocredit/explosion_01.ogg"},
-   {SoundTest::TYPE_SFX, "asteroid hit 2", "assets/sfx/cc0_nocredit/explosion_02.ogg"},
-   {SoundTest::TYPE_BGM, "menu bgm"      , "assets/music/james_gargette/kuia.mp3"},
-   {SoundTest::TYPE_BGM, "game bgm"      , "assets/music/james_gargette/oioioioioioi.mp3"}
+   {SoundTest::TYPE_SFX, "Ship fire"     , { .c=Assets::bullet_fire_1  }},
+   {SoundTest::TYPE_SFX, "Ship explosion", { .c=Assets::shipExplode    }},
+   {SoundTest::TYPE_SFX, "Ship thrust"   , { .c=Assets::shipThrust     }},
+
+   {SoundTest::TYPE_SFX, "asteroid hit 1", { .c=Assets::asteroid_hit_1 }},
+   {SoundTest::TYPE_SFX, "asteroid hit 2", { .c=Assets::asteroid_hit_2 }},
+
+   {SoundTest::TYPE_BGM, "menu bgm"      , { .m=Assets::bgmMenu        }},
+   {SoundTest::TYPE_BGM, "game bgm"      , { .m=Assets::bgmGame        }}
 };
 
-SoundTest::SoundTest()
-:playing(-1) { }
-SoundTest::~SoundTest() {};
-
-SoundTest::SDL_Sound SoundTest::Sound::load() {
-    SDL_Sound r;
-    r.m = nullptr;
-    switch(t) {
-        case SoundTest::TYPE_SFX: 
-            r.c = Mix_LoadWAV(file.c_str()); break;
-
-        case SoundTest::TYPE_BGM: 
-            r.m = Mix_LoadMUS(file.c_str()); break;
-    }
-
-    return r;
-}
-
-void SoundTest::Sound::unload(SDL_Sound r) {
-    switch(t) {
-        case SoundTest::TYPE_SFX: 
-            Mix_FreeChunk(r.c); break;
-
-        case SoundTest::TYPE_BGM: 
-            Mix_FreeMusic(r.m); break;
-    }
-}
-
-void SoundTest::Sound::play(SDL_Sound r) {
+void SoundTest::Sound::play() {
     switch(t) {
         case SoundTest::TYPE_SFX: 
             Mix_PlayChannel(-1, r.c, 0); break;
@@ -51,24 +25,14 @@ void SoundTest::Sound::play(SDL_Sound r) {
 }
 
 void SoundTest::onStart() {
-    for(int a = 0; a < CNT_SNDS; a++) {
-        list.push_back(sounds[a].load());
+    for(int a = 0; a < CNT_SNDS; a++)
         menu.addOption(sounds[a].label);
-    }
 }
 void SoundTest::onEnd() {
-    if(playing > -1) {
-        Mix_HaltMusic();
-        Mix_HaltChannel(-1);        
-        playing = -1;
-    }
-
-    for(int a = 0; a < CNT_SNDS; a++) {
-        sounds[a].unload(list.at(a));
-    }
+    Mix_HaltMusic();
+    Mix_HaltChannel(-1);        
 
     menu.clearOptions();
-    list.clear();
 }
 
 void SoundTest::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
@@ -82,7 +46,7 @@ void SoundTest::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         Mix_HaltMusic();
         Mix_HaltChannel(-1);
         int p = menu.selected();
-        sounds[p].play(list.at(p));
+        sounds[p].play();
     }
     menu.selected();
 }

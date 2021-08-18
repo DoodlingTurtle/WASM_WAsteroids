@@ -33,7 +33,7 @@ $(TARGET).js:$(OBJFILES)
 .PHONY: emsetup, clean
 	
 clean: 
-	rm -f ./**/*.o
+	$(shell rm `find . -name *.o | xargs`)
 	rm -f ./$(TARGET).*
 
 emsetup:

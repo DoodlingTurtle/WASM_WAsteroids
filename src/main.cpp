@@ -5,6 +5,7 @@
 #include "particles.h"
 
 #include "scene.h"
+#include "scenes/loadscreen.h"
 #include "scenes/titlescreen.h"
 #include "scenes/maingame.h"
 #include "scenes/pausescreen.h"
@@ -24,6 +25,7 @@
 #include <ctime>
 
 #include "config.h"
+#include "assets.h"
 #include "global.h"
 
 //EMSCRIPTEN_KEEPALIVE int number = 0;
@@ -35,10 +37,11 @@ public:
     WAsteroids(){};
     ~WAsteroids(){};
     bool OnUserCreate() override {
+        Debug("WAsteroids::onUserCreate");
         // Initialize functions
         srand(time(nullptr));
         currentScene = nullptr;
-
+        
         // setup layers
         auto _setupLayer = [this](bool en=true, std::function<void()> fnc = [](){}){
             int ret = CreateLayer();
@@ -73,12 +76,8 @@ public:
 
         SetDrawTarget(nullptr);
 
-        // Load other Sprites
-        ShipUpgrade_Shield::init(this);
-
         // Load first scene
         nextScene();
-        Global::switchBGMusic("./assets/music/james_gargette/kuia.mp3");
         
         //TODO: Override GetFontSprite() with own Font set
 
@@ -86,6 +85,7 @@ public:
     }
 
     bool OnUserUpdate(float fElapsedTime) override {
+        Debug("WAsteroids::onUserUpdate(" << fElapsedTime << ");");
         Global::gameInput->updateInputs();
 
         if(currentScene != nullptr) {
@@ -119,6 +119,8 @@ public:
 
         // Destroy loaded graphics
         ShipUpgrade_Shield::deinit();
+
+        Assets::deinit();
         return true;
     }
 
@@ -126,7 +128,10 @@ public:
         Debug("switch Scene:");
         Scene* next = nullptr;
         if(currentScene == nullptr)
-            next = &titleScreen;
+            next = &loadScreen;
+        else if(currentScene == (Scene*)&loadScreen)
+            next = &titleScreen; 
+       
         else if(currentScene == (Scene*)&titleScreen) {
             switch(titleScreen.selectedMenu()) {
                 case 2: { // Credits
@@ -209,6 +214,7 @@ public:
             &mainGameScreen.game_difficulty);
     GameOverScreen  gameOverScreen;
     SoundTest       soundTest;
+    LoadScreen      loadScreen;
 
 };
 
@@ -222,28 +228,6 @@ int main()
     }
 
     Debug("Main init");
-
-    /*
-    Mix_Chunk* wave = Mix_LoadWAV("./assets/bg.ogg");
-    if(wave == nullptr)
-        run = false;
-
-    int channel = Mix_PlayChannel(
-        -1,   // next free channel 
-        wave, // Mix_Chunk to play
-        -1    // Loops (-1 = infinite)
-    );
-       
-    while( Mix_Playing(channel) != 0 ) {
-        //To stuff, while channel is playing
-    };
-         
-    Mix_FreeChunk(wave);  // Free/Delete asset if no longer needed
-    while( Mix_Playing(-1) ); // wait until other channels have stopped playing
-    Mix_HaltChannel(channel); // to stop a specific channel
-    Mix_HaltChannel(-1); // to stop all chennels
-
-    */
 
 
     if(run) {

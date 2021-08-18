@@ -19,7 +19,7 @@ public:
     static ScreenLayout* layout;
     static Mix_Music* bgMusic;
 
-    static void switchBGMusic(const char* filename);
+    static void switchBGMusic(Mix_Music* asset);
 
     static int score;
 

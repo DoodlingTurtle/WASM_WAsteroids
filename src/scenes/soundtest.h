@@ -6,6 +6,7 @@
 
 #include "../textmenu.h"
 
+#include "../assets.h"
 #include <SDL/SDL_mixer.h>
 #include <vector>
 
@@ -24,17 +25,13 @@ public:
 
     struct Sound {
         SOUNDTYPE t;
-        std::string label, file;
+        std::string label;
+        SDL_Sound r; 
         
-        SDL_Sound load();
-        void unload(SDL_Sound s);
-        void play(SDL_Sound s);
+        void play();
     };
 
     static Sound sounds[];
-
-    SoundTest();
-    ~SoundTest();
 
     void onDraw(olc::PixelGameEngine*) override;
     void onUpdate(olc::PixelGameEngine*, float) override;
@@ -44,8 +41,6 @@ protected:
     void onEnd() override;
 
 private:
-    int playing;
-    std::vector<SDL_Sound> list;
     TextMenu menu;
 };
 #endif

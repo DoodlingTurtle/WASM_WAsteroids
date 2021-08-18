@@ -10,17 +10,9 @@ Mix_Music* Global::bgMusic   = nullptr;
 
 int Global::score = 0;
 
-void Global::switchBGMusic(const char* filename) {
-    if(bgMusic) {
-        Mix_HaltMusic();
-        Mix_FreeMusic(bgMusic);
-        bgMusic = nullptr;
-    }
-
-    if(filename != nullptr) {
-        bgMusic = Mix_LoadMUS(filename);
-        if(bgMusic) Mix_PlayMusic(bgMusic, -1);
-    }
+void Global::switchBGMusic(Mix_Music* asset) {
+    Mix_HaltMusic();
+    if(asset) Mix_PlayMusic(asset, -1);
 }
 
 olc::Key Global::gamecontrols[5] = {
