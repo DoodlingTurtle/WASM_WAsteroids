@@ -1,7 +1,6 @@
 #include "assets.h"
 #include <SDL/SDL_mixer.h>
 
-
 std::string Assets::loadText(std::string fileName) {
     std::string str;
     str = "assets/" + fileName;

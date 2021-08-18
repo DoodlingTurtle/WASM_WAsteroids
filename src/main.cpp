@@ -37,7 +37,6 @@ public:
     WAsteroids(){};
     ~WAsteroids(){};
     bool OnUserCreate() override {
-        Debug("WAsteroids::onUserCreate");
         // Initialize functions
         srand(time(nullptr));
         currentScene = nullptr;
@@ -85,7 +84,6 @@ public:
     }
 
     bool OnUserUpdate(float fElapsedTime) override {
-        Debug("WAsteroids::onUserUpdate(" << fElapsedTime << ");");
         Global::gameInput->updateInputs();
 
         if(currentScene != nullptr) {
@@ -129,10 +127,13 @@ public:
         Scene* next = nullptr;
         if(currentScene == nullptr)
             next = &loadScreen;
-        else if(currentScene == (Scene*)&loadScreen)
+        else if(currentScene == (Scene*)&loadScreen) {
+            Debug("prev = loadScreen");
             next = &titleScreen; 
+        }
        
         else if(currentScene == (Scene*)&titleScreen) {
+            Debug("prev = titleScreen");
             switch(titleScreen.selectedMenu()) {
                 case 2: { // Credits
                     next = &creditsScreen; break; }
@@ -220,15 +221,14 @@ public:
 
 int main()
 {
+    Debug("main");
+
 // Setup SDL_Mixer
     bool run = true;
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
         Debug("failed to init audio device");
         run = false;
     }
-
-    Debug("Main init");
-
 
     if(run) {
     //Setup global ressources
