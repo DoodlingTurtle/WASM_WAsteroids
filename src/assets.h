@@ -25,22 +25,8 @@ public:
     
     static std::string loadText(std::string fileName);
 
-    static Mix_Music*       bgmMenu;
-    static Mix_Music*       bgmGame;
-
-    static olc::Renderable* ship;
-    static Mix_Chunk*       shipThrust;
-    static Mix_Chunk*       shipExplode;
-    
-    static olc::Renderable* shields;
-    static Mix_Chunk*       shieldBump;
-
-    static olc::Renderable* bullets;
-    static Mix_Chunk*       bullet_fire_1;
-
-    static Mix_Chunk*       asteroid_hit_1;
-    static Mix_Chunk*       asteroid_hit_2;
-
+#define REGISTER_ASSET(p, c, f, l, t) static c* p;
+#include "assets_list.h"
 
     /* starts to load all assets */
     static bool init(std::string* nextLoadedFile);
@@ -49,6 +35,7 @@ public:
 protected:
     static int loadedAssetIndex;
     static bool loadFailed;
+    static int numberOfAssets;
 };
 
 

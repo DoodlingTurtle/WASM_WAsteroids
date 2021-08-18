@@ -21,42 +21,33 @@ std::string Assets::loadText(std::string fileName) {
     return str;
 }
 
-olc::Renderable* Assets::ship           = nullptr; 
-olc::Renderable* Assets::shields        = nullptr;
-olc::Renderable* Assets::bullets        = nullptr; 
-Mix_Chunk*       Assets::shipThrust     = nullptr;
-Mix_Chunk*       Assets::shipExplode    = nullptr; 
-Mix_Chunk*       Assets::shieldBump     = nullptr;
-Mix_Chunk*       Assets::asteroid_hit_1 = nullptr;
-Mix_Chunk*       Assets::asteroid_hit_2 = nullptr;
-Mix_Chunk*       Assets::bullet_fire_1  = nullptr;
-Mix_Music*       Assets::bgmMenu        = nullptr; 
-Mix_Music*       Assets::bgmGame        = nullptr;
+#undef REGISTER_ASSET
+#define REGISTER_ASSET(p, c, f, l, t) c* Assets::p = nullptr;
+#include "assets_list.h"
 
-#define CNT_ASSETS 11 
-Assets::Asset Assets::loaderList[CNT_ASSETS] = {
-    { Assets::SPRITE, "assets/sprites/ship.png",                          { .r=&Assets::ship           }},
-    { Assets::SFX,    "assets/sfx/cc0_nocredit/loop_ambient_01.ogg",      { .c=&Assets::shipThrust     }},
-    { Assets::SFX,    "assets/sfx/sci-fi_sounds/explosionCrunch_004.ogg", { .c=&Assets::shipExplode    }},
-
-    { Assets::SPRITE, "assets/sprites/shield.png",                        { .r=&Assets::shields        }},
-    { Assets::SFX,    "assets/sfx/sci-fi_sounds/laserLarge_002.ogg",      { .c=&Assets::shieldBump     }},
-
-    { Assets::SPRITE, "assets/sprites/shot.png",                          { .r=&Assets::bullets        }},
-    { Assets::SFX,    "assets/sfx/sci-fi_sounds/laserSmall_002.ogg",      { .c=&Assets::bullet_fire_1  }},
-
-    { Assets::SFX,    "assets/sfx/cc0_nocredit/explosion_01.ogg",         { .c=&Assets::asteroid_hit_1 }},
-    { Assets::SFX,    "assets/sfx/cc0_nocredit/explosion_02.ogg",         { .c=&Assets::asteroid_hit_2 }},
-
-    { Assets::BGM,    "assets/music/james_gargette/kuia.mp3",             { .m=&Assets::bgmMenu        }},
-    { Assets::BGM,    "assets/music/james_gargette/oioioioioioi.mp3",     { .m=&Assets::bgmGame        }}
+Assets::Asset Assets::loaderList[] = {
+    #undef REGISTER_ASSET
+    #define REGISTER_ASSET(p, c, f, l, t) { Assets::t, f, { .l=&Assets::p } },
+    #include "assets_list.h"
 };
 
+static auto _count_assets = []() {
+    int i = 0;
+        #undef REGISTER_ASSET
+        #define REGISTER_ASSET(p, c, f, l, t) i++;
+        #include "assets_list.h"
+    return i;
+};
+
+
+int Assets::numberOfAssets = _count_assets();
 int Assets::loadedAssetIndex = 0;
 bool Assets::loadFailed = false;
 
 bool Assets::init(std::string* nextFile) {
-    if(loadedAssetIndex == CNT_ASSETS) return true;
+    if(numberOfAssets == 0) {
+    }
+    if(loadedAssetIndex == numberOfAssets) return true;
     if(loadFailed) {
         *nextFile = loaderList[loadedAssetIndex].file;
         return false;
