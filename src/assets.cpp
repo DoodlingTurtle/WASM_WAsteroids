@@ -30,6 +30,7 @@ Mix_Chunk*       Assets::shipExplode    = nullptr;
 Mix_Chunk*       Assets::shieldBump     = nullptr;
 Mix_Chunk*       Assets::asteroid_hit_1 = nullptr;
 Mix_Chunk*       Assets::asteroid_hit_2 = nullptr;
+Mix_Chunk*       Assets::bullet_fire_1  = nullptr;
 Mix_Music*       Assets::bgmMenu        = nullptr; 
 Mix_Music*       Assets::bgmGame        = nullptr;
 
