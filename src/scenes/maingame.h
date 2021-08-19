@@ -1,11 +1,11 @@
 #ifndef MAINGAMESCREEN_H
 #define MAINGAMESCREEN_H
 
-#include "../olcPixelGameEngine.h"
-#include "../scene.h"
-#include "../gameobjects/asteroids.h"
-#include "../gameobjects/ship.h"
-#include "../particles/ship_explosion.h"
+#include "olcPixelGameEngine.h"
+#include "scene.h"
+#include "gameobjects/asteroids.h"
+#include "gameobjects/ship.h"
+#include "particles/ship_explosion.h"
 
 class MainGameScreen : public Scene {
 

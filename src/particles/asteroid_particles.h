@@ -1,9 +1,9 @@
 #ifndef __Asteroid_Particles_H__
 #define __Asteroid_Particles_H__
 
-#include "sprite_dissolve.h"
-#include "../gameobjects/asteroids.h"
-#include "../spaceobj.h"
+#include "./sprite_dissolve.h"
+#include "spaceobj.h"
+#include "gameobjects/asteroids.h"
 
 class AsteroidExplosion 
 : public SpriteDissolve

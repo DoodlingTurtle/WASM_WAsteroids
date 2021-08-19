@@ -2,11 +2,11 @@ CPP:=em++
 RELEASEDIR:=docs
 
 TARGET:=main
-COMMON_FLAGS:=-std=c++20 
+COMMON_FLAGS:=-I./src -I./src/core -std=c++20 
 LINKERFLAGS:=--preload-file ./assets -s EXPORTED_RUNTIME_METHODS=ccall,cwrap,getValue,setValue,stringToUTF8,UTF8ToString -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ALLOW_MEMORY_GROWTH=1 -s MAX_WEBGL_VERSION=2 -s MIN_WEBGL_VERSION=2 -s USE_OGG=1 -s USE_SDL_MIXER=1 -s USE_LIBPNG=1
 
 RELEASE_FLAGS:=$(COMMON_FLAGS) -O3
-DEBUG_FLAGS:=$(COMMON_FLAGS) -DDEBUG_BUILD --emrun
+DEBUG_FLAGS:=$(COMMON_FLAGS) -Wuninitialized -DDEBUG_BUILD --emrun
 
 FLAGS:=$(DEBUG_FLAGS)
 CPPSOURCEFILES:=$(wildcard ./*/*/*/*.cpp) $(wildcard ./*/*/*.cpp) $(wildcard */*.cpp) 

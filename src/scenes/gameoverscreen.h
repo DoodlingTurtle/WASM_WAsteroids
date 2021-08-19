@@ -1,8 +1,8 @@
 #ifndef __GameOverScreen_H__
 #define __GameOverScreen_H__
 
-#include "../scene.h"
-#include "../transform.h"
+#include "scene.h"
+#include "transform.h"
 
 //#include "animation.h"
 

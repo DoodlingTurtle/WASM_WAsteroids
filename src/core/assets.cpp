@@ -1,5 +1,5 @@
-#include "assets.h"
 #include <SDL/SDL_mixer.h>
+#include "./assets.h"
 
 std::string Assets::loadText(std::string fileName) {
     std::string str;
@@ -23,19 +23,19 @@ std::string Assets::loadText(std::string fileName) {
 
 #undef REGISTER_ASSET
 #define REGISTER_ASSET(p, c, f, l, t) c* Assets::p = nullptr;
-#include "assets_list.h"
+#include "../assets_list.hpp"
 
 Assets::Asset Assets::loaderList[] = {
     #undef REGISTER_ASSET
     #define REGISTER_ASSET(p, c, f, l, t) { Assets::t, f, { .l=&Assets::p } },
-    #include "assets_list.h"
+    #include "../assets_list.hpp"
 };
 
 static auto _count_assets = []() {
     int i = 0;
         #undef REGISTER_ASSET
         #define REGISTER_ASSET(p, c, f, l, t) i++;
-        #include "assets_list.h"
+        #include "../assets_list.hpp"
     return i;
 };
 

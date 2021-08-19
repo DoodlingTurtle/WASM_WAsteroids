@@ -1,7 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H 1
 
-#include "olcPixelGameEngine.h"
+#include "core/olcPixelGameEngine.h"
 #include "gameobjects/asteroids.h"
 
 class Scene {

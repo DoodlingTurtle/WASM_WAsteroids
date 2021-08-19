@@ -2,7 +2,7 @@
 #define __RGNDS_TRANSFORM_CPP__
 
 #include "config.h"
-#include "transform.h"
+#include "./transform.h"
 #include <math.h>
 
 namespace RGNDS {

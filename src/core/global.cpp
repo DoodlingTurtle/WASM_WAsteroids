@@ -1,14 +1,9 @@
 #include "global.h"
 #include "config.h"
 
-olc::PixelGameEngine* Global::pge = nullptr;
-Asteroids* Global::asteroids = nullptr;
-ShipStats* Global::shipStats = nullptr;
-GameInput* Global::gameInput = nullptr;
-ScreenLayout* Global::layout = nullptr;
-Mix_Music* Global::bgMusic   = nullptr;
-
-int Global::score = 0;
+#undef REGISTER_GLOBAL
+#define REGISTER_GLOBAL(t, e, v) t Global::e = v;
+#include "global.hpp"
 
 void Global::switchBGMusic(Mix_Music* asset) {
     Mix_HaltMusic();

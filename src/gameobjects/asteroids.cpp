@@ -1,13 +1,14 @@
-#include "asteroids.h"
-#include "../config.h"
-#include "../global.h"
+#include "./asteroids.h"
+#include "config.h"
+#include "global.h"
+#include "assets.h"
 
-#include "scorepopup.h"
-#include "../particles/asteroid_particles.h"
-#include "../assets.h"
+#include "particles/asteroid_particles.h"
+
+#include "./scorepopup.h"
 
 #include <stdio.h>
-    using namespace std;
+using namespace std;
 
 Asteroids::Asteroid::Asteroid() : SpaceObj(32.0f)
 , sprite(nullptr), decal(nullptr), killOnNextUpdate(false)
@@ -152,10 +153,6 @@ std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
         }
         else spa = new std::vector<SpaceObj*>();
 
-        Global::score += 100/scale;
-
-        spa->push_back(ScorePopup::spawn(100/scale, pos.x, pos.y));
-        
         //Spawn AsteroidExplosion at go->pos
         AsteroidExplosion* e = new AsteroidExplosion(this);
         spa->push_back(e);
@@ -220,6 +217,8 @@ olc::Sprite* Asteroids::Asteroid::getSprite() {
     return sprite;
 }
 
+bool Asteroids::Asteroid::allowDeleteAfterDeath() { return false; }
+
 Asteroids::Asteroid::~Asteroid() { 
     if(decal != nullptr)  delete decal;
     if(sprite != nullptr) delete sprite;
@@ -232,11 +231,7 @@ Asteroids::Asteroid::~Asteroid() {
 
 Asteroids::Asteroids() 
 : dirty(true)
-{
-    Debug("Asteroids::Construct");
-    sfx[0] = Assets::asteroid_hit_1;
-    sfx[1] = Assets::asteroid_hit_2;
-}
+{ }
 
 Asteroids::~Asteroids() { }
 

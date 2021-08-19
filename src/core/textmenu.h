@@ -1,10 +1,10 @@
 #ifndef __TextMenu_H__
 #define __TextMenu_H__
 
-#include "olcPixelGameEngine.h"
+#include "./olcPixelGameEngine.h"
 #include <vector>
 #include <string>
-#include "transform.h"
+#include "./transform.h"
 
     enum TextMenuType {
         TEXTMENU_LIST,

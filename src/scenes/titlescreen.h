@@ -1,10 +1,9 @@
 #ifndef TITLESCREEN_H
 #define TITLESCREEN_H
 
-#include "../olcPixelGameEngine.h"
-#include "../scene.h"
-
-#include "../textmenu.h"
+#include "olcPixelGameEngine.h"
+#include "scene.h"
+#include "textmenu.h"
 
 class TitleScreen : public Scene {
 

@@ -1,25 +1,26 @@
 #include "maingame.h"
 #include <vector>
-#include "../config.h"
-#include "../global.h"
-#include "../assets.h"
+#include <unordered_set>
 
-#include "../gameobjects/scorepopup.h"
+#include "config.h"
+#include "global.h"
+#include "assets.h"
 
 static std::vector<SpaceObj*>   gameObjList[3];
 static std::vector<SpaceObj*>*  gameObjects         = &gameObjList[0];
 static std::vector<SpaceObj*>*  prevGameObjects     = &gameObjList[1];
 static std::vector<SpaceObj*>*  newGameObjects      = &gameObjList[2];
 
+static std::unordered_set<SpaceObj*> worldObjects;
+
 static unsigned char tick = 0;
 
 MainGameScreen::MainGameScreen() 
+:shipexp(nullptr), ship(nullptr)
 { 
 // setup the scoreboard
-    scorelocation.pos.x = 5;
-    scorelocation.pos.y = 5;
+    scorelocation.pos = { 5.0f, 5.0f };
     scorelocation.scale = 2;
-    shipexp = nullptr;
     reset();
 }
 
@@ -28,8 +29,8 @@ void MainGameScreen::reset() {
     game_difficulty = 1.0f;
     shipSurvived = true;
     scoreTimer = 0.0f;
-    onEnd();
 
+    onEnd();
     Global::switchBGMusic(Assets::bgmGame);
 }
 
@@ -86,7 +87,6 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         scoreTimer += 1000.0f * deltaTime;
         if(scoreTimer > 1000) {
             Global::score--;
-            
             scoreTimer = 0;
         }
     }
@@ -145,7 +145,6 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         return;
     }
 
-    ScorePopup::refreshInstanceList();
 
 // Send out an update heartbeat to all attached objects
     std::vector<SpaceObj*>* so;
@@ -180,23 +179,25 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
 void MainGameScreen::onEnd() {
     if(state != MainGameScreen::STATE_RUNNING) {
 
-        Debug("remove ship exp");
-        if(shipexp != nullptr)
-            delete shipexp;
+        Debug("delete ship");
+        if(shipexp) delete shipexp; 
         shipexp = nullptr;
 
-        Debug("clear score popup");
-        ScorePopup::cleanup();
-
-        Debug("delete ship");
-        if(ship != nullptr)
-            delete ship;
+        if(ship) delete ship; 
         ship = nullptr;
 
         Debug("clear gameobjects");
-        gameObjects->clear();
+        auto _clearGameObjects = [this](std::vector<SpaceObj*>* gameObjects) {
+            for(auto go : *gameObjects)
+                if(go->allowDeleteAfterDeath())
+                    delete go;
+
+            gameObjects->clear();
+        };
+        
+        _clearGameObjects(gameObjects);
+        _clearGameObjects(newGameObjects);
         prevGameObjects->clear();
-        newGameObjects->clear();
 
         Debug("MainGameScreen::onEnd finished");
     }

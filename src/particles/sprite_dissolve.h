@@ -1,9 +1,9 @@
 #ifndef __SpriteDissolve_H__
 #define __SpriteDissolve_H__
 
-#include "../olcPixelGameEngine.h"
-#include "../transform.h"
-#include "../particles.h"
+#include "olcPixelGameEngine.h"
+#include "transform.h"
+#include "particles.h"
 
 class SpriteDissolve_Emitter;
 class SpriteDissolve_Particle;

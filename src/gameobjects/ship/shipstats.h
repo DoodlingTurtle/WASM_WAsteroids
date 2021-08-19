@@ -2,7 +2,8 @@
 #define __ShipStats_H__
 
 #include <vector>
-#include "ship_component.h"
+#include "./ship_component.h"
+#include "gameobjects/bullet.h"
 
 class ShipStats {
 public: 
@@ -26,6 +27,9 @@ public:
     void takeComponentsFrom(std::vector<ShipComponent*>*);
 
     void registerNewComponent(ShipComponent* comp);
+
+
+    Bullet* prototypeBullet;
 
 protected:
     std::vector<ShipComponent*> components;

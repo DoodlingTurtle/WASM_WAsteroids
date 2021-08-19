@@ -1,7 +1,7 @@
 #ifndef __GameInput_H__
 #define __GameInput_H__
 
-#include "olcPixelGameEngine.h"
+#include "./olcPixelGameEngine.h"
 
 #define NUM_KEYS 12
 

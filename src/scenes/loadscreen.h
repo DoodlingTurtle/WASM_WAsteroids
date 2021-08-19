@@ -1,7 +1,7 @@
 #ifndef __LoadScreen_H__
 #define __LoadScreen_H__
 
-#include "../scene.h"
+#include "scene.h"
 
 class LoadScreen : public Scene {
 public:

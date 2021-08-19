@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "../olcPixelGameEngine.h"
-#include "../scene.h"
+#include "olcPixelGameEngine.h"
+#include "scene.h"
 
 class TextScene: public Scene {
 public:

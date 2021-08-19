@@ -1,7 +1,8 @@
-#include "shipupgrade_shield.h"
-#include "shipstats.h"
-#include "../../config.h"
-#include "../../assets.h"
+#include "./shipupgrade_shield.h"
+#include "./shipstats.h"
+
+#include "config.h"
+#include "assets.h"
 
 // Init statics
 void ShipUpgrade_Shield::init(olc::PixelGameEngine* pge) {}

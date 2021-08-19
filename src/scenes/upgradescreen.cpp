@@ -1,13 +1,12 @@
-#include "upgradescreen.h"
+#include "./upgradescreen.h"
 #include <functional>
 #include <stdio.h>
 
-#include "../olcPixelGameEngine.h"
+#include "olcPixelGameEngine.h"
+#include "global.h"
+#include "assets.h"
 
-#include "../global.h"
-#include "../assets.h"
-
-#include "../gameobjects/ship/shipupgrade_shieldgenerator.h"
+#include "gameobjects/ship/shipupgrade_shieldgenerator.h"
 
 #define ERROR_PRICE_TO_HIGH "You don't have enough points"
 

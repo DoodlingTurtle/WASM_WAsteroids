@@ -1,15 +1,16 @@
-#include "ship.h"
+#include "./ship.h"
+
 #include <math.h>
 #include <stdio.h>
 
-#include "../config.h"
-#include "../global.h"
-#include "../collision.h"
+#include "config.h"
+#include "global.h"
+#include "collision.h"
+#include "assets.h"
 
-#include "ship/shipupgrade_shield.h"
-#include "ship/shipupgrade_cannon.h"
+#include "gameobjects/ship/shipupgrade_shield.h"
+#include "gameobjects/ship/shipupgrade_cannon.h"
 
-#include "../assets.h"
 
 #define SHIP_DEFAULT_RADIUS 16.0f
 
@@ -320,3 +321,5 @@ bool Ship::shieldIsActive() {
 }
 
 olc::Sprite* Ship::getSprite() { return sprDissolve; }
+
+bool Ship::allowDeleteAfterDeath() { return false; }

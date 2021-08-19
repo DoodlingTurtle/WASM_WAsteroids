@@ -1,9 +1,9 @@
 #ifndef __PauseScreen_H__
 #define __PauseScreen_H__
 
-#include "../olcPixelGameEngine.h"
-#include "../scene.h"
-#include "../textmenu.h"
+#include "olcPixelGameEngine.h"
+#include "scene.h"
+#include "textmenu.h"
 
 class PauseScreen : public Scene {
 public:

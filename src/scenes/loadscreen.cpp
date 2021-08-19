@@ -1,6 +1,6 @@
 #include "loadscreen.h"
-#include "../assets.h"
-#include "../global.h"
+#include "assets.h"
+#include "global.h"
 
 
 LoadScreen::LoadScreen()

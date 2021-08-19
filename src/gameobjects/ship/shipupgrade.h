@@ -1,9 +1,10 @@
 #ifndef __ShipUpgrade_H__
 #define __ShipUpgrade_H__
 
-#include "shipstats.h"
 #include <vector>
-#include "../../spaceobj.h"
+#include "spaceobj.h"
+
+#include "./shipstats.h"
 
 class Ship;
 

@@ -1,8 +1,8 @@
-#include "shipupgrade_shieldgenerator.h"
-#include "../ship.h"
-#include "shipupgrade_shield.h"
+#include "./shipupgrade_shieldgenerator.h"
+#include "./shipupgrade_shield.h"
 
-#include "../../config.h"
+#include "gameobjects/ship.h"
+#include "config.h"
 
 bool ShipUpgrade_ShieldGenerator::draw = true;
 int  ShipUpgrade_ShieldGenerator::cntInstances = 0;

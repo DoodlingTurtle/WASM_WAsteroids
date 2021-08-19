@@ -1,8 +1,8 @@
 #include "./gameoverscreen.h"
 
 #include <cstdio>
-#include "../global.h"
-#include "../assets.h"
+#include "global.h"
+#include "assets.h"
 
 void GameOverScreen::onStart() { 
     

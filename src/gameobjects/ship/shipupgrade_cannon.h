@@ -1,10 +1,10 @@
 #ifndef __ShipUpgrade_Cannon_H__
 #define __ShipUpgrade_Cannon_H__
 
-#include "shipupgrade.h"
-#include "shipstats.h"
-#include "../shot.h"
-#include "../ship.h"
+#include "gameobjects/ship.h"
+
+#include "./shipupgrade.h"
+#include "./shipstats.h"
 
 class ShipUpgrade_Cannon : public ShipUpgrade {
 public:
@@ -18,9 +18,6 @@ public:
           , float deltaTime
           , std::vector<SpaceObj*>* newSpaceObjects
     ) override ;
-
-protected:
-    Shots shots;
 
 private:
 

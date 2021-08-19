@@ -2,21 +2,18 @@
 #define SHIP_H 
 
 #include <vector>
-
-#include "../olcPixelGameEngine.h"
-#include "ship/shipstats.h"
-
-#include "../wraparoundrenderer.h"
-#include "../spaceobj.h"
-
-#include "shot.h"
-
-#include "ship/shipupgrade.h"
-#include "ship/shipstats.h"
-#include "ship/shipengine.h"
-#include "../collision.h"
-
 #include <SDL/SDL_mixer.h>
+
+#include "olcPixelGameEngine.h"
+#include "wraparoundrenderer.h"
+#include "spaceobj.h"
+#include "collision.h"
+
+#include "gameobjects/ship/shipstats.h"
+#include "gameobjects/ship/shipupgrade.h"
+#include "gameobjects/ship/shipstats.h"
+#include "gameobjects/ship/shipengine.h"
+
 
 class ShipUpgrade_Shield;
 
@@ -40,6 +37,8 @@ class Ship : public SpaceObj {
         bool shieldIsActive();
 
         void kill() override;
+
+        bool allowDeleteAfterDeath() override;
 
     protected:
         ShipUpgrade_Shield* currentShield;    // keeps track, which updgrade is the current shield

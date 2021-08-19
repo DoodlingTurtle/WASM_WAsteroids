@@ -1,11 +1,11 @@
 #ifndef __ShipUpgrade_ShieldGenerator_H__
 #define __ShipUpgrade_ShieldGenerator_H__
 
-#include "../../transform.h"
+#include "transform.h"
 
-#include "shipstats.h"
-#include "ship_component.h"
-#include "shipupgrade_shield.h"
+#include "./shipstats.h"
+#include "./ship_component.h"
+#include "./shipupgrade_shield.h"
 
 class ShipUpgrade_ShieldGenerator : public ShipComponent {
 public:

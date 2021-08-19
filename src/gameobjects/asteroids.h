@@ -1,12 +1,10 @@
 #ifndef ASTEROIDS_H
 #define ASTEROIDS_H
 
-#include "../config.h"
-#include "../olcPixelGameEngine.h"
-#include "../spaceobj.h"
-#include "../collision.h"
-
-#include "shot.h"
+#include "config.h"
+#include "olcPixelGameEngine.h"
+#include "spaceobj.h"
+#include "collision.h"
 
 #include <vector>
 
@@ -48,6 +46,7 @@ public:
         void moveInDirection( float distance ) override;
         void markAsHit(const RGNDS::Collision*);
 
+        bool allowDeleteAfterDeath() override;
 
      protected:
         float spinSpeed = 0.10f;
@@ -100,9 +99,6 @@ private:
 
     // defines if the list of live asteroids must be refreshed
     bool dirty;
-
-    // SFX
-    Mix_Chunk* sfx[2];
 
 };
 

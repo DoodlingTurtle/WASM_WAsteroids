@@ -3,14 +3,14 @@
 
 #include <SDL/SDL_mixer.h>
 
-#include "../../transform.h"
+#include "transform.h"
+#include "collision.h"
 
-#include "shipstats.h"
-#include "shipupgrade.h"
+#include "gameobjects/asteroids.h"
+#include "gameobjects/ship.h"
 
-#include "../asteroids.h"
-#include "../../collision.h"
-#include "../ship.h"
+#include "./shipstats.h"
+#include "./shipupgrade.h"
 
 class ShipUpgrade_Shield: public ShipUpgrade 
 {

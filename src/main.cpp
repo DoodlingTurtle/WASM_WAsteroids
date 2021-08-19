@@ -1,7 +1,7 @@
-#include "./olcPixelGameEngine.h"
+#include "olcPixelGameEngine.h"
 #include <SDL/SDL_mixer.h>
 
-#include "gameinput.h"
+#include "core/gameinput.h"
 #include "particles.h"
 
 #include "scene.h"
@@ -25,8 +25,8 @@
 #include <ctime>
 
 #include "config.h"
-#include "assets.h"
-#include "global.h"
+#include "core/assets.h"
+#include "core/global.h"
 
 //EMSCRIPTEN_KEEPALIVE int number = 0;
 

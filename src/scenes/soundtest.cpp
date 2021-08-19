@@ -1,5 +1,5 @@
-#include "soundtest.h"
-#include "../global.h"
+#include "./soundtest.h"
+#include "global.h"
 
 #define CNT_SNDS 7
 SoundTest::Sound SoundTest::sounds[CNT_SNDS] = {

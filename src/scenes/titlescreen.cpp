@@ -1,6 +1,6 @@
-#include "titlescreen.h"
-#include "../global.h"
-#include "../config.h"
+#include "./titlescreen.h"
+#include "global.h"
+#include "config.h"
 
 
 TitleScreen::TitleScreen() 

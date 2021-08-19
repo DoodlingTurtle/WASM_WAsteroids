@@ -1,4 +1,4 @@
-#include "ship_explosion.h"
+#include "./ship_explosion.h"
 
 /*#############################################################################
  * ShipExplosion
@@ -18,3 +18,5 @@ std::vector<SpaceObj*>* ShipExplosion::onUpdate(float deltaTime)
 
 void ShipExplosion::onDraw(olc::PixelGameEngine* pge) 
 { SpriteDissolve::onDraw(pge); }
+
+bool ShipExplosion::allowDeleteAfterDeath() { return false; }

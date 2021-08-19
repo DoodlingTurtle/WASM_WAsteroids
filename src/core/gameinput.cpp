@@ -1,5 +1,5 @@
 #include "gameinput.h"
-#include "config.h"
+#include "../config.h"
 olc::Key GameInput::keyMap[NUM_KEYS] = {
     olc::A,
     olc::D,
@@ -21,8 +21,6 @@ GameInput::GameInput(olc::PixelGameEngine* pge)
 {}
 GameInput::~GameInput() {}
 
-
-
 void GameInput::updateInputs() {
 
     unsigned int key = 0;
@@ -40,5 +38,4 @@ void GameInput::updateInputs() {
     released = keys_released;
     held = keys_held;
 
-    //Debug("Keys: " << pressed << " " << released << " " << held);
 }
