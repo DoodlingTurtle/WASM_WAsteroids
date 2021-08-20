@@ -60,7 +60,7 @@ void ShipUpgrade_Shield::draw(
 }
 
 // Methods
-void ShipUpgrade_Shield::gotHit( Asteroids::Asteroid* a, Ship* s, RGNDS::Collision* c) {
+void ShipUpgrade_Shield::gotHit( Asteroid* a, Ship* s, RGNDS::Collision* c) {
 
     // Get needed variables
     olc::vf2d invHit = c->overlapDir * (-1.0f);

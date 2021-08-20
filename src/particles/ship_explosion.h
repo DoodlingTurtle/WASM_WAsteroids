@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "olcPixelGameEngine.h"
+#include "gameobject.h"
 #include "spaceobj.h"
 
 #include "gameobjects/ship.h"
@@ -11,6 +12,7 @@
 
 class ShipExplosion
 : public SpriteDissolve
+, public GameObject
 , public SpaceObj
 {
 public:
@@ -20,7 +22,6 @@ public:
     std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
     void                    onDraw(olc::PixelGameEngine*) override;
 
-    bool allowDeleteAfterDeath() override;
 };
 
 

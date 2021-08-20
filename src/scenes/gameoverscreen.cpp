@@ -20,8 +20,6 @@ void GameOverScreen::onEnd() {
 }
 
 void GameOverScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    Global::asteroids->update(deltaTime);
-
     if(Global::gameInput->released&KEYPAD_A)
         exit();
 
@@ -36,8 +34,6 @@ void GameOverScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
 }
 void GameOverScreen::onDraw(olc::PixelGameEngine* pge) {
-    Global::asteroids->draw();
-
     char buffer[18];
     sprintf(buffer, "% 8d", Global::score);
     std::string s(buffer);

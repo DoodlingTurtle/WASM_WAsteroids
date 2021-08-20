@@ -1,6 +1,7 @@
 #include "./titlescreen.h"
 #include "global.h"
 #include "config.h"
+#include "gameobjects/asteroids.h"
 
 
 TitleScreen::TitleScreen() 
@@ -21,11 +22,11 @@ TitleScreen::TitleScreen()
 }
 
 void TitleScreen::onStart() {
-    Global::asteroids->spawnAsteroids(4);
+    Global::world->removeWithAttribute(GameObject::ALL);    
+    Asteroid::spawn(4);
 }
 
 void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    Global::asteroids->update(deltaTime);
 
     if(Global::gameInput->pressed&KEYPAD_DOWN)
         menu.selectNext();
@@ -36,7 +37,6 @@ void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 }
 
 void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
-    Global::asteroids->draw();
 
     pge->DrawString(Global::layout->titleScreen_title_placement, "WASteroids", olc::WHITE, 3.0f);
     pge->FillRect(
@@ -51,10 +51,6 @@ void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
     pge->DrawStringDecal({4, 4}, version_text, olc::WHITE, { 0.75f, 0.75f });
     pge->DrawString(help_placement, help_text);
 }
-void TitleScreen::onEnd() {
-    Global::asteroids->killall();
-}
+void TitleScreen::onEnd() { Global::world->removeWithAttribute(GameObject::ALL); }
 
-int TitleScreen::selectedMenu(){
-    return menu.selected();
-}
+int TitleScreen::selectedMenu(){ return menu.selected(); }

@@ -3,13 +3,12 @@
 
 #include "olcPixelGameEngine.h"
 #include "bullet_modifier.h"
+#include "gameobject.h"
 #include "spaceobj.h"
 
-class Bullet : public SpaceObj {
+class Bullet : public GameObject, public SpaceObj {
 public:
-    struct DecalRect {
-        olc::vf2d coords, size;
-    };
+    struct DecalRect { olc::vf2d coords, size; };
 
     Bullet(
             float lifetime = 1.0f, 
@@ -22,7 +21,6 @@ public:
     std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
    
     Bullet* clone(olc::vf2d pos, olc::vf2d dir, float acceleration);
-    bool allowDeleteAfterDeath() override;
 
 protected:
     static olc::Renderable spriteSheet;

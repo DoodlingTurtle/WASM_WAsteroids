@@ -22,7 +22,6 @@ private:
 
     float playhead;
     float playtime;
-    //Animation scoreAnimation;
 };
 
 #endif

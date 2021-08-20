@@ -62,26 +62,12 @@ public:
      */
     virtual std::vector<SpaceObj*>* onUpdate(float deltaTime) { return nullptr; };
 
-    /* defines, if the game is allowd to delete this SpaceObj instance after it
-     * has been killed
-     */
-    virtual bool allowDeleteAfterDeath() = 0; 
-
     /* called once per cycle after everything has been updated */
     virtual void onDraw(olc::PixelGameEngine* pge ){};
-
-    /* marks the Instance as dead, so it can be removed from the game
-     * (and may be deleted depending on allowDeleteAfterDeath() ) */
-    virtual void kill();
-
-    /* tells if the instance is still part of the game */
-    virtual bool isAlive();
-
 
 protected:
     WrapAroundRenderer renderer;
     float objRadius;
-    bool bIsAlive;
 
 private:
     float moveAngle;

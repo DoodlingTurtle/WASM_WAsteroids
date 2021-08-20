@@ -15,7 +15,13 @@
 #define SHIP_DEFAULT_RADIUS 16.0f
 
 Ship::Ship() 
-: SpaceObj(SHIP_DEFAULT_RADIUS)
+: GameObject({
+    GameObject::SPACE_OBJ_UPDATE,
+    GameObject::SPACE_OBJ_DRAW,
+    GameObject::PLAYER_SHIP,
+    GameObject::MAINGAME_COMPONENT
+})
+  , SpaceObj(SHIP_DEFAULT_RADIUS)
   , angRes(PI)
   , thrusting(false)
   , decShip(nullptr)
@@ -29,7 +35,6 @@ Ship::Ship()
     Global::pge->DrawPartialSprite({ 0, 0 }, Assets::ship->Sprite(), { 32, 0 }, { 32, 32 });
     Global::pge->SetDrawTarget(nullptr);
 
-    this->bIsAlive = true;
     stats = Global::shipStats;
 
     reset();
@@ -100,7 +105,6 @@ void Ship::reset() {
     SpaceObj::setDirection(olc::vf2d((float)cos(PI/2), (float)sin(PI/2)));
     moveVelocity = 0.0f;
     setDirection({0.0f, 0.0f});
-    bIsAlive = true;
 
     clearUpgrades();
     
@@ -118,32 +122,24 @@ RGNDS::Collision::Circle Ship::getCollider() {
     return {pos.x, pos.y, radius * scale};
 }
 
-void Ship::kill() {
-    if(chaThrust != -1) {
-        Mix_HaltChannel(chaThrust);
-        chaThrust = -1;
-    }
-    Mix_PlayChannel(-1, Assets::shipExplode, 0);
-    SpaceObj::kill();
-}
-
 std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
 
 //check asteroids collision
-    std::vector<Asteroids::Asteroid*> asteroids = Global::asteroids->getLiveAsteroids();
+//TODO: change to ship_killer
+    auto list = Global::world->findByAttribute(GameObject::ASTEROID);
     RGNDS::Collision c;
-    for(auto asteroid : asteroids) {
+    for(auto go : list) {
         if(RGNDS::Collision::checkCircleOnCircle(
             getCollider(), 
-            asteroid->getColliders(),
+            ((Asteroid*)go)->getColliders(),
             &c
         )){
             if(currentShield != nullptr) {
-                currentShield->gotHit(asteroid, this, &c);
+                currentShield->gotHit((Asteroid*)go, this, &c);
                 moveVelocity *= 0.5f;
             }
             else {
-                this->kill();
+                assignAttribute(GameObject::DEAD); 
                 return nullptr;
             }
         }
@@ -322,4 +318,3 @@ bool Ship::shieldIsActive() {
 
 olc::Sprite* Ship::getSprite() { return sprDissolve; }
 
-bool Ship::allowDeleteAfterDeath() { return false; }

@@ -29,7 +29,7 @@ public:
 
     virtual float getRadius();
 
-    void gotHit( Asteroids::Asteroid*, Ship* s, RGNDS::Collision*);
+    void gotHit( Asteroid*, Ship* s, RGNDS::Collision*);
 
     static void init(olc::PixelGameEngine* pge);
     static void deinit();

@@ -8,47 +8,52 @@
 #include <SDL/SDL_mixer.h>
 
 Bullet::Bullet(float lifetime, const DecalRect sheetCoords, float radius)
-:lifetime(lifetime), decalCoords(sheetCoords) , radius(radius)
-{ this->bIsAlive = true; }
+: GameObject({
+    GameObject::SPACE_OBJ_DRAW,
+    GameObject::SPACE_OBJ_UPDATE,
+})
+, SpaceObj(radius)
+, lifetime(lifetime), decalCoords(sheetCoords) , radius(radius)
+{}
 
 Bullet::~Bullet() {}
 
 std::vector<SpaceObj*>* Bullet::onUpdate(float deltaTime) {
 
-    std::vector<SpaceObj*>* spa = nullptr;
-
     lifetime -= deltaTime * 0.25f;    
-    if(lifetime <= 0) { this->kill(); }
+    if(lifetime <= 0) { assignAttribute(GameObject::DEAD); }
 
     else {
         updatePosition(deltaTime);
 
-        std::vector<Asteroids::Asteroid*> asteroids = Global::asteroids->getLiveAsteroids();
-        RGNDS::Collision c;
+        //TODO: Replace with GameObject::BULLET_COLLIDEABLE
+        auto asteroids = Global::world->findByAttribute(GameObject::ASTEROID);
 
+        RGNDS::Collision c;
+        Asteroid* ast;
         for(auto a : asteroids) {
+            ast = (Asteroid*)a;
+
             if(RGNDS::Collision::checkCircleOnCircle(
                 ((RGNDS::Collision::Circle){
                     pos.x, pos.y, radius 
-                }), a->getColliders(),
+                }), ast->getColliders(),
                 &c
             )){
-                spa = new std::vector<SpaceObj*>();
-
-                a->markAsHit(&c);
-                int score = 100/a->scale;
+                ast->markAsHit(&c);
+                int score = 100/ast->scale;
 
                 for(auto m : modifiers)
-                    score = m->updateScore(score, this, spa);
+                    score = m->updateScore(score, this);
 
                 Global::score += score;
-                spa->push_back(new ScorePopup(score, a->pos.x, a->pos.y));
-                this->kill();
+                Global::world->addGameObject(new ScorePopup(score, ast->pos.x, ast->pos.y));
+                assignAttribute(GameObject::DEAD);
             }
         }
     }
 
-    return spa;
+    return nullptr;
 
 }
 
@@ -75,4 +80,3 @@ Bullet* Bullet::clone(olc::vf2d pos, olc::vf2d dir, float velocity) {
     return b;
 }
 
-bool Bullet::allowDeleteAfterDeath() { return true; }

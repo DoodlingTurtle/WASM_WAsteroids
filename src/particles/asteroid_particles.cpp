@@ -4,13 +4,17 @@
 /*#############################################################################
  * AsteroidExplosion
  *###########################################################################*/
-AsteroidExplosion::AsteroidExplosion(Asteroids::Asteroid* ast)
+AsteroidExplosion::AsteroidExplosion(Asteroid* ast)
 : SpriteDissolve(ast->getSprite(), ast, 16.0f, 1.0f)
+, GameObject({
+    GameObject::SPACE_OBJ_DRAW,
+    GameObject::SPACE_OBJ_UPDATE
+})
 , SpaceObj(64)
-{ SpaceObj::bIsAlive = true; }
+{}
 
 
-void AsteroidExplosion::onEmitterFinished() { SpaceObj::kill(); }
+void AsteroidExplosion::onEmitterFinished() { GameObject::assignAttribute(GameObject::DEAD); }
 
 std::vector<SpaceObj*>* AsteroidExplosion::onUpdate(float deltaTime) { 
     SpriteDissolve::onUpdate(deltaTime);
@@ -23,8 +27,4 @@ void AsteroidExplosion::onDraw(olc::PixelGameEngine* pge)
     SpriteDissolve::onDraw(pge); 
     pge->SetDrawTarget(nullptr);
 }
-
-bool AsteroidExplosion::allowDeleteAfterDeath() { 
-    return true; }
-
 

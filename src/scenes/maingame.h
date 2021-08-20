@@ -40,11 +40,6 @@ protected:
 private:
     RGNDS::Transform scorelocation;
     float scoreTimer;
-
-    Ship* ship;
-
-    bool shipSurvived;
-    ShipExplosion* shipexp; 
 };
 
 #endif

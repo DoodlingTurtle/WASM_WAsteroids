@@ -8,7 +8,7 @@ class Bullet;
 
 class BulletModifier {
 public:
-    virtual int updateScore(int currentScore, Bullet*, std::vector<SpaceObj*>* newSpaceObjects) = 0;
+    virtual int updateScore(int currentScore, Bullet*) = 0;
 
 };
 

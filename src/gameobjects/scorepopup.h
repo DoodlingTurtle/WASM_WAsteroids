@@ -5,16 +5,15 @@
 #include <functional>
 
 #include "olcPixelGameEngine.h"
+#include "gameobject.h"
 #include "spaceobj.h"
 
-class ScorePopup : public SpaceObj {
+class ScorePopup : public GameObject, public SpaceObj {
 public:
     ScorePopup(short score, float x, float y);
-    virtual~ScorePopup();
 
     std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
     void onDraw(olc::PixelGameEngine*) override;
-    bool allowDeleteAfterDeath() override;
 
 protected:
     short score;        // Keeps track of what score is displayed

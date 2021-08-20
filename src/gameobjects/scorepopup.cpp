@@ -1,27 +1,26 @@
 #include "./scorepopup.h"
 #include <cstdio>
 
-ScorePopup::ScorePopup(short s, float x, float y) {
-    score = s;       
-    lifetime = 1000;   //1000ms ms = 1 Sec
-    pos.x = x;
-    pos.y = y;
-    bIsAlive = true;
+ScorePopup::ScorePopup(short s, float x, float y) 
+:GameObject({
+    GameObject::SPACE_OBJ_DRAW,
+    GameObject::SPACE_OBJ_UPDATE
+        })
+, score(s), lifetime(1000)
+{
+    pos = {x, y};
 }
-
-ScorePopup::~ScorePopup() {}
 
 static olc::Pixel color[2] = {
     olc::Pixel(255, 0, 0),
     olc::Pixel(0, 255, 0)
 };
 
-
 std::vector<SpaceObj*>* ScorePopup::onUpdate(float deltaTime) {  
     this->lifetime -= 1000 * deltaTime;
     this->pos.y -= 20.0f*deltaTime;
     if(this->lifetime<=0)
-        this->kill();
+        assignAttribute(GameObject::DEAD);
 
     return nullptr;
 }
@@ -36,5 +35,3 @@ void ScorePopup::onDraw(olc::PixelGameEngine* pge) {
             s, color[this->lifetime&1]
     ); 
 };
-
-bool ScorePopup::allowDeleteAfterDeath() { return true; }

@@ -4,8 +4,8 @@
     
     #include "core/olcPixelGameEngine.h"
     #include "core/gameinput.h"
-    
-    #include "gameobjects/asteroids.h"
+   
+    #include "gameworld.h"
     #include "gameobjects/ship/shipstats.h"
     
     #include "./particles.h"
@@ -15,10 +15,10 @@
 
 REGISTER_GLOBAL(GameInput*           , gameInput, nullptr)
 REGISTER_GLOBAL(olc::PixelGameEngine*, pge      , nullptr)
-REGISTER_GLOBAL(Asteroids*           , asteroids, nullptr)
 REGISTER_GLOBAL(ShipStats*           , shipStats, nullptr)
 REGISTER_GLOBAL(ScreenLayout*        , layout   , nullptr)
 REGISTER_GLOBAL(Mix_Music*           , bgMusic  , nullptr)
 REGISTER_GLOBAL(int                  , score    , 0      )
+REGISTER_GLOBAL(GameWorld*           , world    , nullptr)
 
 #endif

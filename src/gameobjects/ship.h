@@ -6,6 +6,7 @@
 
 #include "olcPixelGameEngine.h"
 #include "wraparoundrenderer.h"
+#include "gameobject.h"
 #include "spaceobj.h"
 #include "collision.h"
 
@@ -17,7 +18,7 @@
 
 class ShipUpgrade_Shield;
 
-class Ship : public SpaceObj {
+class Ship : public GameObject, public SpaceObj {
     public:
 
         Ship();
@@ -35,10 +36,6 @@ class Ship : public SpaceObj {
         // Upgrade related stuff
         void addUpgrade(ShipUpgrade* upgrade);
         bool shieldIsActive();
-
-        void kill() override;
-
-        bool allowDeleteAfterDeath() override;
 
     protected:
         ShipUpgrade_Shield* currentShield;    // keeps track, which updgrade is the current shield
