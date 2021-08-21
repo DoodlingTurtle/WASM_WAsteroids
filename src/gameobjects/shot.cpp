@@ -53,7 +53,7 @@ std::vector<SpaceObj*>* Shots::Shot::onUpdate(float deltaTime) {
 
         for(auto a : asteroids) {
             if(RGNDS::Collision::checkCircleOnCircle(
-                ((RGNDS::Collision::Circle){
+                (RGNDS::Collision::Circle{
                     pos.x, pos.y, 2.0f
                 }), a->getColliders(),
                 &c

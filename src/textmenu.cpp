@@ -28,14 +28,14 @@
     }
 
     void TextMenu::draw(olc::PixelGameEngine* pge) {
-        char buffer[maxlength+6];
+        char buffer[128];
 
         char c;
         int i = 0;
 
         switch(type) {
             case TEXTMENU_SINGLE_HORIZONTAL: {
-                sprintf(buffer, "< %s >", options.at(iSelected).c_str()); 
+                sprintf(buffer, "< %s >\0", options.at(iSelected).c_str()); 
                 std::string s(buffer);
                 //TODO: Reactivate later
 /*                pge->DrawString(

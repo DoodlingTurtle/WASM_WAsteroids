@@ -10,3 +10,13 @@ ressource/*
 src/tags
 .vscode
 !docs/*
+/x64
+/WASteroids.vcxproj.user
+/WASteroids.vcxproj.filters
+/WASteroids.vcxproj
+/WASteroids.sln
+/WASteroids.vcxproj.user
+/WASteroids.vcxproj.filters
+/WASteroids.vcxproj
+/WASteroids.sln
+/.vs/WASteroids/v16

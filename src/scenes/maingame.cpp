@@ -13,7 +13,8 @@ static std::vector<SpaceObj*>*  newGameObjects      = &gameObjList[2];
 
 static unsigned char tick = 0;
 
-MainGameScreen::MainGameScreen() 
+MainGameScreen::MainGameScreen()
+    :ship(nullptr)
 { 
 // setup the scoreboard
     scorelocation.pos.x = 5;
