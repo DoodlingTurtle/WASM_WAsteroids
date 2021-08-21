@@ -55,7 +55,7 @@ public:
 
         layer_blackout = _setupLayer(false, [this](){
             SetPixelMode(olc::Pixel::ALPHA);
-            Clear((olc::Pixel){0, 0, 0, 128});
+            Clear(olc::Pixel{0, 0, 0, 128});
             SetPixelMode(olc::Pixel::NORMAL);
         });
 

@@ -6,7 +6,8 @@
 #include "global.h"
 #include "assets.h"
 
-MainGameScreen::MainGameScreen() 
+MainGameScreen::MainGameScreen()
+    :ship(nullptr)
 { 
 // setup the scoreboard
     scorelocation.pos = { 5.0f, 5.0f };
