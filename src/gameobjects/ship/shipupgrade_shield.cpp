@@ -28,7 +28,6 @@ bool ShipUpgrade_Shield::init(ShipStats* shipstats){
 bool ShipUpgrade_Shield::update(
             ShipStats* shipstats, Ship* ship 
           , float dt
-          , std::vector<SpaceObj*>* newSpaceObjects
 ) {
     lifetime -= dt * 1000.0f;
     if(lastHitTime > 0.0f) {

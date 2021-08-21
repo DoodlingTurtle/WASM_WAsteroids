@@ -11,10 +11,9 @@ ShipUpgrade_ShieldGenerator::ShipUpgrade_ShieldGenerator( ShipUpgrade_ShieldGene
 ShipUpgrade_ShieldGenerator::~ShipUpgrade_ShieldGenerator() { cntInstances--; }
 
 bool ShipUpgrade_ShieldGenerator::invokeShipComponent(
-        ShipStats* stats, Ship* ship, std::vector<SpaceObj*>* newSpaceObjectsToSpawn){
-
+        ShipStats* stats, Ship* ship
+){
     ship->addUpgrade(new ShipUpgrade_Shield()); 
-
     return false;
 };    
 

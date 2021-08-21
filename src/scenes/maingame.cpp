@@ -15,11 +15,10 @@ MainGameScreen::MainGameScreen()
 }
 
 void MainGameScreen::reset() {
-    state = MainGameScreen::STATE_LOST;
+    state = STATE_LOST;
     game_difficulty = 1.0f;
     scoreTimer = 0.0f;
 
-    onEnd();
     Global::switchBGMusic(Assets::bgmGame);
 }
 
@@ -58,14 +57,14 @@ void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 // Check Win loos state
     // If no asteroids = game won
     if(Global::world->countWithAttribute(GameObject::ASTEROID) == 0) {
-        state = MainGameScreen::STATE_WON; 
+        state = STATE_WON; 
         exit();
         return;
     }
 
     // If no ship or ship explosition = game lost 
     if(Global::world->countWithAttribute(GameObject::MAINGAME_COMPONENT) == 0) {
-        state = MainGameScreen::STATE_LOST; 
+        state = STATE_LOST; 
         exit();
         return;
     }
@@ -95,9 +94,8 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
 }
 
 void MainGameScreen::onEnd() {
-    if(state != MainGameScreen::STATE_RUNNING) {
-        Debug("MainGameScreen::onEnd finished");
-    }
+    if(state != MainGameScreen::STATE_RUNNING)
+        Global::world->removeWithAttribute(GameObject::ALL);
 }
 
 MainGameScreen::GAME_STATE MainGameScreen::getState() { return state; }

@@ -12,7 +12,7 @@ public:
     ShipUpgrade_ShieldGenerator(ShipUpgrade_ShieldGenerator* = nullptr);
     virtual ~ShipUpgrade_ShieldGenerator();
 
-    bool invokeShipComponent(ShipStats*, Ship*, std::vector<SpaceObj*>* newSpaceObjectsToSpawn) override;    
+    bool invokeShipComponent(ShipStats*, Ship*) override;    
     bool updateShipComponent(float deltaTime) override;
     
     bool drawShipComponent(ShipStats* stats, Ship* ship, olc::PixelGameEngine* pge, olc::vf2d componentListIconCoordinates) override; 

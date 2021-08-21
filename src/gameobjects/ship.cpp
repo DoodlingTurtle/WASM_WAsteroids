@@ -11,6 +11,8 @@
 #include "gameobjects/ship/shipupgrade_shield.h"
 #include "gameobjects/ship/shipupgrade_cannon.h"
 
+#include "particles/ship_explosion.h"
+
 
 #define SHIP_DEFAULT_RADIUS 16.0f
 
@@ -134,13 +136,13 @@ void Ship::onUpdate(float deltaTime) {
                 moveVelocity *= 0.5f;
             }
             else {
+                Mix_PlayChannel(-1, Assets::shipExplode, 0);
+                Global::world->addGameObject(new ShipExplosion(this));
                 assignAttribute(GameObject::DEAD); 
                 return;
             }
         }
     }
-
-    auto ret = new std::vector<SpaceObj*>();
 
     // Input Rotation
     if(Global::gameInput->held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 
@@ -159,7 +161,7 @@ void Ship::onUpdate(float deltaTime) {
         int index = selectableComponents.at(selectedComponent);
         ShipComponent* c = components.at(index);
         if(c) {
-            if(!c->invokeShipComponent(stats, this, ret)) {
+            if(!c->invokeShipComponent(stats, this)) {
                 delete c;
                 c = nullptr;
             }
@@ -229,10 +231,9 @@ void Ship::onUpdate(float deltaTime) {
     ShipUpgrade* upgrade;
     for(int a = upgrades.size()-1; a >= 0; a--) {
         upgrade = upgrades.at(a);
-        if(!upgrade->update(stats, this, deltaTime, ret)) {
+        if(!upgrade->update(stats, this, deltaTime)) {
             if(upgrade == currentShield) {
                 currentShield = nullptr;
-            //    objRadius = SHIP_DEFAULT_RADIUS;
             }
             Debug("remove ship upgrade " << upgrade);
             delete upgrade;
@@ -300,9 +301,6 @@ void Ship::onDraw(olc::PixelGameEngine* pge) {
 
 }
 
-bool Ship::shieldIsActive() {
-    return currentShield != nullptr;
-}
-
+bool Ship::shieldIsActive() { return currentShield != nullptr; }
 olc::Sprite* Ship::getSprite() { return sprDissolve; }
 

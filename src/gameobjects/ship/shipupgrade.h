@@ -17,7 +17,6 @@ public:
     virtual bool update(
             ShipStats* shipstats, Ship* ship 
           , float deltaTime
-          , std::vector<SpaceObj*>* newSpaceObjects
     ) = 0;
 
 };

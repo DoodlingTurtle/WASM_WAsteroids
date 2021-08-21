@@ -148,6 +148,7 @@ void Asteroid::onUpdate(float deltatime) {
             ast->movePixelDistance(28.0f * scale);
             Global::world->addGameObject(ast); 
             
+            ast = new Asteroid();
             ast->bringBackToLife(
                     pos, true, size, 
                     {moveDirection.y, -moveDirection.x}, 

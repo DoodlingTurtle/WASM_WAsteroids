@@ -16,7 +16,6 @@ public:
     bool update(
             ShipStats* shipstats, Ship* ship 
           , float deltaTime
-          , std::vector<SpaceObj*>* newSpaceObjects
     ) override ;
 
 private:

@@ -90,8 +90,9 @@ public:
 
         if(currentScene != nullptr) {
         // UpdateWorld
-             for(auto go : Global::world->allWorldUpdateable())
-                go->onUpdate(fElapsedTime);                
+            if(currentScene != &pauseScreen)
+                for(auto go : Global::world->allWorldUpdateable())
+                    go->onUpdate(fElapsedTime);                
 
         // Remove Dead GOs
              for(auto go : Global::world->findByAttribute(GameObject::DEAD))

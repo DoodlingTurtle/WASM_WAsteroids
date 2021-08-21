@@ -28,7 +28,6 @@
     }
 
     void TextMenu::draw(olc::PixelGameEngine* pge) {
-        char c;
         int i = 0;
 
         switch(type) {
@@ -44,10 +43,8 @@
             }
             default: {
                 for(auto txt : options) {
-                    c = (i==iSelected) ? cursor : ' ';
+                    std::string s = (( i == iSelected) ? "* " : "  ") + txt;
                     i++;
-                
-                    std::string s = c + " " + txt;
 
                     pge->DrawString(
                             transform.pos.x, transform.pos.y,
