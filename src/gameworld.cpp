@@ -54,24 +54,23 @@ void GameWorld::addGameObject(GameObject* go) {
 }
 
 template<typename T>
-static void clearMap(std::unordered_set<T*> map, GameObject* go) {
-    auto it = map.find((T*)go);
-    if(it != map.end())
-        map.erase(it);
+static void clearMap(std::unordered_set<T*>* map, T* go) {
+    auto it = map->find(go);
+    if(it != map->end())
+        map->erase(it);
 }
 void GameWorld::removeGameObject(GameObject* go) {
 
     Debug("GameWorld::removeGameObject");
     for(auto attr : go->aAttributes) {
-        auto gl = attribute_maps[attr];
-        auto iterator = gl.find(go);
-        if(iterator != gl.end()) {
-            gl.erase(iterator); 
+        auto iterator = attribute_maps[attr].find(go);
+        if(iterator != attribute_maps[attr].end()) {
+            attribute_maps[attr].erase(iterator);
         }
     } 
     Debug("cleared Attributes");
 
-    #define REGISTER_GO_COMPONENT(T) clearMap<T>(map_##T, go); Debug("clear map " << #T);
+    #define REGISTER_GO_COMPONENT(T) map_##T.erase(dynamic_cast<T*>(go)); Debug("clear map " << #T);
     #include "gameobject_components.hpp"
 
     Debug("cleared Compontents");

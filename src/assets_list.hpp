@@ -34,4 +34,4 @@ REGISTER_ASSET(bullet_fire_1,  Mix_Chunk,       "./assets/sfx/sci-fi_sounds/lase
 REGISTER_ASSET(asteroid_hit_1, Mix_Chunk,       "./assets/sfx/cc0_nocredit/explosion_01.ogg",          c, SFX    )
 REGISTER_ASSET(asteroid_hit_2, Mix_Chunk,       "./assets/sfx/cc0_nocredit/explosion_02.ogg",          c, SFX    )
 
-#undef REGISTER_ASSETREGISTER_ASSET(asteroid_hit_2, Mix_Chunk,       "assets/sfx/cc0_nocredit/explosion_02.ogg",          c, SFX    )
+#undef REGISTER_ASSETREGISTER_ASSET

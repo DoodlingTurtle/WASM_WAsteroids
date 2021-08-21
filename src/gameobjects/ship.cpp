@@ -22,12 +22,9 @@ Ship::Ship()
   , SpaceObj(SHIP_DEFAULT_RADIUS)
   , angRes(PI)
   , thrusting(false)
-  , decShip(nullptr)
   , chaThrust(-1)
   , selectedComponent(0)
 {
-    decShip = Assets::ship->Decal();
-
     sprDissolve = new olc::Sprite(32, 32);
     Global::pge->SetDrawTarget(sprDissolve);
     Global::pge->DrawPartialSprite({ 0, 0 }, Assets::ship->Sprite(), { 32, 0 }, { 32, 32 });
@@ -260,7 +257,7 @@ void Ship::onDraw(olc::PixelGameEngine* pge) {
     pge->SetDrawTarget(layer_ship);
     SpaceObj::draw([this](Transform* tr) {
         Global::pge->DrawPartialRotatedDecal(
-            tr->pos, decShip, tr->ang,  
+            tr->pos, Assets::ship->Decal(), tr->ang,  
             {16.0f, 16.0f},
             {(1-thrusting)*32.0f, 0}, {(float)32.0f, (float)32.0f}
         );

@@ -55,7 +55,6 @@ class Ship : public GameObject, public WorldDrawable, public WorldUpdateable, pu
         std::vector<ShipUpgrade*> newUpgrades; 
         std::vector<ShipComponent*> components;
 
-        olc::Decal* decShip;        // Reference to the ships decal (Stored in Assets::ship)
         olc::Sprite* sprDissolve;
         int          chaThrust;    // keeps track on what channel the thrusting sound is playing
 

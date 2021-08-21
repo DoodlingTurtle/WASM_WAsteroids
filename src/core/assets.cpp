@@ -87,7 +87,7 @@ void Assets::deinit() {
     for(int a = 0; a < loadedAssetIndex; a++) {
         switch(loaderList[a].t) {
             case Assets::SPRITE:
-                delete loaderList[a].i.r; break;
+                delete *loaderList[a].i.r; break;
 
             case Assets::SFX:
                 Mix_FreeChunk(*loaderList[a].i.c); break;
