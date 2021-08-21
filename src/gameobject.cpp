@@ -36,5 +36,5 @@ void GameObject::assignAttribute(GameObject::ATTR attr) {
 }
 
 std::string GameObject::toString() {
-     
+    return "GameObject: TODO: Print Attributes here";
 }

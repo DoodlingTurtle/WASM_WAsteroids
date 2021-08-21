@@ -31,7 +31,7 @@ void Bullet::onUpdate(float deltaTime) {
             ast = (Asteroid*)a;
 
             if(RGNDS::Collision::checkCircleOnCircle(
-                ((RGNDS::Collision::Circle){
+                (RGNDS::Collision::Circle{
                     pos.x, pos.y, radius 
                 }), ast->getColliders(),
                 &c
