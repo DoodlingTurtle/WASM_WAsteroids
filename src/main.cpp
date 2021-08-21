@@ -90,8 +90,8 @@ public:
 
         if(currentScene != nullptr) {
         // UpdateWorld
-             for(auto go : Global::world->findByAttribute(GameObject::SPACE_OBJ_UPDATE))
-                ((SpaceObj*)go)->onUpdate(fElapsedTime);                
+             for(auto go : Global::world->allWorldUpdateable())
+                go->onUpdate(fElapsedTime);                
 
         // Remove Dead GOs
              for(auto go : Global::world->findByAttribute(GameObject::DEAD))
@@ -108,8 +108,8 @@ public:
                 Clear(olc::BLANK);
                
                 // Draw World
-                for(auto go : Global::world->findByAttribute(GameObject::SPACE_OBJ_DRAW))
-                    ((SpaceObj*)go)->onDraw(this);                
+                for(auto go : Global::world->allWorldDrawable())
+                    go->onDraw(this);                
 
                 // Draw Scene
                 currentScene->onDraw(this);

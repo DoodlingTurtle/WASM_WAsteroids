@@ -2,11 +2,7 @@
 #include <cstdio>
 
 ScorePopup::ScorePopup(short s, float x, float y) 
-:GameObject({
-    GameObject::SPACE_OBJ_DRAW,
-    GameObject::SPACE_OBJ_UPDATE
-        })
-, score(s), lifetime(1000)
+: score(s), lifetime(1000)
 {
     pos = {x, y};
 }
@@ -16,13 +12,11 @@ static olc::Pixel color[2] = {
     olc::Pixel(0, 255, 0)
 };
 
-std::vector<SpaceObj*>* ScorePopup::onUpdate(float deltaTime) {  
+void ScorePopup::onUpdate(float deltaTime) {  
     this->lifetime -= 1000 * deltaTime;
     this->pos.y -= 20.0f*deltaTime;
     if(this->lifetime<=0)
         assignAttribute(GameObject::DEAD);
-
-    return nullptr;
 }
 
 void ScorePopup::onDraw(olc::PixelGameEngine* pge) {

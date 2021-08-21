@@ -16,8 +16,6 @@
 
 Ship::Ship() 
 : GameObject({
-    GameObject::SPACE_OBJ_UPDATE,
-    GameObject::SPACE_OBJ_DRAW,
     GameObject::PLAYER_SHIP,
     GameObject::MAINGAME_COMPONENT
 })
@@ -122,7 +120,7 @@ RGNDS::Collision::Circle Ship::getCollider() {
     return {pos.x, pos.y, radius * scale};
 }
 
-std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
+void Ship::onUpdate(float deltaTime) {
 
 //check asteroids collision
 //TODO: change to ship_killer
@@ -140,7 +138,7 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
             }
             else {
                 assignAttribute(GameObject::DEAD); 
-                return nullptr;
+                return;
             }
         }
     }
@@ -256,13 +254,6 @@ std::vector<SpaceObj*>* Ship::onUpdate(float deltaTime) {
     
 // Update Position based on Screen-Borders
     updatePosition(deltaTime);
-
-// Check if there is data to be returned
-    if(ret->size() <= 0) {
-        delete ret;
-        ret = nullptr;
-    }
-    return ret;
 }
 
 void Ship::onDraw(olc::PixelGameEngine* pge) {

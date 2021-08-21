@@ -13,8 +13,6 @@ using namespace std;
 Asteroid::Asteroid() 
 : GameObject({
     GameObject::ASTEROID,
-    GameObject::SPACE_OBJ_DRAW,
-    GameObject::SPACE_OBJ_UPDATE,
     GameObject::SHIP_KILLER,
     GameObject::BULLET_COLLIDEABLE
 })
@@ -128,7 +126,7 @@ void Asteroid::bringBackToLife(
 
 }
 
-std::vector<SpaceObj*>* Asteroid::onUpdate(float deltatime) {
+void Asteroid::onUpdate(float deltatime) {
 
     if(killOnNextUpdate) {
 
@@ -169,8 +167,6 @@ std::vector<SpaceObj*>* Asteroid::onUpdate(float deltatime) {
         setAngleRel(PI2 * (deltatime * spinSpeed));
         updatePosition(deltatime);
     }
-    
-    return nullptr;
 }
 
 void Asteroid::moveInDirection(float dist) {

@@ -1,6 +1,7 @@
 #ifndef __GameObject_H__
 #define __GameObject_H__
 
+#include <string>
 #include <vector>
 #include <unordered_set>
 
@@ -18,13 +19,14 @@ public:
         #include "./gameobject_attributes.hpp"
     };
 
-    GameObject(std::vector<GameObject::ATTR> , bool persistent=false);
+    GameObject(std::vector<GameObject::ATTR> = {} , bool persistent=false);
     virtual ~GameObject() = default;
 
     bool hasAttribute(GameObject::ATTR);
 
     void assignAttribute(GameObject::ATTR);
 
+    std::string toString();
 private:
     GameWorld* world;
     bool deleteWithWorld;

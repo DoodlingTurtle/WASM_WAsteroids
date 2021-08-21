@@ -8,17 +8,13 @@
 #include <SDL/SDL_mixer.h>
 
 Bullet::Bullet(float lifetime, const DecalRect sheetCoords, float radius)
-: GameObject({
-    GameObject::SPACE_OBJ_DRAW,
-    GameObject::SPACE_OBJ_UPDATE,
-})
-, SpaceObj(radius)
+: SpaceObj(radius)
 , lifetime(lifetime), decalCoords(sheetCoords) , radius(radius)
 {}
 
 Bullet::~Bullet() {}
 
-std::vector<SpaceObj*>* Bullet::onUpdate(float deltaTime) {
+void Bullet::onUpdate(float deltaTime) {
 
     lifetime -= deltaTime * 0.25f;    
     if(lifetime <= 0) { assignAttribute(GameObject::DEAD); }
@@ -52,9 +48,6 @@ std::vector<SpaceObj*>* Bullet::onUpdate(float deltaTime) {
             }
         }
     }
-
-    return nullptr;
-
 }
 
 void Bullet::onDraw(olc::PixelGameEngine *pge) {

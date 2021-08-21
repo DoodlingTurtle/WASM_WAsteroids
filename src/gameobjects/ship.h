@@ -7,6 +7,7 @@
 #include "olcPixelGameEngine.h"
 #include "wraparoundrenderer.h"
 #include "gameobject.h"
+#include "gamecomponent.h"
 #include "spaceobj.h"
 #include "collision.h"
 
@@ -18,15 +19,14 @@
 
 class ShipUpgrade_Shield;
 
-class Ship : public GameObject, public SpaceObj {
+class Ship : public GameObject, public WorldDrawable, public WorldUpdateable, public SpaceObj {
     public:
 
         Ship();
         ~Ship();
         void reset();
 
-        // Implement SpaceObj
-        std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
+        void onUpdate(float deltaTime) override;
         void onDraw(olc::PixelGameEngine*) override;
 
         // Getters

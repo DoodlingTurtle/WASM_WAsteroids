@@ -4,9 +4,10 @@
 #include "olcPixelGameEngine.h"
 #include "bullet_modifier.h"
 #include "gameobject.h"
+#include "gamecomponent.h"
 #include "spaceobj.h"
 
-class Bullet : public GameObject, public SpaceObj {
+class Bullet : public GameObject, public WorldDrawable, public WorldUpdateable, public SpaceObj {
 public:
     struct DecalRect { olc::vf2d coords, size; };
 
@@ -18,7 +19,7 @@ public:
     virtual~Bullet();
     
     void onDraw(olc::PixelGameEngine*) override;
-    std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
+    void onUpdate(float deltaTime) override;
    
     Bullet* clone(olc::vf2d pos, olc::vf2d dir, float acceleration);
 

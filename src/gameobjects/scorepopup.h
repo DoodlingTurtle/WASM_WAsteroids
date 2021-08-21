@@ -6,13 +6,18 @@
 
 #include "olcPixelGameEngine.h"
 #include "gameobject.h"
+#include "gamecomponent.h"
 #include "spaceobj.h"
 
-class ScorePopup : public GameObject, public SpaceObj {
+class ScorePopup 
+: public GameObject
+, public WorldDrawable
+, public WorldUpdateable
+, public SpaceObj {
 public:
     ScorePopup(short score, float x, float y);
 
-    std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
+    void onUpdate(float deltaTime) override;
     void onDraw(olc::PixelGameEngine*) override;
 
 protected:

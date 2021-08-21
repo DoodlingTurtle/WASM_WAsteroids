@@ -10,11 +10,6 @@ REGISTER_GO_ATTR(ASTEROID)
 REGISTER_GO_ATTR(SHIP_KILLER)
 REGISTER_GO_ATTR(BULLET_COLLIDEABLE)
 
-/* Attention!!!: Only give these two SpaceObj Instances 
-   They tell the Main-Loop, what Instances can be drawn or not */
-REGISTER_GO_ATTR(SPACE_OBJ_DRAW)
-REGISTER_GO_ATTR(SPACE_OBJ_UPDATE)
-
 /* DEAD GOs are removed and deleted from the Mail-Loop */
 REGISTER_GO_ATTR(DEAD)
 

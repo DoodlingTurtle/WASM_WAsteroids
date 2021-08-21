@@ -9,10 +9,16 @@
 #include "spaceobj.h"
 #include "collision.h"
 
+#include "gamecomponent.h"
+
 #include <vector>
 
 
-class Asteroid : public GameObject, public SpaceObj {
+class Asteroid 
+: public GameObject
+, public WorldDrawable
+, public WorldUpdateable
+, public SpaceObj {
 
 public:
     enum SIZES {
@@ -33,9 +39,9 @@ public:
         float velocity = -1 
     );
 
-    // Implement SpaceObj
+    // Implement WorldComponents
     void onDraw(olc::PixelGameEngine* pge) override;
-    std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
+    void onUpdate(float deltaTime) override;
 
     // Getters
     SIZES getSize();

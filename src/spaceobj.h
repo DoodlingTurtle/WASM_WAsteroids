@@ -51,20 +51,6 @@ public:
      */
     void draw(std::function<void(RGNDS::Transform*)> drawingLambda);
 
-    // Virtual functionn
-
-    /* called once per cycle 
-     * \param deltaTime  defines how much percent of a second has passed since the the last update
-     *
-     * \return a list of new SpaceObj s, that will be spawned into the world, at the
-     *         start of the next cycle
-     *         (or nullptr) if no new object should be spawned
-     */
-    virtual std::vector<SpaceObj*>* onUpdate(float deltaTime) { return nullptr; };
-
-    /* called once per cycle after everything has been updated */
-    virtual void onDraw(olc::PixelGameEngine* pge ){};
-
 protected:
     WrapAroundRenderer renderer;
     float objRadius;

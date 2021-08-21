@@ -35,10 +35,7 @@ void MainGameScreen::onStart() {
         if(game_difficulty>8.0f)
             game_difficulty = 8.0f;
 
-    // Empty the world
-        auto list = Global::world->findByAttribute(GameObject::ALL);
-        for(auto go : list)
-            Global::world->removeGameObject(go);
+        Global::world->removeWithAttribute(GameObject::ALL);
 
     // Initialize the Ship
         Ship* ship = new Ship();
@@ -46,7 +43,6 @@ void MainGameScreen::onStart() {
 
     // Initialize the asteroids
         Asteroid::spawn( (int)game_difficulty, Asteroid::SIZE_LARGE, ship);
-
     }
     state = MainGameScreen::STATE_RUNNING;
 }

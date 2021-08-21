@@ -1,4 +1,5 @@
 #include "./gameworld.h"
+#include "./config.h"
 
 /*==============================================================================
  * GameWorld
@@ -6,9 +7,13 @@
 GameWorld::GameWorld() {
     attribute_maps.emplace(GameObject::ALL, std::unordered_set<GameObject*>());
 
-    #undef REGISTER_GO_ATTR
-    #define REGISTER_GO_ATTR(a) attribute_maps.emplace(GameObject::a, std::unordered_set<GameObject*>());
+    #define REGISTER_GO_ATTR(a)\
+        attribute_maps.emplace(GameObject::a, std::unordered_set<GameObject*>());
     #include "gameobject_attributes.hpp"
+
+    #define REGISTER_GO_COMPONENT(a)\
+        map_##a = std::unordered_set<a*>();
+    #include "gameobject_components.hpp"
 }
 
 GameWorld::~GameWorld() {
@@ -16,7 +21,6 @@ GameWorld::~GameWorld() {
     for(auto go : list)
         if(go->deleteWithWorld)
             delete go;
-
 }
 
 GameObjectList GameWorld::findByAttribute(GameObject::ATTR attr) {
@@ -26,6 +30,9 @@ GameObjectList GameWorld::findByAttribute(GameObject::ATTR attr) {
 int GameWorld::countWithAttribute(GameObject::ATTR attr) {
     return attribute_maps[attr].size();
 }
+
+template <typename T>
+static T* dcast(GameObject* go) { return dynamic_cast<T*>(go); }
 
 void GameWorld::addGameObject(GameObject* go) {
     // If object is part of another world remove it from that world first
@@ -39,20 +46,41 @@ void GameWorld::addGameObject(GameObject* go) {
     for(auto attr : go->aAttributes) 
         attribute_maps.find(attr)->second.emplace(go);
 
+    #define REGISTER_GO_COMPONENT(T) T* go_##T = dcast<T>(go);\
+        if(go_##T) map_##T.emplace(go_##T); 
+    #include "gameobject_components.hpp"
+
     go->world = this;
 }
 
+template<typename T>
+static void clearMap(std::unordered_set<T*> map, GameObject* go) {
+    auto it = map.find((T*)go);
+    if(it != map.end())
+        map.erase(it);
+}
 void GameWorld::removeGameObject(GameObject* go) {
 
+    Debug("GameWorld::removeGameObject");
     for(auto attr : go->aAttributes) {
         auto gl = attribute_maps[attr];
         auto iterator = gl.find(go);
-        if(iterator != gl.end()) 
+        if(iterator != gl.end()) {
             gl.erase(iterator); 
-    }
+        }
+    } 
+    Debug("cleared Attributes");
 
+    #define REGISTER_GO_COMPONENT(T) clearMap<T>(map_##T, go); Debug("clear map " << #T);
+    #include "gameobject_components.hpp"
+
+    Debug("cleared Compontents");
+
+    Debug("GameObject" << " can be deleted " << go->deleteWithWorld);
     if(go->deleteWithWorld)
         delete go;
+     
+    Debug("GameObject " << go << " deleted (from world)");
 }
 
 void GameWorld::removeWithAttribute(GameObject::ATTR attr) {
@@ -66,3 +94,10 @@ void GameWorld::addGOToAttribute(GameObject* go, GameObject::ATTR attr) {
     attribute_maps[attr].emplace(go);
 }
 
+#define REGISTER_GO_COMPONENT(T) int GameWorld::count##T() {\
+    return map_##T.size(); }
+#include "gameobject_components.hpp"
+
+#define REGISTER_GO_COMPONENT(T) std::unordered_set<T*> GameWorld::all##T() {\
+    return map_##T; }
+#include "gameobject_components.hpp"
