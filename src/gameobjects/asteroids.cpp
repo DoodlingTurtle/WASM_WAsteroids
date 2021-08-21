@@ -1,19 +1,26 @@
-#include "asteroids.h"
-#include "../config.h"
-#include "../global.h"
+#include "./asteroids.h"
+#include "config.h"
+#include "global.h"
+#include "assets.h"
 
-#include "scorepopup.h"
-#include "../particles/asteroid_particles.h"
-#include "../assets.h"
+#include "particles/asteroid_particles.h"
+
+#include "./scorepopup.h"
 
 #include <stdio.h>
-    using namespace std;
+using namespace std;
 
-Asteroids::Asteroid::Asteroid() : SpaceObj(32.0f)
+Asteroid::Asteroid() 
+: GameObject({
+    GameObject::ASTEROID,
+    GameObject::SHIP_KILLER,
+    GameObject::BULLET_COLLIDEABLE
+})
+, SpaceObj(32.0f)
 , sprite(nullptr), decal(nullptr), killOnNextUpdate(false)
 {}
 
-void Asteroids::Asteroid::markAsHit( const RGNDS::Collision* c) { 
+void Asteroid::markAsHit( const RGNDS::Collision* c) { 
     setDirection(c->overlapDir ); 
     killOnNextUpdate = true;
 }
@@ -22,7 +29,7 @@ float _getradius() {
     return 22 + rand()%10;
 }
 
-void Asteroids::Asteroid::generateShape() {
+void Asteroid::generateShape() {
     olc::PixelGameEngine* pge = Global::pge;
 
     if(sprite == nullptr)
@@ -74,9 +81,9 @@ void Asteroids::Asteroid::generateShape() {
 }
 
 
-void Asteroids::Asteroid::bringBackToLife(
+void Asteroid::bringBackToLife(
         olc::vf2d pos, bool generateNewShape, 
-        Asteroids::SIZES size,
+        SIZES size,
         olc::vf2d direction, float velocity
 ) {
     Debug("revive Asteroid " << this);
@@ -95,17 +102,17 @@ void Asteroids::Asteroid::bringBackToLife(
 	this->pos.y = pos.y;
 
     this->size = size;
-    if(size == SIZE_RANDOM) 
-        size = static_cast<Asteroids::SIZES>(rand()%3);
+    if(size == Asteroid::SIZE_RANDOM) 
+        size = static_cast<SIZES>(rand()%3);
 
     switch(size) {
-        case Asteroids::SIZE_SMALL: {
+        case Asteroid::SIZE_SMALL: {
             this->scale = 0.25f; break; }
                                     
-        case Asteroids::SIZE_MIDDLE: {
+        case Asteroid::SIZE_MIDDLE: {
             this->scale = 0.5f; break; }
 
-        case Asteroids::SIZE_LARGE: 
+        case Asteroid::SIZE_LARGE: 
         default: {
             this->scale = 1.0f; break; }
     }
@@ -113,75 +120,66 @@ void Asteroids::Asteroid::bringBackToLife(
     if(generateNewShape)
         generateShape();
 
-    bIsAlive = true;
     killOnNextUpdate = false;
 
     updatePosition(0.0f);
 
 }
 
-std::vector<SpaceObj*>* Asteroids::Asteroid::onUpdate(float deltatime) {
+void Asteroid::onUpdate(float deltatime) {
 
     if(killOnNextUpdate) {
 
         std::vector<SpaceObj*>* spa;
 
-        Global::asteroids->playSFX();
-        if(this->size != Asteroids::SIZE_SMALL) {
+        playSFX();
+        if(this->size != Asteroid::SIZE_SMALL) {
 
-            Asteroids::SIZES size = static_cast<Asteroids::SIZES>( static_cast<int>(this->size)-1);
+            SIZES size = static_cast<SIZES>( static_cast<int>(this->size)-1);
 
             olc::vf2d moveDirection = getDirection();
 
-            spa = (std::vector<SpaceObj*>*)Global::asteroids->spawnAsteroids( 
-                    1, size,  
-                    this->pos.x, this->pos.y,
-                    {moveDirection.y, -moveDirection.x}, moveVelocity
+            Asteroid* ast = new Asteroid(); 
+            ast->bringBackToLife(
+                    pos, true, size, 
+                    {-moveDirection.y, moveDirection.x},
+                    moveVelocity
             );
-           
-            std::vector<SpaceObj*>* ast2 = (std::vector<SpaceObj*>*)Global::asteroids->spawnAsteroids( 
-                    1, size,  
-                    this->pos.x, this->pos.y,
-                    {-moveDirection.y, moveDirection.x}, moveVelocity
-            );
-            spa->insert(spa->end(), ast2->begin(), ast2->end());
-
-            for(SpaceObj* a : *spa) 
-                a->movePixelDistance(28.0f * scale);
+            ast->movePixelDistance(28.0f * scale);
+            Global::world->addGameObject(ast); 
             
+            ast = new Asteroid();
+            ast->bringBackToLife(
+                    pos, true, size, 
+                    {moveDirection.y, -moveDirection.x}, 
+                    moveVelocity
+            );
+            ast->movePixelDistance(28.0f * scale);
+            Global::world->addGameObject(ast); 
         }
-        else spa = new std::vector<SpaceObj*>();
 
-        Global::score += 100/scale;
-
-        spa->push_back(ScorePopup::spawn(100/scale, pos.x, pos.y));
-        
         //Spawn AsteroidExplosion at go->pos
         AsteroidExplosion* e = new AsteroidExplosion(this);
-        spa->push_back(e);
-        
-        this->kill();
-        Global::asteroids->markDirty();
-        return spa;
+        Global::world->addGameObject(e);
+       
+        this->assignAttribute(GameObject::DEAD);
     }
     else {
         setAngleRel(PI2 * (deltatime * spinSpeed));
         updatePosition(deltatime);
     }
-    
-    return nullptr;
 }
 
-void Asteroids::Asteroid::moveInDirection(float dist) {
+void Asteroid::moveInDirection(float dist) {
     Transform::moveInDirection(dist);
     updatePosition(0.0f);
 }
 
-Asteroids::SIZES Asteroids::Asteroid::getSize() {
+Asteroid::SIZES Asteroid::getSize() {
     return size;
 }
 
-void Asteroids::Asteroid::onDraw(olc::PixelGameEngine* pge) {
+void Asteroid::onDraw(olc::PixelGameEngine* pge) {
     if(decal == nullptr || sprite == nullptr) {
         Debug("WARNING: Asteroid " << this << " is missing sprite or decal");
         return;
@@ -202,7 +200,7 @@ void Asteroids::Asteroid::onDraw(olc::PixelGameEngine* pge) {
 #endif
 }
 
-std::vector<RGNDS::Collision::Circle> Asteroids::Asteroid::getColliders() {
+std::vector<RGNDS::Collision::Circle> Asteroid::getColliders() {
     std::vector<RGNDS::Collision::Circle> r;
 
     for(auto t : renderer.getInstances())
@@ -211,7 +209,7 @@ std::vector<RGNDS::Collision::Circle> Asteroids::Asteroid::getColliders() {
     return r;
 }
 
-olc::Sprite* Asteroids::Asteroid::getSprite() { 
+olc::Sprite* Asteroid::getSprite() { 
     if(sprite == nullptr) {
         Debug("WARNING: Asteroid " << this << " is missing sprite");
         return nullptr;
@@ -220,127 +218,60 @@ olc::Sprite* Asteroids::Asteroid::getSprite() {
     return sprite;
 }
 
-Asteroids::Asteroid::~Asteroid() { 
+Asteroid::~Asteroid() { 
     if(decal != nullptr)  delete decal;
     if(sprite != nullptr) delete sprite;
 }
 
-
-/*#############################################################################
- * Asteroids
- *###########################################################################*/
-
-Asteroids::Asteroids() 
-: dirty(true)
-{
-    Debug("Asteroids::Construct");
-    sfx[0] = Assets::asteroid_hit_1;
-    sfx[1] = Assets::asteroid_hit_2;
-}
-
-Asteroids::~Asteroids() { }
-
-void Asteroids::playSFX() {
+void Asteroid::playSFX() {
     switch(rand()%2) {
         case 0: Mix_PlayChannel(-1, Assets::asteroid_hit_1, 0); break;
         case 1: Mix_PlayChannel(-1, Assets::asteroid_hit_2, 0); break;
     } 
 }
 
-void Asteroids::update(float deltaTime) {
-	for(int a = 0; a < MAX_ASTEROIDS; a++) 
-        if(asteroids[a].isAlive())
-            asteroids[a].onUpdate(deltaTime);
-}
 
-void Asteroids::draw() {
-	int a; 
-	for(a = 0; a < MAX_ASTEROIDS; a++) 
-		if(asteroids[a].isAlive())
-            asteroids[a].onDraw(Global::pge);
-		
-}
 
-void Asteroids::markDirty() { dirty = true; }
+void Asteroid::spawn(
+    int nr, 
+    SIZES size, 
+    Ship* ship,
+    int x, int y,
+    olc::vf2d direction, float velocity
+) {
 
-std::vector<Asteroids::Asteroid*> Asteroids::getLiveAsteroids() {
-    if(dirty) {
-        liveAsteroids.clear();
-        for(int a = 0; a < MAX_ASTEROIDS; a++) {
-            if(asteroids[a].isAlive())
-                liveAsteroids.push_back(&asteroids[a]);
-        }
-        dirty = false;
-    }
-
-    return liveAsteroids;
-}
-
-vector<Asteroids::Asteroid*>* Asteroids::spawnAsteroids(
-        int nr, 
-        Asteroids::SIZES size, 
-        int x, int y,
-        olc::vf2d direction, float velocity
-    ) {
-
-    Debug(this << " spawns " << nr << " asteroid(s) ");
+    Debug("Asteroids: spawns " << nr << " asteroid(s) ");
 
     int spawned = 0;
-    auto list = new vector<Asteroids::Asteroid*>();
     float sx=x, sy=y;
 
     if(nr > MAX_ASTEROIDS) 
         nr = MAX_ASTEROIDS;
     
     for(int a = 0; a < MAX_ASTEROIDS && spawned < nr; a++) {
-        if(!asteroids[a].isAlive()) {
+        Asteroid* ast = new Asteroid(); 
+        if(x == 0) sx = (rand()%APP_SCREEN_WIDTH);
+        if(y == 0) sy = (rand()%APP_SCREEN_HEIGHT);
 
-            if(x == 0)              sx = (rand()%APP_SCREEN_WIDTH);
-            if(y == 0)              sy = (rand()%APP_SCREEN_HEIGHT);
+        ast->bringBackToLife(
+                {sx, sy}, true, 
+                size, 
+                direction, velocity
+        );
 
-            asteroids[a].bringBackToLife( 
-                    {sx, sy}, true, 
-                    size, 
-                    direction, velocity
-            );
-            list->push_back(&asteroids[a]);
-            spawned++;
+        if(ship) {
+            ship->scale = 2.0f;
+            RGNDS::Collision::Circle sc = ship->getCollider();
+            ship->scale = 1.0f;
+
+            while(RGNDS::Collision::checkCircleOnCircle(sc, ast->getColliders())) {
+                Debug("ship hit before game started " << ast->pos.x << " " << ast->pos.y);
+                ast->moveInDirection(32);
+            }
         }
+
+        Global::world->addGameObject(ast);
+        spawned++;
     }
-
-    dirty = true;
-
-    return list;
-}
-
-Asteroids::Asteroid* Asteroids::isAsteroid(void* go) {
-    Asteroids::Asteroid* ret = nullptr;
-    if(go >= asteroids && go < (&asteroids[MAX_ASTEROIDS-1]))
-        ret = (Asteroids::Asteroid*)go;
-    
-    return ret;
-}
-
-std::vector<RGNDS::Collision::Circle> Asteroids::getActiveColliders() {
-    std::vector<RGNDS::Collision::Circle> c;
-
-	for(int a = 0; a < MAX_ASTEROIDS; a++) {
-        if(asteroids[a].isAlive()) {
-            std::vector<RGNDS::Collision::Circle> ac = asteroids[a].getColliders();
-            c.insert(c.end(), ac.begin(), ac.end());
-        }
-    }
-
-    return c;
-};
-
-void Asteroids::killall() {
-    Debug("Killall asteroids" << asteroids);
-	for(int a = 0; a < MAX_ASTEROIDS; a++) {
-        if(asteroids[a].isAlive())
-            asteroids[a].kill();
-    }
-
-    dirty = true;
 }
 

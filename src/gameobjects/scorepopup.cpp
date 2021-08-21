@@ -1,67 +1,22 @@
-#include "scorepopup.h"
+#include "./scorepopup.h"
 #include <cstdio>
 
-ScorePopup::ScorePopup(short s, float x, float y) {
-    score = s;       
-    lifetime = 1000;   //1000ms ms = 1 Sec
-    pos.x = x;
-    pos.y = y;
-    bIsAlive = true;
+ScorePopup::ScorePopup(short s, float x, float y) 
+: score(s), lifetime(1000)
+{
+    pos = {x, y};
 }
-
-bool ScorePopup::bDirty = false;
-void ScorePopup::refreshInstanceList() {
-    if(bDirty) {
-        ScorePopup* sp;
-        for(int a = _instances.size()-1; a >= 0; a--) {
-            sp = _instances.at(a);
-            
-            if(sp->isAlive()) continue;
-
-            delete sp;
-            _instances.erase(_instances.begin()+a);
-        }
-
-        bDirty = false;
-    }
-}
-
-ScorePopup::~ScorePopup() {}
-
-std::vector<ScorePopup*> ScorePopup::_instances = std::vector<ScorePopup*>();
 
 static olc::Pixel color[2] = {
     olc::Pixel(255, 0, 0),
     olc::Pixel(0, 255, 0)
 };
 
-void ScorePopup::cleanup(){
-    for(auto s : _instances)
-        delete s;
-
-    _instances.clear();
-}
-
-ScorePopup* ScorePopup::spawn(short score, float x, float y) {
-
-    ScorePopup* s = new ScorePopup(score, x, y);
-    _instances.push_back(s);
-
-    return s;
-}
-
-std::vector<SpaceObj*>* ScorePopup::onUpdate(float deltaTime) {  
+void ScorePopup::onUpdate(float deltaTime) {  
     this->lifetime -= 1000 * deltaTime;
     this->pos.y -= 20.0f*deltaTime;
     if(this->lifetime<=0)
-        this->kill();
-
-    return nullptr;
-}
-
-void ScorePopup::kill() {
-    SpaceObj::kill();
-    this->bDirty = true;
+        assignAttribute(GameObject::DEAD);
 }
 
 void ScorePopup::onDraw(olc::PixelGameEngine* pge) {

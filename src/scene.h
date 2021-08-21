@@ -1,8 +1,7 @@
 #ifndef COMPONENT_H
-#define COMPONENT_H 1
+#define COMPONENT_H
 
-#include "olcPixelGameEngine.h"
-#include "gameobjects/asteroids.h"
+#include "core/olcPixelGameEngine.h"
 
 class Scene {
 
@@ -15,10 +14,7 @@ public:
 	virtual	void onUpdate(olc::PixelGameEngine* pge, float deltaTime);
 	virtual void onDraw(olc::PixelGameEngine* pge);
 
-
 	bool isActive();
-
-    Asteroids* asteroids;
 
 protected:
     virtual void onStart();

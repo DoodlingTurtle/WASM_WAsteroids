@@ -1,6 +1,6 @@
-#include "pausescreen.h"
-#include "../config.h"
-#include "../global.h"
+#include "./pausescreen.h"
+#include "config.h"
+#include "global.h"
 
 PauseScreen::PauseScreen(Scene* backgroundProvider) {
     this->backgroundProvider = backgroundProvider;

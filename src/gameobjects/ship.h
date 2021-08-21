@@ -2,33 +2,31 @@
 #define SHIP_H 
 
 #include <vector>
-
-#include "../olcPixelGameEngine.h"
-#include "ship/shipstats.h"
-
-#include "../wraparoundrenderer.h"
-#include "../spaceobj.h"
-
-#include "shot.h"
-
-#include "ship/shipupgrade.h"
-#include "ship/shipstats.h"
-#include "ship/shipengine.h"
-#include "../collision.h"
-
 #include <SDL/SDL_mixer.h>
+
+#include "olcPixelGameEngine.h"
+#include "wraparoundrenderer.h"
+#include "gameobject.h"
+#include "gamecomponent.h"
+#include "spaceobj.h"
+#include "collision.h"
+
+#include "gameobjects/ship/shipstats.h"
+#include "gameobjects/ship/shipupgrade.h"
+#include "gameobjects/ship/shipstats.h"
+#include "gameobjects/ship/shipengine.h"
+
 
 class ShipUpgrade_Shield;
 
-class Ship : public SpaceObj {
+class Ship : public GameObject, public WorldDrawable, public WorldUpdateable, public SpaceObj {
     public:
 
         Ship();
         ~Ship();
         void reset();
 
-        // Implement SpaceObj
-        std::vector<SpaceObj*>* onUpdate(float deltaTime) override;
+        void onUpdate(float deltaTime) override;
         void onDraw(olc::PixelGameEngine*) override;
 
         // Getters
@@ -38,8 +36,6 @@ class Ship : public SpaceObj {
         // Upgrade related stuff
         void addUpgrade(ShipUpgrade* upgrade);
         bool shieldIsActive();
-
-        void kill() override;
 
     protected:
         ShipUpgrade_Shield* currentShield;    // keeps track, which updgrade is the current shield
@@ -59,7 +55,6 @@ class Ship : public SpaceObj {
         std::vector<ShipUpgrade*> newUpgrades; 
         std::vector<ShipComponent*> components;
 
-        olc::Decal* decShip;        // Reference to the ships decal (Stored in Assets::ship)
         olc::Sprite* sprDissolve;
         int          chaThrust;    // keeps track on what channel the thrusting sound is playing
 

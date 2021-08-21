@@ -1,14 +1,13 @@
 #ifndef __SOUNDTEST_H__
 #define __SOUNDTEST_H__
 
-#include "../olcPixelGameEngine.h"
-#include "../scene.h"
-
-#include "../textmenu.h"
-
-#include "../assets.h"
-#include <SDL/SDL_mixer.h>
 #include <vector>
+#include <SDL/SDL_mixer.h>
+
+#include "olcPixelGameEngine.h"
+#include "scene.h"
+#include "textmenu.h"
+#include "assets.h"
 
 class SoundTest: public Scene {
 public:

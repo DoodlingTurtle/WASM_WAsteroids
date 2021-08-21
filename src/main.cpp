@@ -1,8 +1,9 @@
-#include "./olcPixelGameEngine.h"
+#include "olcPixelGameEngine.h"
 #include <SDL/SDL_mixer.h>
 
-#include "gameinput.h"
+#include "core/gameinput.h"
 #include "particles.h"
+#include "gameworld.h"
 
 #include "scene.h"
 #include "scenes/loadscreen.h"
@@ -13,6 +14,7 @@
 #include "scenes/gameoverscreen.h"
 #include "scenes/textscene.h"
 #include "scenes/soundtest.h"
+
 //#include "scenes/helpscreen.h"
 //#include "scenes/creditsscreen.h"
 
@@ -25,8 +27,8 @@
 #include <ctime>
 
 #include "config.h"
-#include "assets.h"
-#include "global.h"
+#include "core/assets.h"
+#include "core/global.h"
 
 //EMSCRIPTEN_KEEPALIVE int number = 0;
 
@@ -53,7 +55,7 @@ public:
 
         layer_blackout = _setupLayer(false, [this](){
             SetPixelMode(olc::Pixel::ALPHA);
-            Clear((olc::Pixel){0, 0, 0, 128});
+            Clear(olc::Pixel{0, 0, 0, 128});
             SetPixelMode(olc::Pixel::NORMAL);
         });
 
@@ -87,17 +89,30 @@ public:
         Global::gameInput->updateInputs();
 
         if(currentScene != nullptr) {
+        // UpdateWorld
+            if(currentScene != &pauseScreen)
+                for(auto go : Global::world->allWorldUpdateable())
+                    go->onUpdate(fElapsedTime);                
+
+        // Remove Dead GOs
+             for(auto go : Global::world->findByAttribute(GameObject::DEAD))
+                 Global::world->removeGameObject(go);
+
         // Update logic
             currentScene->onUpdate(this, fElapsedTime);
-            
+
         // if the scene is activate after the logic update
             if(currentScene->isActive()) {
-                // draw a new frame
                 SetDrawTarget(layer_particles);
                     Clear(olc::BLANK);
                 SetDrawTarget(nullptr);
                 Clear(olc::BLANK);
+               
+                // Draw World
+                for(auto go : Global::world->allWorldDrawable())
+                    go->onDraw(this);                
 
+                // Draw Scene
                 currentScene->onDraw(this);
             }
             else {
@@ -189,7 +204,6 @@ public:
         else if(currentScene == (Scene*)&upgradeScreen) {
             Debug("prev = upgradeScreen");
             mainGameScreen.game_difficulty+=0.66f;
-            Global::asteroids->killall();
             next = &mainGameScreen;
         }
 
@@ -237,11 +251,9 @@ int main()
         int screenLayout = 0;    
         Global::layout = &screenLayouts[screenLayout];
 
-        Asteroids       asteroids;
         ShipStats       shipStats;
     
         Global::score = 0;
-        Global::asteroids = &asteroids;
         Global::shipStats = &shipStats;
     
         WAsteroids      app;
@@ -249,6 +261,10 @@ int main()
     // Setup GameInput
         GameInput           gameInput(&app);
         Global::gameInput = &gameInput;
+
+    // Setup GameWorld
+        GameWorld       world;
+        Global::world = &world;
 
     //Setup PGE 
         Global::pge = &app; 

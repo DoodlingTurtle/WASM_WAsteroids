@@ -1,7 +1,7 @@
-#include "textscene.h"
+#include "./textscene.h"
 
-#include "../global.h"
-#include "../assets.h"
+#include "global.h"
+#include "assets.h"
 
 TextScene::TextScene(std::string assetFileName) 
 {

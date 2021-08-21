@@ -3,14 +3,14 @@
 
 #include <SDL/SDL_mixer.h>
 
-#include "../../transform.h"
+#include "transform.h"
+#include "collision.h"
 
-#include "shipstats.h"
-#include "shipupgrade.h"
+#include "gameobjects/asteroids.h"
+#include "gameobjects/ship.h"
 
-#include "../asteroids.h"
-#include "../../collision.h"
-#include "../ship.h"
+#include "./shipstats.h"
+#include "./shipupgrade.h"
 
 class ShipUpgrade_Shield: public ShipUpgrade 
 {
@@ -24,12 +24,11 @@ public:
     bool update(
             ShipStats* shipstats, Ship* ship 
           , float deltaTime
-          , std::vector<SpaceObj*>* newSpaceObjects
     ) override;
 
     virtual float getRadius();
 
-    void gotHit( Asteroids::Asteroid*, Ship* s, RGNDS::Collision*);
+    void gotHit( Asteroid*, Ship* s, RGNDS::Collision*);
 
     static void init(olc::PixelGameEngine* pge);
     static void deinit();

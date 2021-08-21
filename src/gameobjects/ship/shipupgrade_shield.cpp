@@ -1,7 +1,8 @@
-#include "shipupgrade_shield.h"
-#include "shipstats.h"
-#include "../../config.h"
-#include "../../assets.h"
+#include "./shipupgrade_shield.h"
+#include "./shipstats.h"
+
+#include "config.h"
+#include "assets.h"
 
 // Init statics
 void ShipUpgrade_Shield::init(olc::PixelGameEngine* pge) {}
@@ -27,7 +28,6 @@ bool ShipUpgrade_Shield::init(ShipStats* shipstats){
 bool ShipUpgrade_Shield::update(
             ShipStats* shipstats, Ship* ship 
           , float dt
-          , std::vector<SpaceObj*>* newSpaceObjects
 ) {
     lifetime -= dt * 1000.0f;
     if(lastHitTime > 0.0f) {
@@ -59,7 +59,7 @@ void ShipUpgrade_Shield::draw(
 }
 
 // Methods
-void ShipUpgrade_Shield::gotHit( Asteroids::Asteroid* a, Ship* s, RGNDS::Collision* c) {
+void ShipUpgrade_Shield::gotHit( Asteroid* a, Ship* s, RGNDS::Collision* c) {
 
     // Get needed variables
     olc::vf2d invHit = c->overlapDir * (-1.0f);

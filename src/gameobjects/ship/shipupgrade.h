@@ -1,9 +1,10 @@
 #ifndef __ShipUpgrade_H__
 #define __ShipUpgrade_H__
 
-#include "shipstats.h"
 #include <vector>
-#include "../../spaceobj.h"
+#include "spaceobj.h"
+
+#include "./shipstats.h"
 
 class Ship;
 
@@ -16,7 +17,6 @@ public:
     virtual bool update(
             ShipStats* shipstats, Ship* ship 
           , float deltaTime
-          , std::vector<SpaceObj*>* newSpaceObjects
     ) = 0;
 
 };

@@ -1,11 +1,12 @@
 #ifndef __UpgradeScreen__
 #define __UpgradeScreen__
 
-#include "../scene.h"
-#include "../gameobjects/ship/shipstats.h"
-#include "../textmenu.h"
-#include "../transform.h"
 #include <string>
+
+#include "scene.h"
+#include "gameobjects/ship/shipstats.h"
+#include "textmenu.h"
+#include "transform.h"
 
 class UpgradeScreen : public Scene {
 public:

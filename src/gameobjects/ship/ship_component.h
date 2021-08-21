@@ -2,8 +2,8 @@
 #define __ShipComponent_H__
 
 #include <vector>
-#include "../../spaceobj.h"
-#include "../../olcPixelGameEngine.h"
+#include "spaceobj.h"
+#include "olcPixelGameEngine.h"
 
 class Ship;
 class ShipStats;
@@ -29,7 +29,7 @@ public:
      * This is the point, where the component can spawn new items on the screen, or make changes to the ship
      * \return true = the component stays active
      *         false = the component will be deleted */
-    virtual bool invokeShipComponent(ShipStats*, Ship*, std::vector<SpaceObj*>* newSpaceObjectsToSpawn) = 0;
+    virtual bool invokeShipComponent(ShipStats*, Ship*) = 0;
 
     /* Called by the ship one per cycle, after everything is updated 
      * \return defines if an icon has been drawn within the component list section of the screen 

@@ -1,8 +1,8 @@
-#include "shipupgrade_shieldgenerator.h"
-#include "../ship.h"
-#include "shipupgrade_shield.h"
+#include "./shipupgrade_shieldgenerator.h"
+#include "./shipupgrade_shield.h"
 
-#include "../../config.h"
+#include "gameobjects/ship.h"
+#include "config.h"
 
 bool ShipUpgrade_ShieldGenerator::draw = true;
 int  ShipUpgrade_ShieldGenerator::cntInstances = 0;
@@ -11,10 +11,9 @@ ShipUpgrade_ShieldGenerator::ShipUpgrade_ShieldGenerator( ShipUpgrade_ShieldGene
 ShipUpgrade_ShieldGenerator::~ShipUpgrade_ShieldGenerator() { cntInstances--; }
 
 bool ShipUpgrade_ShieldGenerator::invokeShipComponent(
-        ShipStats* stats, Ship* ship, std::vector<SpaceObj*>* newSpaceObjectsToSpawn){
-
+        ShipStats* stats, Ship* ship
+){
     ship->addUpgrade(new ShipUpgrade_Shield()); 
-
     return false;
 };    
 

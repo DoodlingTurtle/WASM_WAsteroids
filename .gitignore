@@ -9,4 +9,11 @@ release/*.js
 ressource/*
 src/tags
 .vscode
+.vs
+x64
+Debug
 !docs/*
+/WASteroids.vcxproj.user
+/WASteroids.vcxproj.filters
+/WASteroids.vcxproj
+/WASteroids.sln

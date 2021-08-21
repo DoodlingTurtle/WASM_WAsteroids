@@ -1,9 +1,9 @@
 #ifndef __SpaceObj_Emitter_H__
 #define __SpaceObj_Emitter_H__
 
-#include "../particles.h"
-#include "../transform.h"
-#include "../spaceobj.h"
+#include "particles.h"
+#include "transform.h"
+#include "spaceobj.h"
 
 template <typename Pa>
 class SpaceObj_Emitter 

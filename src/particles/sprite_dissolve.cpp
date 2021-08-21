@@ -1,4 +1,4 @@
-#include "sprite_dissolve.h"
+#include "./sprite_dissolve.h"
 
 /*#############################################################################
  * SpriteDissovlve

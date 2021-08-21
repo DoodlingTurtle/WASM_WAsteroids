@@ -6,8 +6,6 @@
 SpaceObj::SpaceObj() : SpaceObj::SpaceObj(1.0f){}
 SpaceObj::SpaceObj( float radius ) {
     objRadius = radius;
-    bIsAlive = false;
-
     renderer.defineWrappingArea(0, Global::layout->app_width, Global::layout->app_height, 0);
 
     moveVelocity = 0.0f;
@@ -57,6 +55,3 @@ void SpaceObj::draw(std::function<void(RGNDS::Transform*)> drawingLambda) {
     this->pos = posOrig;
 }
 
-void SpaceObj::kill() { bIsAlive = false; }
-
-bool SpaceObj::isAlive() { return bIsAlive; }

@@ -1,21 +1,18 @@
-#include "asteroid_particles.h"
-#include "../config.h"
+#include "./asteroid_particles.h"
+#include "config.h"
 
 /*#############################################################################
  * AsteroidExplosion
  *###########################################################################*/
-AsteroidExplosion::AsteroidExplosion(Asteroids::Asteroid* ast)
+AsteroidExplosion::AsteroidExplosion(Asteroid* ast)
 : SpriteDissolve(ast->getSprite(), ast, 16.0f, 1.0f)
 , SpaceObj(64)
-{ SpaceObj::bIsAlive = true; }
+{}
 
 
-void AsteroidExplosion::onEmitterFinished() { SpaceObj::kill(); }
+void AsteroidExplosion::onEmitterFinished() { GameObject::assignAttribute(GameObject::DEAD); }
 
-std::vector<SpaceObj*>* AsteroidExplosion::onUpdate(float deltaTime) { 
-    SpriteDissolve::onUpdate(deltaTime);
-    return nullptr;
-}
+void AsteroidExplosion::onUpdate(float deltaTime) { SpriteDissolve::onUpdate(deltaTime); }
 
 void AsteroidExplosion::onDraw(olc::PixelGameEngine* pge) 
 { 
@@ -23,8 +20,4 @@ void AsteroidExplosion::onDraw(olc::PixelGameEngine* pge)
     SpriteDissolve::onDraw(pge); 
     pge->SetDrawTarget(nullptr);
 }
-
-bool AsteroidExplosion::allowDeleteAfterDeath() { 
-    return true; }
-
 

@@ -1,7 +1,7 @@
 #ifndef __PARTICLES_H__
-#define __PARTICLES_H__ 
+#define __PARTICLES_H__
 
-#include "olcPixelGameEngine.h"
+#include "core/olcPixelGameEngine.h"
 #include "config.h"
 #include <vector>
 

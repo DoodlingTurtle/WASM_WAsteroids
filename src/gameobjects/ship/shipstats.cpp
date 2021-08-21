@@ -1,6 +1,8 @@
 #include "shipstats.h"
 
-ShipStats::ShipStats() { resetToLV1(); }
+ShipStats::ShipStats() 
+:prototypeBullet(nullptr)
+{ resetToLV1(); }
 
 static void _clearComponents(std::vector<ShipComponent*> &components) {
     for(auto c : components)
@@ -25,6 +27,11 @@ void ShipStats::resetToLV1() {
     generatorhalt = false;
 
     _clearComponents(components);
+
+    if(prototypeBullet)
+        delete prototypeBullet;
+
+    prototypeBullet = new Bullet();
 }
 
 
