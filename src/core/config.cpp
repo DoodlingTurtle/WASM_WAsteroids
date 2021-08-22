@@ -24,9 +24,10 @@ int layer_ship = 0;
 int layer_blackout = 0;
 int layer_particles = 0;
 
-ScreenLayout screenLayouts[1] = {
-//    title       screen   screen   pixel    title       title menu    help
-//                width    height   scale    location    location      position
-    { "Portrait", 256,     384,     1,       {10, 88},   {32, 248},    { 4, 360 }  }
+ScreenLayout screenLayouts[2] = {
+//    title       screen   screen   pixel    title       title    title menu    ship energy    ship energy    ship energy     ship energy    help          screen 
+//                width    height   scale    location    scale    location      full pos       full size      empty pos       empty size     position      offset
+    { "Phone"    ,256     ,384     ,3       ,{10, 88}   ,3.0f    ,{32, 248}    ,{240, 28}     ,{16, 328}     ,{240, 192}     ,{16,  0}      ,{   4, 360 } ,{  0,   0} },
+    { "Desktop"  ,640     ,360     ,2       ,{64, 48}   ,4.0f    ,{32, 216}    ,{430,  4}     ,{210, 18}     ,{640,   4}     ,{ 0, 18}      ,{ 384, 348 } ,{192, -12} }
 };
 

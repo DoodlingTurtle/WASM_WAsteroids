@@ -94,8 +94,8 @@ void Ship::addUpgrade(ShipUpgrade *upgrade) {
 
 void Ship::reset() {
     Debug("ship reset");
-    pos.x = APP_SCREEN_WIDTH/2;
-    pos.y = APP_SCREEN_HEIGHT/4;
+    pos.x = Global::layout->app_width/2;
+    pos.y = Global::layout->app_height/2;
     
     scale = 1;
     setAngleRel(PI/2);
@@ -268,13 +268,25 @@ void Ship::onDraw(olc::PixelGameEngine* pge) {
     });
     pge->SetDrawTarget(nullptr);
 
-    int barheight = (int)((stats->generator / stats->generatorcapacity) * 164.0f);
+    float generator = (stats->generator / stats->generatorcapacity);
 
     olc::Pixel c = stats->generatorhalt ? olc::RED : olc::WHITE;
     c.a = 128;
 
-    pge->FillRect(240, 28 + (164 - barheight), 16, barheight, c) ;
-    pge->FillRect(240, 192, 16, barheight, c) ;
+    olc::vf2d barsize = Global::layout->ship_energy_empty_size - Global::layout->ship_energy_full_size;
+    barsize.x = barsize.x * (1.0f - ((barsize.x < 0) * 2.0f));  // Make barsize absolute
+    barsize.y = barsize.y * (1.0f - ((barsize.y < 0) * 2.0f));
+
+    olc::vf2d barpos = Global::layout->ship_energy_empty_pos - Global::layout->ship_energy_full_pos;
+    barpos.x = barpos.x * (1.0f - ((barpos.x < 0) * 2.0f));  // Make barpos absolute
+    barpos.y = barpos.y * (1.0f - ((barpos.y < 0) * 2.0f));
+
+
+    pge->FillRectDecal(
+          Global::layout->ship_energy_empty_pos  - barpos  * generator
+        , Global::layout->ship_energy_empty_size + barsize * generator
+      , c
+    );
 
 #ifdef DEBUG_BUILD
     olc::vf2d moveDirection = getDirection();

@@ -36,7 +36,8 @@
 
     protected:
         std::vector<std::string> options;
-        char cursor; 
+        std::string cursor; 
+        std::string empty;
         int iSelected;
 
     private:
