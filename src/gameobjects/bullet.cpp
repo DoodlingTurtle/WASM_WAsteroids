@@ -66,7 +66,7 @@ void Bullet::onDraw(olc::PixelGameEngine *pge) {
 Bullet* Bullet::clone(olc::vf2d pos, olc::vf2d dir, float velocity) {
     Bullet* b = new Bullet(lifetime, decalCoords, radius);
     
-    b->moveVelocity = 72.0f;
+    b->moveVelocity = velocity + 72.0f;
     b->pos = pos;
     b->setDirection(dir);
 
