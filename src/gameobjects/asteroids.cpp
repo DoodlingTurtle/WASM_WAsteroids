@@ -11,18 +11,40 @@
 using namespace std;
 
 Asteroid::Asteroid() 
-: GameObject({
-    GameObject::ASTEROID,
-    GameObject::SHIP_KILLER,
-    GameObject::BULLET_COLLIDEABLE
-})
+: GameObject({ GameObject::ASTEROID })
 , SpaceObj(32.0f)
 , sprite(nullptr), decal(nullptr), killOnNextUpdate(false)
 {}
 
-void Asteroid::markAsHit( const RGNDS::Collision* c) { 
-    setDirection(c->overlapDir ); 
+void Asteroid::hitByBullet(Bullet* b, RGNDS::Collision* c) { 
+    setDirection(c->overlapDir); 
     killOnNextUpdate = true;
+}
+
+int Asteroid::getDestructionScore() {
+    return 100.0f / scale;
+}
+
+void Asteroid::gotDeflected(Ship* s, ShipUpgrade_Shield* sh, RGNDS::Collision* c) {
+    // Get needed variables
+    olc::vf2d invHit = c->overlapDir * (-1.0f);
+    olc::vf2d aDir = this->getDirection();
+    olc::vf2d sDir = s->getDirection();
+
+    float dot = aDir.x * invHit.x + aDir.y * invHit.y;
+    float dotSA = aDir.x * sDir.x + aDir.y * sDir.y;
+    float aVel = this->moveVelocity;
+
+    // move Asteroid to the exact intersection point
+    this->movePixelDistance(c->C2COverlapImpact);
+
+    // set Asteroids direction to the hit direction
+    this->setDirection(invHit);
+
+    // calculate new velocity
+    this->moveVelocity *= 0.90;                    // remove 10% of the velocity (because impact to the ship)
+    this->moveVelocity += s->moveVelocity * dotSA; // Add ships velocity according to Dot product / influence 
+
 }
 
 float _getradius() {

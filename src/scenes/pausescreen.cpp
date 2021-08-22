@@ -1,6 +1,7 @@
 #include "./pausescreen.h"
 #include "config.h"
 #include "global.h"
+#include "assets.h"
 
 PauseScreen::PauseScreen(Scene* backgroundProvider) {
     this->backgroundProvider = backgroundProvider;
@@ -40,7 +41,7 @@ void PauseScreen::onDraw(olc::PixelGameEngine* pge) {
     );
     menu.draw(pge);
 
-    pge->DrawString(help_position, help_text, olc::WHITE);
+    pge->DrawStringDecal(help_position, help_text, olc::WHITE);
 }
 
 bool PauseScreen::endGame() {
@@ -53,5 +54,11 @@ bool PauseScreen::skipLevel() {
 #endif
 
 void PauseScreen::onStart() { Global::pge->EnableLayer(layer_blackout, true); }
-void PauseScreen::onEnd() { Global::pge->EnableLayer(layer_blackout, false); }
+void PauseScreen::onEnd() { 
+    Global::pge->EnableLayer(layer_blackout, false); 
+    
+    if (menu.selected() == 1) 
+        Global::switchBGMusic(Assets::bgmMenu);
+    
+}
 

@@ -190,7 +190,6 @@ public:
         else if(currentScene == (Scene*)&pauseScreen) {
             Debug("prev = pauseScreen");
             if(pauseScreen.endGame()) {
-                mainGameScreen.reset();
                 next = &titleScreen;
 #ifdef DEBUG_BUILD
             } else if(pauseScreen.skipLevel()) {

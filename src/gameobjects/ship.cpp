@@ -13,7 +13,7 @@
 
 #include "particles/ship_explosion.h"
 
-
+#define SHIP_MAX_VELOCITY 256.0f
 #define SHIP_DEFAULT_RADIUS 16.0f
 
 Ship::Ship() 
@@ -123,26 +123,34 @@ void Ship::onUpdate(float deltaTime) {
 
 //check asteroids collision
 //TODO: change to ship_killer
-    auto list = Global::world->findByAttribute(GameObject::ASTEROID);
-    RGNDS::Collision c;
-    for(auto go : list) {
-        if(RGNDS::Collision::checkCircleOnCircle(
-            getCollider(), 
-            ((Asteroid*)go)->getColliders(),
-            &c
-        )){
-            if(currentShield != nullptr) {
-                currentShield->gotHit((Asteroid*)go, this, &c);
-                moveVelocity *= 0.5f;
+
+    if (currentShield) {
+        auto list = Global::world->allShipShieldDeflectable();
+        RGNDS::Collision c;
+        for(auto go : list)
+            if (RGNDS::Collision::checkCircleOnCircle(
+                getCollider(),
+                go->getColliders(),
+                &c
+            )) {
+                Mix_PlayChannel(-1, Assets::shieldBump, 0);
+                go->gotDeflected(this, currentShield, &c);
             }
-            else {
+    }
+    else {
+        auto list = Global::world->allPlayerKiller();
+        for (auto go : list)
+            if (RGNDS::Collision::checkCircleOnCircle(
+                getCollider(),
+                go->getColliders()
+            )) {
                 Mix_PlayChannel(-1, Assets::shipExplode, 0);
                 Global::world->addGameObject(new ShipExplosion(this));
-                assignAttribute(GameObject::DEAD); 
+                assignAttribute(GameObject::DEAD);
                 return;
             }
-        }
     }
+    
 
     // Input Rotation
     if(Global::gameInput->held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 
@@ -245,10 +253,11 @@ void Ship::onUpdate(float deltaTime) {
 // Update Position based on physics
     olc::vf2d moveDirection = getDirection();
     float dot   = moveDirection.x * dir.x + moveDirection.y * dir.y;
-    if(thrusting)
-        setDirection(moveDirection + (dir - moveDirection)*deltaTime);
-    
-    moveVelocity += dot * shipEngine.acceleration;
+    if (thrusting) {
+        setDirection(moveDirection + (dir - moveDirection) * deltaTime);
+        moveVelocity += dot * shipEngine.acceleration;
+        moveVelocity = std::max(std::min(moveVelocity, SHIP_MAX_VELOCITY), -SHIP_MAX_VELOCITY);
+    }
     
 // Update Position based on Screen-Borders
     updatePosition(deltaTime);
