@@ -123,26 +123,34 @@ void Ship::onUpdate(float deltaTime) {
 
 //check asteroids collision
 //TODO: change to ship_killer
-    auto list = Global::world->findByAttribute(GameObject::ASTEROID);
-    RGNDS::Collision c;
-    for(auto go : list) {
-        if(RGNDS::Collision::checkCircleOnCircle(
-            getCollider(), 
-            ((Asteroid*)go)->getColliders(),
-            &c
-        )){
-            if(currentShield != nullptr) {
-                currentShield->gotHit((Asteroid*)go, this, &c);
-                moveVelocity *= 0.5f;
+
+    if (currentShield) {
+        auto list = Global::world->allShipShieldDeflectable();
+        RGNDS::Collision c;
+        for(auto go : list)
+            if (RGNDS::Collision::checkCircleOnCircle(
+                getCollider(),
+                go->getColliders(),
+                &c
+            )) {
+                Mix_PlayChannel(-1, Assets::shieldBump, 0);
+                go->gotDeflected(this, currentShield, &c);
             }
-            else {
+    }
+    else {
+        auto list = Global::world->allPlayerKiller();
+        for (auto go : list)
+            if (RGNDS::Collision::checkCircleOnCircle(
+                getCollider(),
+                go->getColliders()
+            )) {
                 Mix_PlayChannel(-1, Assets::shipExplode, 0);
                 Global::world->addGameObject(new ShipExplosion(this));
-                assignAttribute(GameObject::DEAD); 
+                assignAttribute(GameObject::DEAD);
                 return;
             }
-        }
     }
+    
 
     // Input Rotation
     if(Global::gameInput->held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 

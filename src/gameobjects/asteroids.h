@@ -18,6 +18,9 @@ class Asteroid
 : public GameObject
 , public WorldDrawable
 , public WorldUpdateable
+, public ShipShieldDeflectable
+, public PlayerKiller
+, public BulletHitable
 , public SpaceObj {
 
 public:
@@ -39,9 +42,13 @@ public:
         float velocity = -1 
     );
 
-    // Implement WorldComponents
+    // Implement Components
     void onDraw(olc::PixelGameEngine* pge) override;
     void onUpdate(float deltaTime) override;
+    void gotDeflected(Ship*, ShipUpgrade_Shield*, RGNDS::Collision*) override;
+    void hitByBullet(Bullet*, RGNDS::Collision*) override;
+    int  getDestructionScore() override;
+
 
     // Getters
     SIZES getSize();
@@ -50,8 +57,6 @@ public:
 
     // Setters
     void moveInDirection( float distance ) override;
-    void markAsHit(const RGNDS::Collision*);
-
 
     static void spawn( 
         int nr, SIZES size = SIZE_RANDOM, 

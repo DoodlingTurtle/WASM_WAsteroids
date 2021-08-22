@@ -8,7 +8,7 @@
 #include <SDL/SDL_mixer.h>
 
 Bullet::Bullet(float lifetime, const DecalRect sheetCoords, float radius)
-: SpaceObj(radius)
+    : SpaceObj(radius), GameObject({GameObject::BULLET})
 , lifetime(lifetime), decalCoords(sheetCoords) , radius(radius)
 {}
 
@@ -22,28 +22,25 @@ void Bullet::onUpdate(float deltaTime) {
     else {
         updatePosition(deltaTime);
 
-        //TODO: Replace with GameObject::BULLET_COLLIDEABLE
-        auto asteroids = Global::world->findByAttribute(GameObject::ASTEROID);
+        auto list = Global::world->allBulletHitable();
 
         RGNDS::Collision c;
-        Asteroid* ast;
-        for(auto a : asteroids) {
-            ast = (Asteroid*)a;
-
+        
+        for(auto a : list) {
             if(RGNDS::Collision::checkCircleOnCircle(
                 (RGNDS::Collision::Circle{
                     pos.x, pos.y, radius 
-                }), ast->getColliders(),
+                }), a->getColliders(),
                 &c
             )){
-                ast->markAsHit(&c);
-                int score = 100/ast->scale;
+                a->hitByBullet(this, &c);
+                int score = a->getDestructionScore();
 
                 for(auto m : modifiers)
                     score = m->updateScore(score, this);
 
                 Global::score += score;
-                Global::world->addGameObject(new ScorePopup(score, ast->pos.x, ast->pos.y));
+                Global::world->addGameObject(new ScorePopup(score, pos.x, pos.y));
                 assignAttribute(GameObject::DEAD);
             }
         }
