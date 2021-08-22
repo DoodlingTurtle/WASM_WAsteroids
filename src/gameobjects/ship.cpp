@@ -13,7 +13,7 @@
 
 #include "particles/ship_explosion.h"
 
-
+#define SHIP_MAX_VELOCITY 256.0f
 #define SHIP_DEFAULT_RADIUS 16.0f
 
 Ship::Ship() 
@@ -245,10 +245,11 @@ void Ship::onUpdate(float deltaTime) {
 // Update Position based on physics
     olc::vf2d moveDirection = getDirection();
     float dot   = moveDirection.x * dir.x + moveDirection.y * dir.y;
-    if(thrusting)
-        setDirection(moveDirection + (dir - moveDirection)*deltaTime);
-    
-    moveVelocity += dot * shipEngine.acceleration;
+    if (thrusting) {
+        setDirection(moveDirection + (dir - moveDirection) * deltaTime);
+        moveVelocity += dot * shipEngine.acceleration;
+        moveVelocity = std::max(std::min(moveVelocity, SHIP_MAX_VELOCITY), -SHIP_MAX_VELOCITY);
+    }
     
 // Update Position based on Screen-Borders
     updatePosition(deltaTime);
