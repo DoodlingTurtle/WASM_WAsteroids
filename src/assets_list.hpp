@@ -1,7 +1,3 @@
-#ifndef REGISTER_ASSET
-#define REGISTER_ASSET(propertyname, type, path, letter, enumeration) /* to keep the diagnostics happy */
-#endif
-
 /**
  *  propertyname ( example bgMenu will becomes Assets::bgmMenu )
  *

@@ -6,7 +6,8 @@
 
 
     TextMenu::TextMenu(TextMenuType menuType) {
-        cursor = '*';
+        cursor = "* ";
+        empty = std::string(cursor.size(), ' ');
         iSelected = 0;
         type = menuType;
         maxlength = 0;
@@ -43,12 +44,12 @@
             }
             default: {
                 for(auto txt : options) {
-                    std::string s = (( i == iSelected) ? "* " : "  ") + txt;
+                    std::string s = (( i == iSelected) ? cursor : empty) + txt;
                     i++;
 
-                    pge->DrawString(
-                            transform.pos.x, transform.pos.y,
-                            s, olc::WHITE, transform.scale
+                    pge->DrawStringDecal(
+                            transform.pos,
+                            s, olc::WHITE, { transform.scale, transform.scale }
                             );
                     transform.pos.y += 10*transform.scale;
                 }

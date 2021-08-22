@@ -11,7 +11,7 @@ TitleScreen::TitleScreen()
 
     help_placement = Global::layout->help_position;
     help_text = std::string("W = up   S = down   P = confirm");
-    version_text = "alpha 0.3";
+    version_text = "alpha 0.4";
 
     menu.addOption("new game");
     menu.addOption("help");
@@ -23,7 +23,7 @@ TitleScreen::TitleScreen()
 
 void TitleScreen::onStart() {
     Global::world->removeWithAttribute(GameObject::ALL);    
-    Asteroid::spawn(4);
+    Asteroid::spawn(5);
 }
 
 void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
@@ -38,7 +38,7 @@ void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
 void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
 
-    pge->DrawString(Global::layout->titleScreen_title_placement, "WASteroids", olc::WHITE, 3.0f);
+    pge->DrawString(Global::layout->titleScreen_title_placement, "WASteroids", olc::WHITE, Global::layout->titleScreen_title_scale);
     pge->FillRect(
             Global::layout->titleScreen_menu_placement.x+28, 
             (Global::layout->titleScreen_menu_placement.y-2) + (20 * menu.selected()),

@@ -8,7 +8,7 @@ void GameOverScreen::onStart() {
     
     scoreStartLocation = { 117, 5 };
     scoreLocation = scoreStartLocation;
-    scoreTargetLocation = {64.0f, 88.0f};
+    scoreTargetLocation = olc::vf2d{64.0f, 88.0f} + Global::layout->screen_offset;
 
     playhead = 0.0f;
     playtime = 1.5f;
@@ -43,8 +43,8 @@ void GameOverScreen::onDraw(olc::PixelGameEngine* pge) {
         , 2
     );
 
-    pge->DrawString({ 40, 296}, "  Press P  ", olc::WHITE, 2);
-    pge->DrawString({ 82, 312}, "to continue", olc::WHITE, 1);
+    pge->DrawString(olc::vf2d{ 40, 296} + Global::layout->screen_offset, "  Press P  ", olc::WHITE, 2);
+    pge->DrawString(olc::vf2d{ 82, 312} + Global::layout->screen_offset, "to continue", olc::WHITE, 1);
 }
 
 

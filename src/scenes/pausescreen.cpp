@@ -5,8 +5,7 @@
 PauseScreen::PauseScreen(Scene* backgroundProvider) {
     this->backgroundProvider = backgroundProvider;
 
-    menu.transform.pos.x = 48;
-    menu.transform.pos.y = 80;
+    menu.transform.pos = olc::vf2d{ 48, 80 } + Global::layout->screen_offset;
     menu.transform.scale = 2.0f;
 
     help_text = "W = up   S = down  P = confirm";
@@ -22,7 +21,7 @@ PauseScreen::PauseScreen(Scene* backgroundProvider) {
 PauseScreen::~PauseScreen() {}
 
 void PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-
+     
     if(Global::gameInput->pressed&KEYPAD_DOWN)
         menu.selectNext();
     else if(Global::gameInput->pressed&KEYPAD_UP)
@@ -35,10 +34,9 @@ void PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 void PauseScreen::onDraw(olc::PixelGameEngine* pge) {
     this->backgroundProvider->onDraw(pge);
 
-    pge->FillRect(
-            76, 78 + (20 * menu.selected()),
-            102 ,20,
-            pix_menubg
+    pge->FillRectDecal(
+        olc::vf2d{ 76.0f, 78.0f + (20.0f * menu.selected()) } + Global::layout->screen_offset,
+        { 102 ,20 }, pix_menubg
     );
     menu.draw(pge);
 

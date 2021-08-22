@@ -55,6 +55,7 @@ I may even retweet it.
 
 With that out of the way, here is how you setup the build environment for the project.
 
+
 1. Download and install Emscripten. A guide for that can be found [here](https://emscripten.org/docs/getting_started/downloads.html).
 2. Install 'make'. (not cmake, just the plain old make)
 3. Clone this repository.
@@ -87,22 +88,27 @@ Example:
    std::cout << "I am only shown in debug builds" << std::endl
 #endif
 ```
+The project can also be compiled to a Windows EXE via Visual Studio 2019.
+Just make sure to link SDL and SDL_mixer to your project and to copy the assets folder to where your 
+Debug working directory is. (Also, dont forget to put the required SDL DLL files next to your EXE file)
 
 ---
 ## Current TODOs     
 A the game is missing its roughlite element, but is otherwise playable already.
 
 There are a lot more things todo behind the scenes however.
-- Add support for different window formats and resolutions
-- Add Touch controls
-- Store highscores and Settings via LocalStorage in the Browser
 - Add more Upgrade options
   - different kinds of bullets / cannons
     - spreadshot, etc ...
     - size modifiers
     - speed modifiers
   - score multiplyers / bonuses
-  
+- Add Touch controls
+
+
+- Store highscores and Settings via LocalStorage in the Browser
+
+- ~~Add support for different window formats and resolutions~~ (done)  
 - ~~Bring over the other Gamestates~~
   - ~~Main Game screen~~ (done)
     - ~~requires other Game component~~ (done)
@@ -116,7 +122,5 @@ There are a lot more things todo behind the scenes however.
   - ~~GameOver screen~~ (done)
   - ~~Credits/License screen~~ (done)
   - ~~Shop/Upgrade Screen~~ (done)
-     
-
 - ~~Add sound effects~~(done)
 

@@ -44,10 +44,16 @@ struct ScreenLayout {
         app_height, 
         app_scale;
 
-    olc::vf2d titleScreen_title_placement,
-              titleScreen_menu_placement;
+    olc::vf2d titleScreen_title_placement;
+    float titleScreen_title_scale;
+    olc::vf2d titleScreen_menu_placement;
     
+    olc::vf2d ship_energy_full_pos , ship_energy_full_size
+            , ship_energy_empty_pos, ship_energy_empty_size;
+
     olc::vf2d help_position;
+
+    olc::vf2d screen_offset;
 };
 
 

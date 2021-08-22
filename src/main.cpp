@@ -248,7 +248,7 @@ int main()
     //Setup global ressources
     // layout has to be set, in very first play, otherwise everything else explodes
     // TODO: store and get layout via Browser localStorage
-        int screenLayout = 0;    
+        int screenLayout = 1;    
         Global::layout = &screenLayouts[screenLayout];
 
         ShipStats       shipStats;
