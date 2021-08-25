@@ -5,7 +5,6 @@
 #include "config.h"
 #include "global.h"
 #include "assets.h"
-
 MainGameScreen::MainGameScreen()
 { 
 // setup the scoreboard
@@ -31,8 +30,8 @@ void MainGameScreen::endLevel() {
 
 void MainGameScreen::onStart() {
     if(state != MainGameScreen::STATE_RUNNING) {
-        if(game_difficulty>8.0f)
-            game_difficulty = 8.0f;
+        if(game_difficulty>16.0f)
+            game_difficulty = 16.0f;
 
         Global::world->removeWithAttribute(GameObject::ALL);
 
