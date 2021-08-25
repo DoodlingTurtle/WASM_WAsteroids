@@ -140,8 +140,7 @@ public:
     void nextScene() {
         Debug("switch Scene:");
         Scene* next = nullptr;
-        if(currentScene == nullptr)
-            next = &loadScreen;
+        if(currentScene == nullptr) next = &loadScreen;
         else if(currentScene == (Scene*)&loadScreen) {
             Debug("prev = loadScreen");
             next = &titleScreen; 
@@ -150,23 +149,21 @@ public:
         else if(currentScene == (Scene*)&titleScreen) {
             Debug("prev = titleScreen");
             switch(titleScreen.selectedMenu()) {
-                case 2: { // Credits
-                    next = &creditsScreen; break; }
-                        
-                case 0: { // new Game
+                case 2: /* Credits */ { next = &creditsScreen; break; } 
+
+                case 0: /* new Game */ { 
                     Global::score = 0;                       //reset score
+                    Global::level = 0;
+
                     mainGameScreen.reset();
                     Global::shipStats->resetToLV1();
                     next = &mainGameScreen; 
                     break; }
                      
-                case 1: { // help
-                    next = &helpScreen; break; }
+                case 1: /* help */ {  next = &helpScreen; break; }
                         
-                case 3: {  /*Soundtest*/ next = &soundTest; break; }
-                default: {
-                    next = &titleScreen;
-                }
+                case 3:  /*Soundtest*/ { next = &soundTest; break; }
+                default: { next = &titleScreen; }
             }
         }
         else if(
@@ -202,7 +199,8 @@ public:
         }
         else if(currentScene == (Scene*)&upgradeScreen) {
             Debug("prev = upgradeScreen");
-            mainGameScreen.game_difficulty+=0.66f;
+            mainGameScreen.game_difficulty++;
+            Global::level++;
             next = &mainGameScreen;
         }
 
@@ -251,10 +249,10 @@ int main()
         Global::layout = &screenLayouts[screenLayout];
 
         ShipStats       shipStats;
-    
+
         Global::score = 0;
         Global::shipStats = &shipStats;
-    
+
         WAsteroids      app;
 
     // Setup GameInput
