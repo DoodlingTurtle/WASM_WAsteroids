@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "transform.h"
+#include "lerp.h"
 
 //#include "animation.h"
 
@@ -16,12 +17,9 @@ protected:
     void onStart() override;
 
 private:
-    olc::vf2d scoreStartLocation;
+    RGNDS::Lerp<olc::vf2d> lerp;
     olc::vf2d scoreLocation;
-    olc::vf2d scoreTargetLocation;
 
-    float playhead;
-    float playtime;
 };
 
 #endif
