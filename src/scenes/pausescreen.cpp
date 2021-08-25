@@ -16,6 +16,7 @@ PauseScreen::PauseScreen(Scene* backgroundProvider) {
     menu.addOption("Exit");
 #ifdef DEBUG_BUILD
     menu.addOption("[D] next Level");
+    menu.addOption("[D] instand lose");
 #endif
 }
 
@@ -27,9 +28,8 @@ void PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         menu.selectNext();
     else if(Global::gameInput->pressed&KEYPAD_UP)
         menu.selectPrev();
-    else if(Global::gameInput->pressed&(KEYPAD_A))
+    else if(Global::gameInput->released&(KEYPAD_A))
         exit();
-
 }
 
 void PauseScreen::onDraw(olc::PixelGameEngine* pge) {
@@ -59,6 +59,13 @@ void PauseScreen::onEnd() {
     
     if (menu.selected() == 1) 
         Global::switchBGMusic(Assets::bgmMenu);
-    
+#ifdef DEBUG_BUILD
+    if (menu.selected() == 3) {
+        Global::score += 523346;
+        Global::level += 893;
+        (*(Global::world->findByAttribute(GameObject::PLAYER_SHIP).begin()))->assignAttribute(GameObject::DEAD); 
+        menu.setSelection(0);
+    }
+#endif
 }
 
