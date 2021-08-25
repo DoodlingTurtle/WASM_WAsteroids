@@ -33,8 +33,6 @@ public:
     GameObjectList findByAttribute(GameObject::ATTR);
     void removeWithAttribute(GameObject::ATTR);
 
-    int countWithComponent(GameWorld::COMPONENT);
-
     #define REGISTER_GO_COMPONENT(T) std::unordered_set<T*> all##T();
     #include "gameobject_components.hpp"
 
