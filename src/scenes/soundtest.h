@@ -4,7 +4,7 @@
 #include <SDL/SDL_mixer.h>
 
 #include "../engine/olcPixelGameEngine.h"
-#include "../engine/assets.h"
+#include "../engine/Assets.h"
 #include "../engine/ui/TextMenu.h"
 #include "../engine/Scene.h"
 

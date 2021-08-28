@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../world/components/Updateable.h"
+#include <unordered_map>
+#include <vector>
 
 namespace RGNDS {
 	namespace Animation {

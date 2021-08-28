@@ -2,7 +2,7 @@
 #include "./asteroids.h"
 #include "./scorepopup.h"
 #include "../engine/global.h"
-#include "../engine/assets.h"
+#include "../engine/Assets.h"
 
 #include <SDL/SDL_mixer.h>
 
