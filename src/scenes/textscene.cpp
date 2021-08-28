@@ -1,7 +1,8 @@
 #include "./textscene.h"
 
-#include "global.h"
-#include "assets.h"
+#include "../engine/Global.h"
+#include "../engine/Assets.h"
+using namespace RGNDS;
 
 TextScene::TextScene(std::string assetFileName) 
 {
@@ -19,12 +20,20 @@ void TextScene::onStart() {
 }
 void TextScene::onEnd() { text = ""; help_text = ""; }
 
-void TextScene::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    if(Global::gameInput->pressed&(KEYPAD_A))
-        exit();
+bool TextScene::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
+    if (Global::input.pressed & (KEYPAD_A))
+        return false;
 }
 
 void TextScene::onDraw(olc::PixelGameEngine* pge) {
     pge->DrawStringDecal(text_position, text, olc::WHITE);
     pge->DrawString(help_position, help_text, olc::WHITE);
 }
+
+Scene* TextScene::nextScene() {
+    return nullptr;
+    //TODO: replace with propper content
+}
+
+
+

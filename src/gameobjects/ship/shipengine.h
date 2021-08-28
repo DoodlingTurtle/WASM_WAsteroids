@@ -1,6 +1,4 @@
-#ifndef SHIPENGINE_H
-#define SHIPENGINE_H
-
+#pragma once
 
 class ShipEngine
 {
@@ -10,5 +8,3 @@ class ShipEngine
         void accelerate(float deltaTime);
         void decerlerate(float deltaTime);
 };
-
-#endif // SHIPENGINE_H

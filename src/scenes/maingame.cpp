@@ -1,10 +1,13 @@
-#include "maingame.h"
 #include <vector>
 #include <unordered_set>
 
-#include "config.h"
-#include "global.h"
-#include "assets.h"
+#include "./maingame.h"
+
+#include "../config.h"
+#include "../engine/Global.h"
+#include "../engine/Assets.h"
+using namespace RGNDS;
+
 MainGameScreen::MainGameScreen()
 { 
 // setup the scoreboard
@@ -24,7 +27,7 @@ void MainGameScreen::reset() {
 #ifdef DEBUG_BUILD
 void MainGameScreen::endLevel() { 
     state = MainGameScreen::STATE_WON;
-    exit(); 
+
 }
 #endif
 
@@ -33,11 +36,11 @@ void MainGameScreen::onStart() {
         if(game_difficulty>16.0f)
             game_difficulty = 16.0f;
 
-        Global::world->removeWithAttribute(GameObject::ALL);
+        Global::world.removeWithAttribute(GameObject::ALL);
 
     // Initialize the Ship
         Ship* ship = new Ship();
-        Global::world->addGameObject(ship);
+        Global::world.addGameObject(ship);
 
     // Initialize the asteroids
         Asteroid::spawn( (int)game_difficulty, Asteroid::SIZE_LARGE, ship);
@@ -45,27 +48,22 @@ void MainGameScreen::onStart() {
     state = MainGameScreen::STATE_RUNNING;
 }
 
-void MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
+bool MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
 // Check for Pause Key
-    if(Global::gameInput->pressed&KEYPAD_SELECT){
-        exit();
-        return;
-    }
+    if(Global::input.pressed&KEYPAD_SELECT){ return false; }
 
 // Check Win loos state
     // If no asteroids = game won
-    if(Global::world->countWithAttribute(GameObject::ASTEROID) == 0) {
+    if(Global::world.countWithAttribute(GameObject::ASTEROID) == 0) {
         state = STATE_WON; 
-        exit();
-        return;
+        return false;
     }
 
     // If no ship or ship explosition = game lost 
-    if(Global::world->countWithAttribute(GameObject::MAINGAME_COMPONENT) == 0) {
+    if(Global::world.countWithAttribute(GameObject::MAINGAME_COMPONENT) == 0) {
         state = STATE_LOST; 
-        exit();
-        return;
+        return false;
     }
 
 // score countdown
@@ -94,7 +92,12 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
 
 void MainGameScreen::onEnd() {
     if(state != MainGameScreen::STATE_RUNNING)
-        Global::world->removeWithAttribute(GameObject::ALL);
+        Global::world.removeWithAttribute(GameObject::ALL);
 }
 
 MainGameScreen::GAME_STATE MainGameScreen::getState() { return state; }
+
+Scene* MainGameScreen::nextScene() {
+    return nullptr;
+    //TODO: replace with propper content
+}

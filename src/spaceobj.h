@@ -2,12 +2,14 @@
 #define __SPACEOBJ_H__
 
 #include <functional>
-#include "core/olcPixelGameEngine.h"
-#include "core/transform.h"
+#include "./engine/olcPixelGameEngine.h"
+#include "./engine/Transform.h"
 
-#include "wraparoundrenderer.h"
+#include "./wraparoundrenderer.h"
 
-class SpaceObj : public RGNDS::Transform {
+using namespace RGNDS;
+
+class SpaceObj : public Transform {
 public:
 
     SpaceObj();
@@ -49,7 +51,7 @@ public:
      *                        the function is given a paramter that describes where
      *                        the object should be drawn
      */
-    void draw(std::function<void(RGNDS::Transform*)> drawingLambda);
+    void draw(std::function<void(Transform*)> drawingLambda);
 
 protected:
     WrapAroundRenderer renderer;

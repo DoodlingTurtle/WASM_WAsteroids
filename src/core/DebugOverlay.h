@@ -1,19 +1,23 @@
 #pragma once
 
-#include "olcPixelGameEngine.h"
-#include "gameobject.h"
-#include "gamecomponent.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/world/Object.h"
+#include "../engine/world/components/Drawable.h"
+
+#include "../gamecomponents.h"
+
+using namespace RGNDS;
 
 class DebugOverlay
 	: public GameObject
-	, public WorldDrawable
+	, public World::Drawable
 {
 public:
 	DebugOverlay(olc::vf2d pos = { 0, 0 });
 
 	enum Type {
 		#define REGISTER_DEBUGTYPE(t, l, s) TYPE_##l,
-		#include "DebugOverlay.hpp"
+		#include "../DebugOverlay.hpp"
 	};
 
 	void onDraw(olc::PixelGameEngine* pge) override;
@@ -24,7 +28,7 @@ public:
 private:
 	union _data {
 		#define REGISTER_DEBUGTYPE(ty, l, s) ty* t##l;
-		#include "DebugOverlay.hpp"
+		#include "../DebugOverlay.hpp"
 	};
 	struct _displayItem {
 		std::string l;

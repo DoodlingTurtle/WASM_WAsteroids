@@ -3,18 +3,20 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "config.h"
-#include "global.h"
-#include "collision.h"
-#include "assets.h"
+#include "../config.h"
+#include "../engine/Global.h"
+#include "../engine/physics/Collision.h"
+#include "../engine/Assets.h"
 
-#include "gameobjects/ship/shipupgrade_shield.h"
-#include "gameobjects/ship/shipupgrade_cannon.h"
+#include "./ship/shipupgrade_shield.h"
+#include "./ship/shipupgrade_cannon.h"
 
-#include "particles/ship_explosion.h"
+#include "../particles/ship_explosion.h"
 
 #define SHIP_MAX_VELOCITY 256.0f
 #define SHIP_DEFAULT_RADIUS 16.0f
+
+using namespace RGNDS;
 
 Ship::Ship() 
 : GameObject({
@@ -32,7 +34,7 @@ Ship::Ship()
     Global::pge->DrawPartialSprite({ 0, 0 }, Assets::ship->Sprite(), { 32, 0 }, { 32, 32 });
     Global::pge->SetDrawTarget(nullptr);
 
-    stats = Global::shipStats;
+    stats = &Global::shipStats;
 
     reset();
 
@@ -110,7 +112,7 @@ void Ship::reset() {
 
 }
 
-RGNDS::Collision::Circle Ship::getCollider() {
+Physics::Collision::Circle Ship::getCollider() {
     float radius = 14.0f;
 
     if(currentShield != nullptr)
@@ -125,10 +127,10 @@ void Ship::onUpdate(float deltaTime) {
 //TODO: change to ship_killer
 
     if (currentShield) {
-        auto list = Global::world->allShipShieldDeflectable();
-        RGNDS::Collision c;
+        auto list = Global::world.allShipShieldDeflectable();
+        Physics::Collision c;
         for(auto go : list)
-            if (RGNDS::Collision::checkCircleOnCircle(
+            if (Physics::Collision::checkCircleOnCircle(
                 getCollider(),
                 go->getColliders(),
                 &c
@@ -138,14 +140,14 @@ void Ship::onUpdate(float deltaTime) {
             }
     }
     else {
-        auto list = Global::world->allPlayerKiller();
+        auto list = Global::world.allPlayerKiller();
         for (auto go : list)
-            if (RGNDS::Collision::checkCircleOnCircle(
+            if (Physics::Collision::checkCircleOnCircle(
                 getCollider(),
                 go->getColliders()
             )) {
                 Mix_PlayChannel(-1, Assets::shipExplode, 0);
-                Global::world->addGameObject(new ShipExplosion(this));
+                Global::world.addGameObject(new ShipExplosion(this));
                 assignAttribute(GameObject::DEAD);
                 return;
             }
@@ -153,19 +155,19 @@ void Ship::onUpdate(float deltaTime) {
     
 
     // Input Rotation
-    if(Global::gameInput->held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 
-    if(Global::gameInput->held&KEYPAD_LEFT) setAngleRel(-angRes*deltaTime); 
+    if(Global::input.held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 
+    if(Global::input.held&KEYPAD_LEFT) setAngleRel(-angRes*deltaTime); 
 
     // Input Component selection
-    if(Global::gameInput->pressed&KEYPAD_X) selectedComponent--;
-    if(Global::gameInput->pressed&KEYPAD_Y) selectedComponent++;
+    if(Global::input.pressed&KEYPAD_X) selectedComponent--;
+    if(Global::input.pressed&KEYPAD_Y) selectedComponent++;
 
     int sz = selectableComponents.size()-1;
     if(selectedComponent < 0)   selectedComponent = 0;
     if(selectedComponent > sz)  selectedComponent = sz; 
 
     // Activate component with A-Key (P on the Keybaord)
-    if(sz > -1 && Global::gameInput->pressed&KEYPAD_A) {
+    if(sz > -1 && Global::input.pressed&KEYPAD_A) {
         int index = selectableComponents.at(selectedComponent);
         ShipComponent* c = components.at(index);
         if(c) {
@@ -181,7 +183,7 @@ void Ship::onUpdate(float deltaTime) {
     // Input Thrusting
     thrusting = false;
     bool allowgeneratoregen = true;
-    if(Global::gameInput->held&KEYPAD_UP) {
+    if(Global::input.held&KEYPAD_UP) {
         float consumption = stats->thrustenergyconsumption * deltaTime;
         if(!stats->generatorhalt && stats->generator >= consumption) {
             thrusting = true;

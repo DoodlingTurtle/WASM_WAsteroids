@@ -1,5 +1,6 @@
 #include "./soundtest.h"
-#include "global.h"
+#include "../engine/Global.h"
+using namespace RGNDS;
 
 #define CNT_SNDS 7
 SoundTest::Sound SoundTest::sounds[CNT_SNDS] = {
@@ -35,20 +36,29 @@ void SoundTest::onEnd() {
     menu.clearOptions();
 }
 
-void SoundTest::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    if(Global::gameInput->pressed&KEYPAD_DOWN)
+bool SoundTest::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
+    if(Global::input.pressed&KEYPAD_DOWN)
         menu.selectNext();
         
-    if(Global::gameInput->pressed&KEYPAD_UP)
+    if(Global::input.pressed&KEYPAD_UP)
         menu.selectPrev();
 
-    if(Global::gameInput->pressed&KEYPAD_A) {
+    if(Global::input.pressed&KEYPAD_A) {
         Mix_HaltMusic();
         Mix_HaltChannel(-1);
         int p = menu.selected();
         sounds[p].play();
     }
     menu.selected();
+
+    return true;
 }
 
 void SoundTest::onDraw(olc::PixelGameEngine* pge) { menu.draw(pge); }
+
+Scene* SoundTest::nextScene() {
+    return nullptr;
+    //TODO: replace with propper content
+}
+
+

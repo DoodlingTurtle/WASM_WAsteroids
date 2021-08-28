@@ -1,37 +1,12 @@
-#include "olcPixelGameEngine.h"
 #include <SDL/SDL_mixer.h>
 
-#include "core/gameinput.h"
-#include "particles.h"
-#include "gameworld.h"
-
-#include "scene.h"
-#include "scenes/loadscreen.h"
-#include "scenes/titlescreen.h"
-#include "scenes/maingame.h"
-#include "scenes/pausescreen.h"
-#include "scenes/upgradescreen.h"
-#include "scenes/gameoverscreen.h"
-#include "scenes/textscene.h"
-#include "scenes/soundtest.h"
-
-//#include "scenes/helpscreen.h"
-//#include "scenes/creditsscreen.h"
-
-#include "gameobjects/asteroids.h"
-#include "gameobjects/ship/shipupgrade_shield.h"
-
-#include "gameobjects/ship/shipstats.h"
-
-#include <cstdlib>
-#include <ctime>
-
+#include "./engine/Global.h"
+#include "./scenes/loadscreen.h"
 #include "config.h"
-#include "core/assets.h"
-#include "core/global.h"
+
+using namespace RGNDS;
 
 //EMSCRIPTEN_KEEPALIVE int number = 0;
-
 // Override base class with your custom functionality
 class WAsteroids : public olc::PixelGameEngine
 {
@@ -39,10 +14,7 @@ public:
     WAsteroids(){};
     ~WAsteroids(){};
     bool OnUserCreate() override {
-        // Initialize functions
-        srand(time(nullptr));
-        currentScene = nullptr;
-        
+
         // setup layers
         auto _setupLayer = [this](bool en=true, std::function<void()> fnc = [](){}){
             int ret = CreateLayer();
@@ -58,7 +30,6 @@ public:
             Clear(olc::Pixel{0, 0, 0, 128});
             SetPixelMode(olc::Pixel::NORMAL);
         });
-
         layer_ship      = _setupLayer();
         layer_asteroids = _setupLayer();
         layer_shots     = _setupLayer();
@@ -86,42 +57,11 @@ public:
     }
 
     bool OnUserUpdate(float fElapsedTime) override {
-        Global::gameInput->updateInputs();
 
-        if(currentScene != nullptr) {
-        // UpdateWorld
-            if(currentScene != &pauseScreen)
-                for(auto go : Global::world->allWorldUpdateable())
-                    go->onUpdate(fElapsedTime);                
-
-        // Remove Dead GOs
-             for(auto go : Global::world->findByAttribute(GameObject::DEAD))
-                 Global::world->removeGameObject(go);
-
-        // Update logic
-            currentScene->onUpdate(this, fElapsedTime);
-
-        // if the scene is activate after the logic update
-            if(currentScene->isActive()) {
-                SetDrawTarget(layer_particles);
-                    Clear(olc::BLANK);
-                SetDrawTarget(nullptr);
-                Clear(olc::BLANK);
-               
-                // Draw World
-                for(auto go : Global::world->allWorldDrawable())
-                    go->onDraw(this);                
-
-                // Draw Scene
-                currentScene->onDraw(this);
-            }
-            else {
-                // else switch to the next scene
-                Debug("Scene has ended");
-                nextScene();
-            }
-
-        }
+        //TODO: Deal with this
+		SetDrawTarget(layer_particles);
+			Clear(olc::BLANK);
+		SetDrawTarget(nullptr);
 
         return true;
     }
@@ -131,14 +71,14 @@ public:
         Mix_HaltChannel(-1);
 
         // Destroy loaded graphics
-        ShipUpgrade_Shield::deinit();
+//        ShipUpgrade_Shield::deinit();
 
-        Assets::deinit();
+//        Assets::deinit();
         return true;
     }
 
     void nextScene() {
-        Debug("switch Scene:");
+    /*
         Scene* next = nullptr;
         if(currentScene == nullptr) next = &loadScreen;
         else if(currentScene == (Scene*)&loadScreen) {
@@ -149,20 +89,20 @@ public:
         else if(currentScene == (Scene*)&titleScreen) {
             Debug("prev = titleScreen");
             switch(titleScreen.selectedMenu()) {
-                case 2: /* Credits */ { next = &creditsScreen; break; } 
+                case 2: /* Credits * / { next = &creditsScreen; break; } 
 
-                case 0: /* new Game */ { 
+                case 0: /* new Game * / { 
                     Global::score = 0;                       //reset score
                     Global::level = 0;
 
                     mainGameScreen.reset();
-                    Global::shipStats->resetToLV1();
+                    Global::shipStats.resetToLV1();
                     next = &mainGameScreen; 
                     break; }
                      
-                case 1: /* help */ {  next = &helpScreen; break; }
+                case 1: /* help * / {  next = &helpScreen; break; }
                         
-                case 3:  /*Soundtest*/ { next = &soundTest; break; }
+                case 3:  /*Soundtest* / { next = &soundTest; break; }
                 default: { next = &titleScreen; }
             }
         }
@@ -211,9 +151,9 @@ public:
         
 
         currentScene = next;
+*/
     }
-
-    Scene*          currentScene;
+/*
 
     TitleScreen     titleScreen;
     
@@ -222,18 +162,17 @@ public:
     MainGameScreen  mainGameScreen;
     PauseScreen     pauseScreen   = PauseScreen(&mainGameScreen);
     UpgradeScreen   upgradeScreen = UpgradeScreen(
-            Global::shipStats, &Global::score, 
+            &Global::shipStats, &Global::score, 
             &mainGameScreen.game_difficulty);
     GameOverScreen  gameOverScreen;
     SoundTest       soundTest;
     LoadScreen      loadScreen;
-
+*/
 };
+
 
 int main()
 {
-    Debug("main");
-
 // Setup SDL_Mixer
     bool run = true;
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
@@ -248,29 +187,12 @@ int main()
         int screenLayout = 1;    
         Global::layout = &screenLayouts[screenLayout];
 
-        ShipStats       shipStats;
-
-        Global::score = 0;
-        Global::shipStats = &shipStats;
-
-        WAsteroids      app;
-
-    // Setup GameInput
-        GameInput           gameInput(&app);
-        Global::gameInput = &gameInput;
-
-    // Setup GameWorld
-        GameWorld       world;
-        Global::world = &world;
-
-    //Setup PGE 
-        Global::pge = &app; 
-        if (run && app.Construct(
+        if(Global::game.Construct(
             Global::layout->app_width,
             Global::layout->app_height,
             Global::layout->app_scale,
-            Global::layout->app_scale
-        )) app.Start();
+            Global::layout->app_scale, false, true
+        )) Global::game.Start();
 
         Global::switchBGMusic(nullptr);
 

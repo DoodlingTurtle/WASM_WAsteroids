@@ -1,11 +1,13 @@
 #ifndef __ShipUpgrade_ShieldGenerator_H__
 #define __ShipUpgrade_ShieldGenerator_H__
 
-#include "transform.h"
+#include "../../engine/Transform.h"
 
 #include "./shipstats.h"
 #include "./ship_component.h"
 #include "./shipupgrade_shield.h"
+
+using namespace RGNDS;
 
 class ShipUpgrade_ShieldGenerator : public ShipComponent {
 public:

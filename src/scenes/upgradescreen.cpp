@@ -1,12 +1,16 @@
-#include "./upgradescreen.h"
 #include <functional>
 #include <stdio.h>
 
-#include "olcPixelGameEngine.h"
-#include "global.h"
-#include "assets.h"
+#include "./upgradescreen.h"
 
-#include "gameobjects/ship/shipupgrade_shieldgenerator.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/Global.h"
+#include "../engine/Assets.h"
+
+#include "../gameobjects/ship/shipupgrade_shieldgenerator.h"
+
+
+using namespace RGNDS;
 
 #define ERROR_PRICE_TO_HIGH "You don't have enough points"
 
@@ -104,13 +108,13 @@ void UpgradeScreen::onEnd() {
     selection.clearOptions();
 }
 
-void UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
+bool UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
-    if(Global::gameInput->pressed&KEYPAD_DOWN)
+    if(Global::input.pressed&KEYPAD_DOWN)
         selection.selectNext();
-    else if(Global::gameInput->pressed&KEYPAD_UP)
+    else if(Global::input.pressed&KEYPAD_UP)
         selection.selectPrev();
-    else if(Global::gameInput->pressed&(KEYPAD_A|KEYPAD_START))
+    else if(Global::input.pressed&(KEYPAD_A|KEYPAD_START))
     {
         int selected = upgrade_data.at(selection.selected());
         int cost = costs[selected] * (*game_difficulty);
@@ -136,12 +140,14 @@ void UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
                     break;
 
             }
-            exit();
+            return false;
         }
         else {
             showError = true;    
         }
     }
+
+    return true;
 }
 
 
@@ -191,3 +197,9 @@ void UpgradeScreen::onDraw(olc::PixelGameEngine* pge) {
     _printPGE(pge, costlocation, str, olc::WHITE);
    
 }
+
+Scene* UpgradeScreen::nextScene() {
+    return nullptr;
+    //TODO: change output based on selected menu entry
+}
+

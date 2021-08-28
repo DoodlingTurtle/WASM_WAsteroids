@@ -2,20 +2,26 @@
 #define __Ship_Explosions_H__
 
 #include <vector>
-#include "olcPixelGameEngine.h"
-#include "gameobject.h"
-#include "gamecomponent.h"
-#include "spaceobj.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/world/Object.h"
+#include "../engine/world/components/Drawable.h"
+#include "../engine/world/components/Updateable.h"
 
-#include "gameobjects/ship.h"
+#include "../gamecomponents.h"
+
+#include "../spaceobj.h"
+
+#include "../gameobjects/ship.h"
 
 #include "./sprite_dissolve.h"
+
+using namespace RGNDS;
 
 class ShipExplosion
 : public SpriteDissolve
 , public GameObject
-, public WorldUpdateable
-, public WorldDrawable
+, public World::Updateable
+, public World::Drawable
 , public SpaceObj
 {
 public:

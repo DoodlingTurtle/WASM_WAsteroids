@@ -1,23 +1,24 @@
-#ifndef ASTEROIDS_H
-#define ASTEROIDS_H
+#pragma once
 
 #include "./ship.h"
 
-#include "config.h"
-#include "olcPixelGameEngine.h"
-#include "gameobject.h"
-#include "spaceobj.h"
-#include "collision.h"
+#include "../config.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/world/Object.h"
+#include "../engine/physics/Collision.h"
 
-#include "gamecomponent.h"
+#include "../spaceobj.h"
+
+#include "../gamecomponents.h"
 
 #include <vector>
 
+using namespace RGNDS;
 
 class Asteroid 
 : public GameObject
-, public WorldDrawable
-, public WorldUpdateable
+, public World::Drawable 
+, public World::Updateable
 , public ShipShieldDeflectable
 , public PlayerKiller
 , public BulletHitable
@@ -45,14 +46,14 @@ public:
     // Implement Components
     void onDraw(olc::PixelGameEngine* pge) override;
     void onUpdate(float deltaTime) override;
-    void gotDeflected(Ship*, ShipUpgrade_Shield*, RGNDS::Collision*) override;
-    void hitByBullet(Bullet*, RGNDS::Collision*) override;
+    void gotDeflected(Ship*, ShipUpgrade_Shield*, Physics::Collision*) override;
+    void hitByBullet(Bullet*, Physics::Collision*) override;
     int  getDestructionScore() override;
 
 
     // Getters
     SIZES getSize();
-    std::vector<RGNDS::Collision::Circle> getColliders();
+    std::vector<Physics::Collision::Circle> getColliders();
     olc::Sprite* getSprite();   
 
     // Setters
@@ -78,4 +79,3 @@ public:
     
     bool killOnNextUpdate;
 };
-#endif

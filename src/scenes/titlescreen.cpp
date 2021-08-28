@@ -1,8 +1,11 @@
 #include "./titlescreen.h"
-#include "global.h"
-#include "config.h"
-#include "gameobjects/asteroids.h"
+#include "../engine/Global.h"
+#include "../engine/Assets.h"
 
+#include "../config.h"
+#include "../gameobjects/asteroids.h"
+
+using namespace RGNDS;
 
 TitleScreen::TitleScreen() 
 {
@@ -22,18 +25,19 @@ TitleScreen::TitleScreen()
 }
 
 void TitleScreen::onStart() {
-    Global::world->removeWithAttribute(GameObject::ALL);    
+    Global::world.removeWithAttribute(GameObject::ALL);    
     Asteroid::spawn(5);
 }
 
-void TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-
-    if(Global::gameInput->pressed&KEYPAD_DOWN)
+bool TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
+    if (Global::input.pressed & KEYPAD_DOWN)
         menu.selectNext();
-    else if(Global::gameInput->pressed&KEYPAD_UP)
+    else if (Global::input.pressed & KEYPAD_UP)
         menu.selectPrev();
-    else if(Global::gameInput->pressed&(KEYPAD_A))
-        exit();
+    else if (Global::input.pressed & (KEYPAD_A))
+        return false;
+
+    return true;
 }
 
 void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
@@ -50,7 +54,13 @@ void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
 
     pge->DrawStringDecal({4, 4}, version_text, olc::WHITE, { 0.75f, 0.75f });
     pge->DrawString(help_placement, help_text);
+    
 }
-void TitleScreen::onEnd() { Global::world->removeWithAttribute(GameObject::ALL); }
+void TitleScreen::onEnd() { Global::world.removeWithAttribute(GameObject::ALL); }
 
 int TitleScreen::selectedMenu(){ return menu.selected(); }
+
+Scene* TitleScreen::nextScene() {
+    return nullptr;
+    //TODO: change output based on selected menu entry
+}

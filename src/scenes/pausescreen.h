@@ -1,19 +1,23 @@
-#ifndef __PauseScreen_H__
-#define __PauseScreen_H__
+#pragma once
 
-#include "olcPixelGameEngine.h"
-#include "scene.h"
-#include "textmenu.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/ui/TextMenu.h"
+
+#include "./engine/Scene.h"
+
+using namespace RGNDS;
 
 class PauseScreen : public Scene {
 public:
     PauseScreen(Scene* backgroundProvider);
     virtual~PauseScreen();
 
-    void onUpdate(olc::PixelGameEngine* pge, float deltaTime) override;
+    bool onUpdate(olc::PixelGameEngine* pge, float deltaTime) override;
     void onDraw(olc::PixelGameEngine* pge) override;
     void onStart() override;
     void onEnd() override;
+
+    Scene* nextScene() override;
 
 #ifdef DEBUG_BUILD
     bool skipLevel();
@@ -25,11 +29,9 @@ protected:
     Scene* backgroundProvider;
 
 private:
-    TextMenu menu;
+    UI::TextMenu menu;
 
     std::string help_text;
     olc::vf2d   help_position;
 
 };
-
-#endif

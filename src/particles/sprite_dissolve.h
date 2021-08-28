@@ -1,9 +1,10 @@
-#ifndef __SpriteDissolve_H__
-#define __SpriteDissolve_H__
+#pragma once
 
-#include "olcPixelGameEngine.h"
-#include "transform.h"
-#include "particles.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/Transform.h"
+#include "../particles.h"
+
+using namespace RGNDS;
 
 class SpriteDissolve_Emitter;
 class SpriteDissolve_Particle;
@@ -17,7 +18,7 @@ class SpriteDissolve
 : public t_SpriteDissolve
 {
 public:
-    SpriteDissolve(olc::Sprite* spr, RGNDS::Transform* tr,
+    SpriteDissolve(olc::Sprite* spr, Transform* tr,
             float maxParticleDistance = 10.0f, /* Defines how far each particle can move from its origin during its lifetime */
             float maxParticleLifetimeSecs = 1.0f /* defines how many seconds a particle can stay active at maximum*/
     );
@@ -32,12 +33,12 @@ public:
  *###########################################################################*/
 class SpriteDissolve_Emitter 
 : public t_SpriteDissolve::Emitter
-, public RGNDS::Transform
+, public Transform
 {
 public:
     SpriteDissolve_Emitter(
             olc::Sprite*, 
-            RGNDS::Transform*, 
+            Transform*, 
             SpriteDissolve*,
             float maxParticleDistance = 10.0f, /* Defines how far each particle can move from its origin during its lifetime */
             float maxParticleLifetimeSecs = 1.0f /* defines how many seconds a particle can stay active at maximum*/
@@ -59,7 +60,7 @@ private:
  *###########################################################################*/
 class SpriteDissolve_Particle 
 : public t_SpriteDissolve::Particle
-, public RGNDS::Transform
+, public Transform
 {
 public:
     /** \brief consturctor
@@ -86,5 +87,3 @@ protected:
     float maxLifetime;
     olc::Pixel pixel;
 };
-
-#endif

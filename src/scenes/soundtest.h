@@ -1,13 +1,14 @@
-#ifndef __SOUNDTEST_H__
-#define __SOUNDTEST_H__
+#pragma once
 
 #include <vector>
 #include <SDL/SDL_mixer.h>
 
-#include "olcPixelGameEngine.h"
-#include "scene.h"
-#include "textmenu.h"
-#include "assets.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/assets.h"
+#include "../engine/ui/TextMenu.h"
+#include "../engine/Scene.h"
+
+using namespace RGNDS;
 
 class SoundTest: public Scene {
 public:
@@ -33,13 +34,14 @@ public:
     static Sound sounds[];
 
     void onDraw(olc::PixelGameEngine*) override;
-    void onUpdate(olc::PixelGameEngine*, float) override;
+    bool onUpdate(olc::PixelGameEngine*, float) override;
+
+    Scene* nextScene() override;
 
 protected:
     void onStart() override;
     void onEnd() override;
 
 private:
-    TextMenu menu;
+    UI::TextMenu menu;
 };
-#endif

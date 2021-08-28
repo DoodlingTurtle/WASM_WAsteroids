@@ -1,9 +1,8 @@
 #include "./bullet.h"
 #include "./asteroids.h"
 #include "./scorepopup.h"
-#include "global.h"
-
-#include "assets.h"
+#include "../engine/global.h"
+#include "../engine/assets.h"
 
 #include <SDL/SDL_mixer.h>
 
@@ -22,13 +21,13 @@ void Bullet::onUpdate(float deltaTime) {
     else {
         updatePosition(deltaTime);
 
-        auto list = Global::world->allBulletHitable();
+        auto list = Global::world.allBulletHitable();
 
-        RGNDS::Collision c;
+        Physics::Collision c;
         
         for(auto a : list) {
-            if(RGNDS::Collision::checkCircleOnCircle(
-                (RGNDS::Collision::Circle{
+            if(Physics::Collision::checkCircleOnCircle(
+                (Physics::Collision::Circle{
                     pos.x, pos.y, radius 
                 }), a->getColliders(),
                 &c
@@ -40,7 +39,7 @@ void Bullet::onUpdate(float deltaTime) {
                     score = m->updateScore(score, this);
 
                 Global::score += score;
-                Global::world->addGameObject(new ScorePopup(score, pos.x, pos.y));
+                Global::world.addGameObject(new ScorePopup(score, pos.x, pos.y));
                 assignAttribute(GameObject::DEAD);
             }
         }

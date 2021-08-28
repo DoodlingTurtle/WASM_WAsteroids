@@ -1,8 +1,6 @@
-#ifndef __PARTICLES_H__
-#define __PARTICLES_H__
+#pragma once
 
-#include "core/olcPixelGameEngine.h"
-#include "config.h"
+#include "./engine/olcPixelGameEngine.h"
 #include <vector>
 
 template <typename Em, typename Pa>
@@ -19,7 +17,6 @@ public:
     class Emitter {
     public:
         virtual ~Emitter(){
-            Debug("ParticleSystem::Emitter::~Emitter");
             for(auto p : particles)
                 delete p;
 
@@ -84,7 +81,6 @@ public:
 
     virtual int spawnNewParticles(int cnt=1) final {
 
-        Debug("Spawn Particles " << cnt);
 
         int attempts = 1000;
         int spawned = 0;
@@ -109,6 +105,3 @@ protected:
     Pa* particle;
 
 };
-
-
-#endif

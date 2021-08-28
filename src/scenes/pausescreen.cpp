@@ -1,7 +1,8 @@
 #include "./pausescreen.h"
-#include "config.h"
-#include "global.h"
-#include "assets.h"
+#include "../config.h"
+#include "../engine/Global.h"
+#include "../engine/Assets.h"
+using namespace RGNDS;
 
 PauseScreen::PauseScreen(Scene* backgroundProvider) {
     this->backgroundProvider = backgroundProvider;
@@ -22,14 +23,14 @@ PauseScreen::PauseScreen(Scene* backgroundProvider) {
 
 PauseScreen::~PauseScreen() {}
 
-void PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
+bool PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
      
-    if(Global::gameInput->pressed&KEYPAD_DOWN)
+    if(Global::input.pressed&KEYPAD_DOWN)
         menu.selectNext();
-    else if(Global::gameInput->pressed&KEYPAD_UP)
+    else if(Global::input.pressed&KEYPAD_UP)
         menu.selectPrev();
-    else if(Global::gameInput->released&(KEYPAD_A))
-        exit();
+    else if(Global::input.released&(KEYPAD_A))
+        return false;
 }
 
 void PauseScreen::onDraw(olc::PixelGameEngine* pge) {
@@ -63,9 +64,14 @@ void PauseScreen::onEnd() {
     if (menu.selected() == 3) {
         Global::score += 523346;
         Global::level += 893;
-        (*(Global::world->findByAttribute(GameObject::PLAYER_SHIP).begin()))->assignAttribute(GameObject::DEAD); 
+        (*(Global::world.findByAttribute(GameObject::PLAYER_SHIP).begin()))->assignAttribute(GameObject::DEAD); 
         menu.setSelection(0);
     }
 #endif
+}
+
+Scene* PauseScreen::nextScene() {
+    return nullptr;
+    //TODO: replace with propper content
 }
 

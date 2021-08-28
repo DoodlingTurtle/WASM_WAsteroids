@@ -1,8 +1,9 @@
+#include "../engine/Macros.h"
 #include "./sprite_dissolve.h"
 
-/*#############################################################################
+/*==============================================================================
  * SpriteDissovlve
- *###########################################################################*/
+ *============================================================================*/ 
 SpriteDissolve::SpriteDissolve( 
         olc::Sprite* spr, RGNDS::Transform* tr,
         float mpd, float mpl
@@ -17,14 +18,13 @@ void SpriteDissolve::onUpdate(float deltaTime)
 void SpriteDissolve::onDraw(olc::PixelGameEngine* pge) 
 { emitter->drawParticles(pge); }
 
-/*#############################################################################
+/*==============================================================================
  * SpriteDissolve_Emitter
- *###########################################################################*/
+ *============================================================================*/ 
 SpriteDissolve_Emitter::SpriteDissolve_Emitter(
         olc::Sprite* spr, RGNDS::Transform* tr,
         SpriteDissolve* sys, float mpmd, float mplt
 ){
-    Debug("SpriteDissolve_Emitter::SpriteDissolve_Emitter " << spr->width << " " << spr->height);
     this->system = sys;
     this->decal = new olc::Decal(spr);
     int offx = spr->width / 2;
@@ -68,9 +68,9 @@ SpriteDissolve_Emitter::~SpriteDissolve_Emitter() { delete decal; }
 
 void SpriteDissolve_Emitter::onNoParticlesLeft() { system->onEmitterFinished(); }
 
-/*#############################################################################
+/*==============================================================================
  * SpriteDissolve_Particle
- *###########################################################################*/
+ *============================================================================*/ 
 SpriteDissolve_Particle::SpriteDissolve_Particle(
         olc::vf2d s, olc::vf2d empos, 
         olc::Pixel p, 

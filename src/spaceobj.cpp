@@ -1,6 +1,6 @@
-#include "spaceobj.h"
-#include "config.h"
-#include "global.h"
+#include "./spaceobj.h"
+#include "./config.h"
+#include "./engine/Global.h"
 
 
 SpaceObj::SpaceObj() : SpaceObj::SpaceObj(1.0f){}

@@ -4,15 +4,20 @@
 #include <vector>
 #include <functional>
 
-#include "olcPixelGameEngine.h"
-#include "gameobject.h"
-#include "gamecomponent.h"
-#include "spaceobj.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/world/Object.h"
+#include "../engine/world/components/Drawable.h"
+#include "../engine/world/components/Updateable.h"
+
+#include "../gamecomponents.h"
+#include "../spaceobj.h"
+
+using namespace RGNDS;
 
 class ScorePopup 
 : public GameObject
-, public WorldDrawable
-, public WorldUpdateable
+, public World::Drawable 
+, public World::Updateable
 , public SpaceObj {
 public:
     ScorePopup(short score, float x, float y);

@@ -1,4 +1,4 @@
-#include "config.h"
+#include "../config.h"
 
 olc::Key GameKeyMap[11] = {
     olc::A,

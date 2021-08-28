@@ -1,14 +1,16 @@
-#include "./asteroids.h"
-#include "config.h"
-#include "global.h"
-#include "assets.h"
+#include <stdio.h>
 
-#include "particles/asteroid_particles.h"
+#include "./asteroids.h"
+#include "../config.h"
+#include "../engine/Global.h"
+#include "../engine/Assets.h"
+
+#include "../particles/asteroid_particles.h"
 
 #include "./scorepopup.h"
 
-#include <stdio.h>
 using namespace std;
+using namespace RGNDS;
 
 Asteroid::Asteroid() 
 : GameObject({ GameObject::ASTEROID })
@@ -16,7 +18,7 @@ Asteroid::Asteroid()
 , sprite(nullptr), decal(nullptr), killOnNextUpdate(false)
 {}
 
-void Asteroid::hitByBullet(Bullet* b, RGNDS::Collision* c) { 
+void Asteroid::hitByBullet(Bullet* b, Physics::Collision* c) { 
     setDirection(c->overlapDir); 
     killOnNextUpdate = true;
 }
@@ -25,7 +27,7 @@ int Asteroid::getDestructionScore() {
     return 100.0f / scale;
 }
 
-void Asteroid::gotDeflected(Ship* s, ShipUpgrade_Shield* sh, RGNDS::Collision* c) {
+void Asteroid::gotDeflected(Ship* s, ShipUpgrade_Shield* sh, Physics::Collision* c) {
     // Get needed variables
     olc::vf2d invHit = c->overlapDir * (-1.0f);
     olc::vf2d aDir = this->getDirection();
@@ -108,7 +110,6 @@ void Asteroid::bringBackToLife(
         SIZES size,
         olc::vf2d direction, float velocity
 ) {
-    Debug("revive Asteroid " << this);
 
     if(direction.x == 0 && direction.y == 0) 
         setRandomDirection();
@@ -168,7 +169,7 @@ void Asteroid::onUpdate(float deltatime) {
                     moveVelocity
             );
             ast->movePixelDistance(28.0f * scale);
-            Global::world->addGameObject(ast); 
+            Global::world.addGameObject(ast); 
             
             ast = new Asteroid();
             ast->bringBackToLife(
@@ -177,12 +178,12 @@ void Asteroid::onUpdate(float deltatime) {
                     moveVelocity
             );
             ast->movePixelDistance(28.0f * scale);
-            Global::world->addGameObject(ast); 
+            Global::world.addGameObject(ast); 
         }
 
         //Spawn AsteroidExplosion at go->pos
         AsteroidExplosion* e = new AsteroidExplosion(this);
-        Global::world->addGameObject(e);
+        Global::world.addGameObject(e);
        
         this->assignAttribute(GameObject::DEAD);
     }
@@ -208,7 +209,7 @@ void Asteroid::onDraw(olc::PixelGameEngine* pge) {
     }
 
     pge->SetDrawTarget(layer_asteroids);
-    SpaceObj::draw([this](RGNDS::Transform* tr){
+    SpaceObj::draw([this](Transform* tr){
         Global::pge->DrawRotatedDecal( 
             tr->pos, decal, tr->ang,
             {(float)sprite->width/2.0f,(float)sprite->height/2.0f},
@@ -222,8 +223,8 @@ void Asteroid::onDraw(olc::PixelGameEngine* pge) {
 #endif
 }
 
-std::vector<RGNDS::Collision::Circle> Asteroid::getColliders() {
-    std::vector<RGNDS::Collision::Circle> r;
+std::vector<Physics::Collision::Circle> Asteroid::getColliders() {
+    std::vector<Physics::Collision::Circle> r;
 
     for(auto t : renderer.getInstances())
         r.push_back({t.x, t.y, 28*scale});
@@ -261,16 +262,12 @@ void Asteroid::spawn(
     int x, int y,
     olc::vf2d direction, float velocity
 ) {
-
-    Debug("Asteroids: spawns " << nr << " asteroid(s) ");
-
-    int spawned = 0;
     float sx=x, sy=y;
 
     if(nr > MAX_ASTEROIDS) 
         nr = MAX_ASTEROIDS;
     
-    for(int a = 0; a < MAX_ASTEROIDS && spawned < nr; a++) {
+    for(int a = 0; a < MAX_ASTEROIDS && nr > 0; a++) {
         Asteroid* ast = new Asteroid(); 
         if(x == 0) sx = (rand()%APP_SCREEN_WIDTH);
         if(y == 0) sy = (rand()%APP_SCREEN_HEIGHT);
@@ -283,17 +280,17 @@ void Asteroid::spawn(
 
         if(ship) {
             ship->scale = 2.0f;
-            RGNDS::Collision::Circle sc = ship->getCollider();
+            Physics::Collision::Circle sc = ship->getCollider();
             ship->scale = 1.0f;
 
-            while(RGNDS::Collision::checkCircleOnCircle(sc, ast->getColliders())) {
+            while(Physics::Collision::checkCircleOnCircle(sc, ast->getColliders())) {
                 Debug("ship hit before game started " << ast->pos.x << " " << ast->pos.y);
                 ast->moveInDirection(32);
             }
         }
 
-        Global::world->addGameObject(ast);
-        spawned++;
+        Global::world.addGameObject(ast);
+        nr--;
     }
 }
 

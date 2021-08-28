@@ -2,8 +2,8 @@
 #define __ShipComponent_H__
 
 #include <vector>
-#include "spaceobj.h"
-#include "olcPixelGameEngine.h"
+#include "../../spaceobj.h"
+#include "../../engine/olcPixelGameEngine.h"
 
 class Ship;
 class ShipStats;

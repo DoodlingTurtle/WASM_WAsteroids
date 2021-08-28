@@ -1,7 +1,7 @@
 #ifndef __MainConfig_H__
 #define __MainConfig_H__
 
-#include "olcPixelGameEngine.h"
+#include "./engine/olcPixelGameEngine.h"
 
 #define APP_SCREEN_WIDTH 256
 #define APP_SCREEN_HEIGHT 384

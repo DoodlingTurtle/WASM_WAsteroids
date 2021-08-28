@@ -1,4 +1,4 @@
-#include "shipengine.h"
+#include "./shipengine.h"
 
 #include <math.h>
 
