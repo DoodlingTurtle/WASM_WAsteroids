@@ -1,20 +1,21 @@
-#ifndef __LoadScreen_H__
-#define __LoadScreen_H__
+#pragma once
 
-#include "scene.h"
+#include "../engine/Scene.h"
+
+using namespace RGNDS;
 
 class LoadScreen : public Scene {
 public:
     LoadScreen();
     virtual~LoadScreen();
 
-	void onUpdate(olc::PixelGameEngine* pge, float deltaTime) override;
+	bool onUpdate(olc::PixelGameEngine* pge, float deltaTime) override;
 	void onDraw(olc::PixelGameEngine* pge) override;
+
+    Scene* nextScene() override;
 
 protected:
     void onEnd() override;
     std::string msg;
 
 };
-
-#endif

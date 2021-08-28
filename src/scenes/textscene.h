@@ -1,10 +1,11 @@
-#ifndef __TextScene_H__
-#define __TextScene_H__
+#pragma once
 
 #include <string>
 
-#include "olcPixelGameEngine.h"
-#include "scene.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/Scene.h"
+
+using namespace RGNDS;
 
 class TextScene: public Scene {
 public:
@@ -12,11 +13,14 @@ public:
     ~TextScene();
 
     void onDraw(olc::PixelGameEngine*) override;
-    void onUpdate(olc::PixelGameEngine*, float) override;
+    bool onUpdate(olc::PixelGameEngine*, float) override;
+
+    Scene* nextScene() override;
 
 protected:
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
     void onEnd() override;
+
 
 private:
     olc::vf2d   text_position;
@@ -26,5 +30,3 @@ private:
     std::string help_text;
     olc::vf2d   help_position;
 };
-
-#endif

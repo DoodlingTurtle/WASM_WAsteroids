@@ -1,7 +1,13 @@
 #include "./pausescreen.h"
-#include "config.h"
-#include "global.h"
-#include "assets.h"
+#include "../config.h"
+#include "../engine/Global.h"
+#include "../engine/Assets.h"
+
+#include "./titlescreen.h"
+#include "./upgradescreen.h"
+#include "./gameoverscreen.h"
+
+using namespace RGNDS;
 
 PauseScreen::PauseScreen(Scene* backgroundProvider) {
     this->backgroundProvider = backgroundProvider;
@@ -16,20 +22,22 @@ PauseScreen::PauseScreen(Scene* backgroundProvider) {
     menu.addOption("Exit");
 #ifdef DEBUG_BUILD
     menu.addOption("[D] next Level");
+    menu.addOption("[D] instand lose");
 #endif
 }
 
 PauseScreen::~PauseScreen() {}
 
-void PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
+bool PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
      
-    if(Global::gameInput->pressed&KEYPAD_DOWN)
+    if(Global::input->pressed&KEYPAD_DOWN)
         menu.selectNext();
-    else if(Global::gameInput->pressed&KEYPAD_UP)
+    else if(Global::input->pressed&KEYPAD_UP)
         menu.selectPrev();
-    else if(Global::gameInput->pressed&(KEYPAD_A))
-        exit();
+    else if(Global::input->released&(KEYPAD_A))
+        return false;
 
+    return true;
 }
 
 void PauseScreen::onDraw(olc::PixelGameEngine* pge) {
@@ -44,21 +52,54 @@ void PauseScreen::onDraw(olc::PixelGameEngine* pge) {
     pge->DrawStringDecal(help_position, help_text, olc::WHITE);
 }
 
-bool PauseScreen::endGame() {
-    return menu.selected() == 1;
-}
 #ifdef DEBUG_BUILD
 bool PauseScreen::skipLevel() {
     return menu.selected() == 2;
 }
 #endif
 
-void PauseScreen::onStart() { Global::pge->EnableLayer(layer_blackout, true); }
+void PauseScreen::onStart(olc::PixelGameEngine* pge) { 
+    Global::game->pause();
+    Global::game->EnableLayer(layer_blackout, true); }
+
 void PauseScreen::onEnd() { 
-    Global::pge->EnableLayer(layer_blackout, false); 
+    Global::game->resume();
+    Global::game->EnableLayer(layer_blackout, false); 
     
-    if (menu.selected() == 1) 
-        Global::switchBGMusic(Assets::bgmMenu);
-    
+#ifdef DEBUG_BUILD
+    if (menu.selected() == 3) {
+        Global::score += 523346;
+        Global::level += 893;
+        (*(Global::world->findByAttribute(GameObject::PLAYER_SHIP).begin()))->assignAttribute(GameObject::DEAD); 
+        menu.setSelection(0);
+    }
+#endif
+}
+
+Scene* PauseScreen::nextScene() {
+
+    int sel = menu.selected();
+
+    if (sel != 0 && sel != 2)
+        delete backgroundProvider;
+
+    switch (menu.selected()) {
+
+    case 0: /* resume */
+        return backgroundProvider;
+
+    case 1: /* exit */
+        switchBGMusic(Assets::bgmMenu);
+        return new TitleScreen();
+
+    case 2: /* Skip Level */
+        return new UpgradeScreen((MainGameScreen*)backgroundProvider);
+
+    case 3: /* game over */
+        return new GameOverScreen();
+
+    }
+
+    return nullptr;
 }
 

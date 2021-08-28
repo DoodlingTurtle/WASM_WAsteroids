@@ -3,18 +3,20 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "config.h"
-#include "global.h"
-#include "collision.h"
-#include "assets.h"
+#include "../config.h"
+#include "../engine/Global.h"
+#include "../engine/physics/Collision.h"
+#include "../engine/Assets.h"
 
-#include "gameobjects/ship/shipupgrade_shield.h"
-#include "gameobjects/ship/shipupgrade_cannon.h"
+#include "./ship/shipupgrade_shield.h"
+#include "./ship/shipupgrade_cannon.h"
 
-#include "particles/ship_explosion.h"
+#include "../particles/ship_explosion.h"
 
 #define SHIP_MAX_VELOCITY 256.0f
 #define SHIP_DEFAULT_RADIUS 16.0f
+
+using namespace RGNDS;
 
 Ship::Ship() 
 : GameObject({
@@ -28,9 +30,9 @@ Ship::Ship()
   , selectedComponent(0)
 {
     sprDissolve = new olc::Sprite(32, 32);
-    Global::pge->SetDrawTarget(sprDissolve);
-    Global::pge->DrawPartialSprite({ 0, 0 }, Assets::ship->Sprite(), { 32, 0 }, { 32, 32 });
-    Global::pge->SetDrawTarget(nullptr);
+    Global::game->SetDrawTarget(sprDissolve);
+    Global::game->DrawPartialSprite({ 0, 0 }, Assets::ship->Sprite(), { 32, 0 }, { 32, 32 });
+    Global::game->SetDrawTarget(nullptr);
 
     stats = Global::shipStats;
 
@@ -52,16 +54,13 @@ Ship::Ship()
 Ship::~Ship() {
     stats->takeComponentsFrom(&components);
 
-    Debug("clear upgrades");
     clearUpgrades();
 
-    Debug("clear sfx");
     if(chaThrust != -1) {
         Mix_HaltChannel(chaThrust);
         chaThrust = -1;
     }
 
-    Debug("Delete ship dissolveSpr");
     delete sprDissolve;
 }
 
@@ -110,7 +109,7 @@ void Ship::reset() {
 
 }
 
-RGNDS::Collision::Circle Ship::getCollider() {
+Physics::Collision::Circle Ship::getCollider() {
     float radius = 14.0f;
 
     if(currentShield != nullptr)
@@ -126,9 +125,9 @@ void Ship::onUpdate(float deltaTime) {
 
     if (currentShield) {
         auto list = Global::world->allShipShieldDeflectable();
-        RGNDS::Collision c;
+        Physics::Collision c;
         for(auto go : list)
-            if (RGNDS::Collision::checkCircleOnCircle(
+            if (Physics::Collision::checkCircleOnCircle(
                 getCollider(),
                 go->getColliders(),
                 &c
@@ -140,7 +139,7 @@ void Ship::onUpdate(float deltaTime) {
     else {
         auto list = Global::world->allPlayerKiller();
         for (auto go : list)
-            if (RGNDS::Collision::checkCircleOnCircle(
+            if (Physics::Collision::checkCircleOnCircle(
                 getCollider(),
                 go->getColliders()
             )) {
@@ -153,19 +152,19 @@ void Ship::onUpdate(float deltaTime) {
     
 
     // Input Rotation
-    if(Global::gameInput->held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 
-    if(Global::gameInput->held&KEYPAD_LEFT) setAngleRel(-angRes*deltaTime); 
+    if(Global::input->held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 
+    if(Global::input->held&KEYPAD_LEFT) setAngleRel(-angRes*deltaTime); 
 
     // Input Component selection
-    if(Global::gameInput->pressed&KEYPAD_X) selectedComponent--;
-    if(Global::gameInput->pressed&KEYPAD_Y) selectedComponent++;
+    if(Global::input->pressed&KEYPAD_X) selectedComponent--;
+    if(Global::input->pressed&KEYPAD_Y) selectedComponent++;
 
     int sz = selectableComponents.size()-1;
     if(selectedComponent < 0)   selectedComponent = 0;
     if(selectedComponent > sz)  selectedComponent = sz; 
 
     // Activate component with A-Key (P on the Keybaord)
-    if(sz > -1 && Global::gameInput->pressed&KEYPAD_A) {
+    if(sz > -1 && Global::input->pressed&KEYPAD_A) {
         int index = selectableComponents.at(selectedComponent);
         ShipComponent* c = components.at(index);
         if(c) {
@@ -181,7 +180,7 @@ void Ship::onUpdate(float deltaTime) {
     // Input Thrusting
     thrusting = false;
     bool allowgeneratoregen = true;
-    if(Global::gameInput->held&KEYPAD_UP) {
+    if(Global::input->held&KEYPAD_UP) {
         float consumption = stats->thrustenergyconsumption * deltaTime;
         if(!stats->generatorhalt && stats->generator >= consumption) {
             thrusting = true;
@@ -266,14 +265,14 @@ void Ship::onUpdate(float deltaTime) {
 void Ship::onDraw(olc::PixelGameEngine* pge) {
     pge->SetDrawTarget(layer_ship);
     SpaceObj::draw([this](Transform* tr) {
-        Global::pge->DrawPartialRotatedDecal(
+        Global::game->DrawPartialRotatedDecal(
             tr->pos, Assets::ship->Decal(), tr->ang,  
             {16.0f, 16.0f},
             {(1-thrusting)*32.0f, 0}, {(float)32.0f, (float)32.0f}
         );
         
         for(auto upgrade : upgrades)
-            upgrade->draw(Global::pge, *tr);
+            upgrade->draw(Global::game, *tr);
     });
     pge->SetDrawTarget(nullptr);
 

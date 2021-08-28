@@ -1,4 +1,4 @@
-#include "shipstats.h"
+#include "./shipstats.h"
 
 ShipStats::ShipStats() 
 :prototypeBullet(nullptr)

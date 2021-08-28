@@ -1,9 +1,8 @@
 #include "./bullet.h"
 #include "./asteroids.h"
 #include "./scorepopup.h"
-#include "global.h"
-
-#include "assets.h"
+#include "../engine/global.h"
+#include "../engine/assets.h"
 
 #include <SDL/SDL_mixer.h>
 
@@ -24,11 +23,11 @@ void Bullet::onUpdate(float deltaTime) {
 
         auto list = Global::world->allBulletHitable();
 
-        RGNDS::Collision c;
+        Physics::Collision c;
         
         for(auto a : list) {
-            if(RGNDS::Collision::checkCircleOnCircle(
-                (RGNDS::Collision::Circle{
+            if(Physics::Collision::checkCircleOnCircle(
+                (Physics::Collision::Circle{
                     pos.x, pos.y, radius 
                 }), a->getColliders(),
                 &c
@@ -50,7 +49,7 @@ void Bullet::onUpdate(float deltaTime) {
 void Bullet::onDraw(olc::PixelGameEngine *pge) {
     pge->SetDrawTarget(layer_shots);
     SpaceObj::draw([this](RGNDS::Transform *tr){
-        Global::pge->DrawPartialRotatedDecal(
+        Global::game->DrawPartialRotatedDecal(
                 tr->pos, Assets::bullets->Decal(), tr->ang, 
                 decalCoords.coords + decalCoords.size / 2.0f,
                 decalCoords.coords, decalCoords.size,

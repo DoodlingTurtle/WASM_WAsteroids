@@ -1,30 +1,38 @@
-#ifndef __UpgradeScreen__
-#define __UpgradeScreen__
+#pragma once
 
 #include <string>
 
-#include "scene.h"
-#include "gameobjects/ship/shipstats.h"
-#include "textmenu.h"
-#include "transform.h"
+#include "../engine/Transform.h"
+#include "../engine/ui/Textmenu.h"
+#include "../engine/Scene.h"
+
+#include "../gameobjects/ship/shipstats.h"
+
+using namespace RGNDS;
+
+class MainGameScreen;
 
 class UpgradeScreen : public Scene {
 public:
-    UpgradeScreen(
-            ShipStats*, int* score, float* game_difficulty);
+    UpgradeScreen(MainGameScreen* backscene);
     virtual ~UpgradeScreen();
 
     void onDraw(olc::PixelGameEngine*) override;
-    void onUpdate(olc::PixelGameEngine*, float) override;
+    bool onUpdate(olc::PixelGameEngine*, float) override;
+
+    Scene* nextScene() override;
 
 protected:
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
     void onEnd() override;
     
 private:
+
+    MainGameScreen* backscene;
+
     ShipStats* shipstats;
     int*       score;
-    TextMenu   selection;
+    UI::TextMenu selection;
 
     std::vector<std::string> description;
     olc::vf2d descriptionlocation;
@@ -39,5 +47,3 @@ private:
     float* game_difficulty;
 
 };
-
-#endif

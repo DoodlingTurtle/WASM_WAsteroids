@@ -1,9 +1,11 @@
-#include "shipupgrade_cannon.h"
-#include "global.h"
-#include "assets.h"
+#include "./shipupgrade_cannon.h"
+#include "../../engine/Global.h"
+#include "../../engine/Assets.h"
 
 ShipUpgrade_Cannon::ShipUpgrade_Cannon() {}
 ShipUpgrade_Cannon::~ShipUpgrade_Cannon() { }
+
+using namespace RGNDS;
 
 bool ShipUpgrade_Cannon::init(ShipStats* stats) { return true; }
 
@@ -11,7 +13,7 @@ bool ShipUpgrade_Cannon::update(
         ShipStats* stats, Ship* ship 
       , float deltaTime
 ) {
-    if(Global::gameInput->pressed&KEYPAD_R) {
+    if(Global::input->pressed&KEYPAD_R) {
         if(!stats->generatorhalt && stats->generator >= stats->shotenergyconsumption) {
 
             Bullet* b = stats->prototypeBullet->clone(ship->pos, ship->dir, std::max(0.0f, ship->moveVelocity * (ship->dir.dot(ship->getDirection()))));
@@ -25,4 +27,4 @@ bool ShipUpgrade_Cannon::update(
     return true;
 }
 
-void ShipUpgrade_Cannon::draw(olc::PixelGameEngine*, RGNDS::Transform& ship) {}
+void ShipUpgrade_Cannon::draw(olc::PixelGameEngine*, Transform& ship) {}

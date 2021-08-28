@@ -2,7 +2,7 @@
 #define WRAPAROUNDRENDERER_H
 
 #include <vector>
-#include "core/olcPixelGameEngine.h"
+#include "./engine/olcPixelGameEngine.h"
 
 class WrapAroundRenderer
 {

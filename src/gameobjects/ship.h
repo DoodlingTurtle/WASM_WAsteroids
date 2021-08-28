@@ -1,25 +1,30 @@
-#ifndef SHIP_H
-#define SHIP_H 
+#pragma once
 
 #include <vector>
 #include <SDL/SDL_mixer.h>
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/world/Object.h"
+#include "../engine/world/components/Drawable.h"
+#include "../engine/world/components/Updateable.h"
+#include "../engine/physics/Collision.h"
 
-#include "olcPixelGameEngine.h"
-#include "wraparoundrenderer.h"
-#include "gameobject.h"
-#include "gamecomponent.h"
-#include "spaceobj.h"
-#include "collision.h"
+#include "./ship/shipstats.h"
+#include "./ship/shipupgrade.h"
+#include "./ship/shipstats.h"
+#include "./ship/shipengine.h"
 
-#include "gameobjects/ship/shipstats.h"
-#include "gameobjects/ship/shipupgrade.h"
-#include "gameobjects/ship/shipstats.h"
-#include "gameobjects/ship/shipengine.h"
-
+#include "../wraparoundrenderer.h"
+#include "../spaceobj.h"
 
 class ShipUpgrade_Shield;
+using namespace RGNDS;
 
-class Ship : public GameObject, public WorldDrawable, public WorldUpdateable, public SpaceObj {
+class Ship : 
+      public GameObject
+    , public World::Drawable
+    , public World::Updateable
+    , public SpaceObj 
+{
     public:
 
         Ship();
@@ -30,7 +35,7 @@ class Ship : public GameObject, public WorldDrawable, public WorldUpdateable, pu
         void onDraw(olc::PixelGameEngine*) override;
 
         // Getters
-        RGNDS::Collision::Circle getCollider();
+        Physics::Collision::Circle getCollider();
         olc::Sprite* getSprite();  // Gets a sprite representing the ship
 
         // Upgrade related stuff
@@ -61,6 +66,3 @@ class Ship : public GameObject, public WorldDrawable, public WorldUpdateable, pu
         std::vector<int> selectableComponents;  // A list of indexes in this->components, that is invoceable bz the plazer
         int              selectedComponent;     // the currently selected component in selectableComponents
 };
-
-
-#endif // SHIP_H

@@ -1,16 +1,19 @@
-#ifndef __Asteroid_Particles_H__
-#define __Asteroid_Particles_H__
+#pragma once
 
 #include "./sprite_dissolve.h"
-#include "gameobject.h"
-#include "gamecomponent.h"
-#include "spaceobj.h"
-#include "gameobjects/asteroids.h"
+#include "../engine/world/Object.h"
+#include "../engine/world/components/Updateable.h"
+#include "../engine/world/components/Drawable.h"
+#include "../gamecomponents.h"
+#include "../spaceobj.h"
+#include "../gameobjects/asteroids.h"
+
+using namespace RGNDS;
 
 class AsteroidExplosion 
 : public SpriteDissolve
-, public WorldDrawable
-, public WorldUpdateable
+, public World::Updateable
+, public World::Drawable
 , public GameObject
 , public SpaceObj {
 public:
@@ -22,6 +25,3 @@ public:
     void onDraw(olc::PixelGameEngine*) override;
 
 } ;
-
-
-#endif

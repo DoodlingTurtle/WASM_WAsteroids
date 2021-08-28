@@ -1,12 +1,17 @@
-#include "./upgradescreen.h"
 #include <functional>
 #include <stdio.h>
 
-#include "olcPixelGameEngine.h"
-#include "global.h"
-#include "assets.h"
+#include "./upgradescreen.h"
 
-#include "gameobjects/ship/shipupgrade_shieldgenerator.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/Global.h"
+#include "../engine/Assets.h"
+
+#include "../gameobjects/ship/shipupgrade_shieldgenerator.h"
+
+#include "./maingame.h"
+
+using namespace RGNDS;
 
 #define ERROR_PRICE_TO_HIGH "You don't have enough points"
 
@@ -37,12 +42,7 @@ static const char* files[NUM_TOTAL_UPGRADES] = {
 /*=============================================================================
  * UpgradeScreen
  *===========================================================================*/
-UpgradeScreen::UpgradeScreen(
-    ShipStats* stats, 
-    int* score,
-    float* game_difficulty
-)
-:Scene(), shipstats(stats), score(score), game_difficulty(game_difficulty)
+UpgradeScreen::UpgradeScreen( MainGameScreen* backscene ) : Scene() , backscene(backscene)
 {
     selection.transform.pos.y += 200;
     selection.transform.pos.x += 8;
@@ -59,7 +59,7 @@ UpgradeScreen::UpgradeScreen(
 UpgradeScreen::~UpgradeScreen(){}
 
 
-void UpgradeScreen::onStart(){
+void UpgradeScreen::onStart(olc::PixelGameEngine* pge){
     // Shield is always available    
     upgrade_data.push_back(1);
 
@@ -104,19 +104,19 @@ void UpgradeScreen::onEnd() {
     selection.clearOptions();
 }
 
-void UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
+bool UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
-    if(Global::gameInput->pressed&KEYPAD_DOWN)
+    if(Global::input->pressed&KEYPAD_DOWN)
         selection.selectNext();
-    else if(Global::gameInput->pressed&KEYPAD_UP)
+    else if(Global::input->pressed&KEYPAD_UP)
         selection.selectPrev();
-    else if(Global::gameInput->pressed&(KEYPAD_A|KEYPAD_START))
+    else if(Global::input->pressed&(KEYPAD_A|KEYPAD_START))
     {
         int selected = upgrade_data.at(selection.selected());
-        int cost = costs[selected] * (*game_difficulty);
+        int cost = costs[selected] * (backscene->game_difficulty);
 
-        if(*score >= cost) {
-            *score -= cost;
+        if(Global::score >= cost) {
+            Global::score -= cost;
 
             switch(selected) {
                 
@@ -124,24 +124,26 @@ void UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
                     break;
 
                 case 1: // shielduses 
-                    shipstats->registerNewComponent( new ShipUpgrade_ShieldGenerator() );
+                    Global::shipStats->registerNewComponent( new ShipUpgrade_ShieldGenerator() );
                     break;
 
                 case 2: // Generator capacity 
-                    shipstats->generatorcapacity += 15;
+                    Global::shipStats->generatorcapacity += 15;
                     break;
 
                 case 3: // Generator regen
-                    shipstats->generatorrecovery *= 1.5f;
+                    Global::shipStats->generatorrecovery *= 1.5f;
                     break;
 
             }
-            exit();
+            return false;
         }
         else {
             showError = true;    
         }
     }
+
+    return true;
 }
 
 
@@ -173,7 +175,7 @@ void UpgradeScreen::onDraw(olc::PixelGameEngine* pge) {
         _printPGE(pge, { 16, 116 }, ERROR_PRICE_TO_HIGH, olc::RED);
 
     char buffer[17]{ 0 };
-    std::sprintf(buffer, "Score: % 8d", *score);
+    std::sprintf(buffer, "Score: % 8d", Global::score);
     _printPGE(pge, scorelocation, buffer,olc::Pixel(0, 80, 255), { 2.0f, 2.0f });
 
     pge->DrawStringDecal(
@@ -186,8 +188,11 @@ void UpgradeScreen::onDraw(olc::PixelGameEngine* pge) {
     std::sprintf(
             str,
             "cost: % 24d", 
-            (int)(costs[upgrade_data.at(selection.selected())] * (*game_difficulty))
+            (int)(costs[upgrade_data.at(selection.selected())] * (backscene->game_difficulty))
     );
     _printPGE(pge, costlocation, str, olc::WHITE);
    
 }
+
+Scene* UpgradeScreen::nextScene() { return backscene; }
+

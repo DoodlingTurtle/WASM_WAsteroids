@@ -1,11 +1,13 @@
-#ifndef MAINGAMESCREEN_H
-#define MAINGAMESCREEN_H
+#pragma once
 
-#include "olcPixelGameEngine.h"
-#include "scene.h"
-#include "gameobjects/asteroids.h"
-#include "gameobjects/ship.h"
-#include "particles/ship_explosion.h"
+#include "../engine/olcPixelGameEngine.h"
+
+#include "../engine/Scene.h"
+#include "../gameobjects/asteroids.h"
+#include "../gameobjects/ship.h"
+#include "../particles/ship_explosion.h"
+
+using namespace RGNDS;
 
 class MainGameScreen : public Scene {
 
@@ -20,19 +22,19 @@ public:
     MainGameScreen();
     void reset();
 
-    void onUpdate(olc::PixelGameEngine* pge, float dt) override;
+    bool onUpdate(olc::PixelGameEngine* pge, float dt) override;
     void onDraw(olc::PixelGameEngine* pge) override;
     
     float game_difficulty;        // difficulty goes from 1 to 16;
 
-    GAME_STATE getState();
+    Scene* nextScene() override;
 
 #ifdef DEBUG_BUILD
     void endLevel();
 #endif
     
 protected:
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
     void onEnd() override;
 
     GAME_STATE state;
@@ -41,5 +43,3 @@ private:
     RGNDS::Transform scorelocation;
     float scoreTimer;
 };
-
-#endif

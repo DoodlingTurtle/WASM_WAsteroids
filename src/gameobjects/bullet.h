@@ -1,13 +1,22 @@
-#ifndef __Bullet_H__
-#define __Bullet_H__
+#pragma once
 
-#include "olcPixelGameEngine.h"
-#include "bullet_modifier.h"
-#include "gameobject.h"
-#include "gamecomponent.h"
-#include "spaceobj.h"
+#include "../engine/olcPixelGameEngine.h"
+#include "../engine/world/Object.h"
+#include "../engine/world/components/Drawable.h"
+#include "../engine/world/components/Updateable.h"
 
-class Bullet : public GameObject, public WorldDrawable, public WorldUpdateable, public SpaceObj {
+#include "./bullet_modifier.h"
+#include "../gamecomponents.h"
+#include "../spaceobj.h"
+
+using namespace RGNDS;
+
+class Bullet 
+    : public GameObject
+    , public World::Drawable
+    , public World::Updateable
+    , public SpaceObj 
+{
 public:
     struct DecalRect { olc::vf2d coords, size; };
 
@@ -30,6 +39,3 @@ protected:
 
     DecalRect decalCoords;
 };
-
-#endif
-

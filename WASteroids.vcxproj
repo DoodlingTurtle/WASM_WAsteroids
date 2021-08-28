@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\sprites\record.png" />
+    <Image Include="assets\sprites\shield.png" />
+    <Image Include="assets\sprites\ship.png" />
+    <Image Include="assets\sprites\shot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="bugs.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\assets_list.hpp" />
+    <ClInclude Include="src\config.h" />
+    <ClInclude Include="src\core\DebugOverlay.h" />
+    <ClInclude Include="src\engine\Animation.h" />
+    <ClInclude Include="src\engine\animation\Strip.h" />
+    <ClInclude Include="src\engine\animation\Timeline.h" />
+    <ClInclude Include="src\engine\Assets.h" />
+    <ClInclude Include="src\engine\Engine.h" />
+    <ClInclude Include="src\engine\Global.h" />
+    <ClInclude Include="src\engine\Input.h" />
+    <ClInclude Include="src\engine\Lerp.h" />
+    <ClInclude Include="src\engine\Macros.h" />
+    <ClInclude Include="src\engine\misc\global.hpp" />
+    <ClInclude Include="src\engine\olcPixelGameEngine.h" />
+    <ClInclude Include="src\engine\physics\Collision.h" />
+    <ClInclude Include="src\engine\Scene.h" />
+    <ClInclude Include="src\engine\SpriteSheet.h" />
+    <ClInclude Include="src\engine\Transform.h" />
+    <ClInclude Include="src\engine\UI.h" />
+    <ClInclude Include="src\engine\ui\TextMenu.h" />
+    <ClInclude Include="src\engine\World.h" />
+    <ClInclude Include="src\engine\world\components\Drawable.h" />
+    <ClInclude Include="src\engine\world\components\Updateable.h" />
+    <ClInclude Include="src\engine\world\Object.h" />
+    <ClInclude Include="src\engine\world\engine.h" />
+    <ClInclude Include="src\engine\world\World.h" />
+    <ClInclude Include="src\gamecomponents.h" />
+    <ClInclude Include="src\gameobjects\asteroids.h" />
+    <ClInclude Include="src\gameobjects\bullet.h" />
+    <ClInclude Include="src\gameobjects\bullet_modifier.h" />
+    <ClInclude Include="src\gameobjects\scorepopup.h" />
+    <ClInclude Include="src\gameobjects\ship.h" />
+    <ClInclude Include="src\gameobjects\ship\shipengine.h" />
+    <ClInclude Include="src\gameobjects\ship\shipstats.h" />
+    <ClInclude Include="src\gameobjects\ship\shipupgrade.h" />
+    <ClInclude Include="src\gameobjects\ship\shipupgrade_cannon.h" />
+    <ClInclude Include="src\gameobjects\ship\shipupgrade_shield.h" />
+    <ClInclude Include="src\gameobjects\ship\shipupgrade_shieldgenerator.h" />
+    <ClInclude Include="src\gameobjects\ship\ship_component.h" />
+    <ClInclude Include="src\gameobject_attributes.hpp" />
+    <ClInclude Include="src\gameobject_components.hpp" />
+    <ClInclude Include="src\global.hpp" />
+    <ClInclude Include="src\particles.h" />
+    <ClInclude Include="src\particles\asteroid_particles.h" />
+    <ClInclude Include="src\particles\ship_explosion.h" />
+    <ClInclude Include="src\particles\spaceobj_emitter.h" />
+    <ClInclude Include="src\particles\sprite_dissolve.h" />
+    <ClInclude Include="src\scenes\gameoverscreen.h" />
+    <ClInclude Include="src\scenes\loadscreen.h" />
+    <ClInclude Include="src\scenes\maingame.h" />
+    <ClInclude Include="src\scenes\pausescreen.h" />
+    <ClInclude Include="src\scenes\soundtest.h" />
+    <ClInclude Include="src\scenes\textscene.h" />
+    <ClInclude Include="src\scenes\titlescreen.h" />
+    <ClInclude Include="src\scenes\upgradescreen.h" />
+    <ClInclude Include="src\spaceobj.h" />
+    <ClInclude Include="src\wraparoundrenderer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\config.cpp" />
+    <ClCompile Include="src\core\DebugOverlay.cpp" />
+    <ClCompile Include="src\engine\animation\animation.cpp" />
+    <ClCompile Include="src\engine\misc\Assets.cpp" />
+    <ClCompile Include="src\engine\misc\Game.cpp" />
+    <ClCompile Include="src\engine\misc\Input.cpp" />
+    <ClCompile Include="src\engine\misc\pge_module.cpp" />
+    <ClCompile Include="src\engine\misc\Scene.cpp" />
+    <ClCompile Include="src\engine\misc\SpriteSheet.cpp" />
+    <ClCompile Include="src\engine\misc\transform.cpp" />
+    <ClCompile Include="src\engine\physics\physics.cpp" />
+    <ClCompile Include="src\engine\ui\ui.cpp" />
+    <ClCompile Include="src\engine\world\world.cpp" />
+    <ClCompile Include="src\gameobjects\asteroids.cpp" />
+    <ClCompile Include="src\gameobjects\bullet.cpp" />
+    <ClCompile Include="src\gameobjects\scorepopup.cpp" />
+    <ClCompile Include="src\gameobjects\ship.cpp" />
+    <ClCompile Include="src\gameobjects\ship\shipengine.cpp" />
+    <ClCompile Include="src\gameobjects\ship\shipstats.cpp" />
+    <ClCompile Include="src\gameobjects\ship\shipupgrade_cannon.cpp" />
+    <ClCompile Include="src\gameobjects\ship\shipupgrade_shield.cpp" />
+    <ClCompile Include="src\gameobjects\ship\shipupgrade_shieldgenerator.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\particles\asteroid_particles.cpp" />
+    <ClCompile Include="src\particles\ship_explosion.cpp" />
+    <ClCompile Include="src\particles\sprite_dissolve.cpp" />
+    <ClCompile Include="src\scenes\gameoverscreen.cpp" />
+    <ClCompile Include="src\scenes\loadscreen.cpp" />
+    <ClCompile Include="src\scenes\maingame.cpp" />
+    <ClCompile Include="src\scenes\pausescreen.cpp" />
+    <ClCompile Include="src\scenes\soundtest.cpp" />
+    <ClCompile Include="src\scenes\textscene.cpp" />
+    <ClCompile Include="src\scenes\titlescreen.cpp" />
+    <ClCompile Include="src\scenes\upgradescreen.cpp" />
+    <ClCompile Include="src\spaceobj.cpp" />
+    <ClCompile Include="src\wraparoundrenderer.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{2C21D0A4-53FE-43BF-B89A-6995A197DCAA}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+    <IntDir>$(Platform)\tmp\</IntDir>
+    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\core;C:\Users\DT\DEV\2_libs\c++\SDL_mixer_1.2\include;C:\Users\DT\DEV\2_libs\c++\SDL-1.2.15\include\SDL;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+    <IntDir>$(Platform)\tmp</IntDir>
+    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\core;C:\Users\DT\DEV\2_libs\c++\SDL_mixer_1.2\include;C:\Users\DT\DEV\2_libs\c++\SDL-1.2.15\include\SDL;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <AdditionalDependencies>C:\Users\DT\DEV\2_libs\c++\SDL-1.2.15\lib\x64\SDL.lib;C:\Users\DT\DEV\2_libs\c++\SDL-1.2.15\lib\x64\SDLmain.lib;C:\Users\DT\DEV\2_libs\c++\SDL_mixer_1.2\lib\x64\SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/DDEBUG_BUILD %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalDependencies>C:\Users\DT\DEV\2_libs\c++\SDL-1.2.15\lib\x64\SDL.lib;C:\Users\DT\DEV\2_libs\c++\SDL-1.2.15\lib\x64\SDLmain.lib;C:\Users\DT\DEV\2_libs\c++\SDL_mixer_1.2\lib\x64\SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

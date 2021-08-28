@@ -1,16 +1,17 @@
-#ifndef __ShipUpgrade_Shield_H__
-#define __ShipUpgrade_Shield_H__
+#pragma once
 
 #include <SDL/SDL_mixer.h>
 
-#include "transform.h"
-#include "collision.h"
+#include "../../engine/Transform.h"
+#include "../../engine/physics/Collision.h"
 
-#include "gameobjects/asteroids.h"
-#include "gameobjects/ship.h"
+#include "./gameobjects/asteroids.h"
+#include "./gameobjects/ship.h"
 
 #include "./shipstats.h"
 #include "./shipupgrade.h"
+
+using namespace RGNDS;
 
 class ShipUpgrade_Shield: public ShipUpgrade 
 {
@@ -20,7 +21,7 @@ public:
 
     bool init(ShipStats *shipstats) override;
 
-    void draw(olc::PixelGameEngine*, RGNDS::Transform& ship) override;
+    void draw(olc::PixelGameEngine*, Transform& ship) override;
     bool update(
             ShipStats* shipstats, Ship* ship 
           , float deltaTime
@@ -28,7 +29,7 @@ public:
 
     virtual float getRadius();
 
-    void gotHit( Asteroid*, Ship* s, RGNDS::Collision*);
+    void gotHit( Asteroid*, Ship* s, Physics::Collision*);
 
     static void init(olc::PixelGameEngine* pge);
     static void deinit();
@@ -39,5 +40,3 @@ private:
     double ang; 
     float rotspeed;
 };
-
-#endif

@@ -1,27 +1,24 @@
-#ifndef __GameOverScreen_H__
-#define __GameOverScreen_H__
+#pragma once
 
-#include "scene.h"
-#include "transform.h"
+#include "../engine/Transform.h"
+#include "../engine/Lerp.h"
+#include "../engine/Animation.h"
+#include "../engine/Scene.h"
 
-//#include "animation.h"
+using namespace RGNDS;
 
 class GameOverScreen : public Scene {
 public:
-    void onUpdate(olc::PixelGameEngine*, float) override;
+    bool onUpdate(olc::PixelGameEngine*, float) override;
     void onDraw(olc::PixelGameEngine* pge) override;
+
+    Scene* nextScene() override;
 
 protected:
     void onEnd() override;
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
 
 private:
-    olc::vf2d scoreStartLocation;
     olc::vf2d scoreLocation;
-    olc::vf2d scoreTargetLocation;
-
-    float playhead;
-    float playtime;
+    RGNDS::Animation::Timeline timeline;
 };
-
-#endif

@@ -1,8 +1,10 @@
 #include "./shipupgrade_shield.h"
 #include "./shipstats.h"
 
-#include "config.h"
-#include "assets.h"
+#include "../../config.h"
+#include "../../engine/Assets.h"
+
+using namespace RGNDS;
 
 // Init statics
 void ShipUpgrade_Shield::init(olc::PixelGameEngine* pge) {}
@@ -45,7 +47,7 @@ bool ShipUpgrade_Shield::update(
 
 void ShipUpgrade_Shield::draw(
         olc::PixelGameEngine* pge, 
-        RGNDS::Transform& ship
+        Transform& ship
 ) {
     unsigned char r=8, g=31, b=31;
 
@@ -59,7 +61,7 @@ void ShipUpgrade_Shield::draw(
 }
 
 // Methods
-void ShipUpgrade_Shield::gotHit( Asteroid* a, Ship* s, RGNDS::Collision* c) {
+void ShipUpgrade_Shield::gotHit( Asteroid* a, Ship* s, Physics::Collision* c) {
 
     // Get needed variables
     olc::vf2d invHit = c->overlapDir * (-1.0f);
