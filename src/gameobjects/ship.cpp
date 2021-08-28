@@ -30,11 +30,11 @@ Ship::Ship()
   , selectedComponent(0)
 {
     sprDissolve = new olc::Sprite(32, 32);
-    Global::pge->SetDrawTarget(sprDissolve);
-    Global::pge->DrawPartialSprite({ 0, 0 }, Assets::ship->Sprite(), { 32, 0 }, { 32, 32 });
-    Global::pge->SetDrawTarget(nullptr);
+    Global::game->SetDrawTarget(sprDissolve);
+    Global::game->DrawPartialSprite({ 0, 0 }, Assets::ship->Sprite(), { 32, 0 }, { 32, 32 });
+    Global::game->SetDrawTarget(nullptr);
 
-    stats = &Global::shipStats;
+    stats = Global::shipStats;
 
     reset();
 
@@ -54,16 +54,13 @@ Ship::Ship()
 Ship::~Ship() {
     stats->takeComponentsFrom(&components);
 
-    Debug("clear upgrades");
     clearUpgrades();
 
-    Debug("clear sfx");
     if(chaThrust != -1) {
         Mix_HaltChannel(chaThrust);
         chaThrust = -1;
     }
 
-    Debug("Delete ship dissolveSpr");
     delete sprDissolve;
 }
 
@@ -127,7 +124,7 @@ void Ship::onUpdate(float deltaTime) {
 //TODO: change to ship_killer
 
     if (currentShield) {
-        auto list = Global::world.allShipShieldDeflectable();
+        auto list = Global::world->allShipShieldDeflectable();
         Physics::Collision c;
         for(auto go : list)
             if (Physics::Collision::checkCircleOnCircle(
@@ -140,14 +137,14 @@ void Ship::onUpdate(float deltaTime) {
             }
     }
     else {
-        auto list = Global::world.allPlayerKiller();
+        auto list = Global::world->allPlayerKiller();
         for (auto go : list)
             if (Physics::Collision::checkCircleOnCircle(
                 getCollider(),
                 go->getColliders()
             )) {
                 Mix_PlayChannel(-1, Assets::shipExplode, 0);
-                Global::world.addGameObject(new ShipExplosion(this));
+                Global::world->addGameObject(new ShipExplosion(this));
                 assignAttribute(GameObject::DEAD);
                 return;
             }
@@ -155,19 +152,19 @@ void Ship::onUpdate(float deltaTime) {
     
 
     // Input Rotation
-    if(Global::input.held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 
-    if(Global::input.held&KEYPAD_LEFT) setAngleRel(-angRes*deltaTime); 
+    if(Global::input->held&KEYPAD_RIGHT) setAngleRel(angRes*deltaTime); 
+    if(Global::input->held&KEYPAD_LEFT) setAngleRel(-angRes*deltaTime); 
 
     // Input Component selection
-    if(Global::input.pressed&KEYPAD_X) selectedComponent--;
-    if(Global::input.pressed&KEYPAD_Y) selectedComponent++;
+    if(Global::input->pressed&KEYPAD_X) selectedComponent--;
+    if(Global::input->pressed&KEYPAD_Y) selectedComponent++;
 
     int sz = selectableComponents.size()-1;
     if(selectedComponent < 0)   selectedComponent = 0;
     if(selectedComponent > sz)  selectedComponent = sz; 
 
     // Activate component with A-Key (P on the Keybaord)
-    if(sz > -1 && Global::input.pressed&KEYPAD_A) {
+    if(sz > -1 && Global::input->pressed&KEYPAD_A) {
         int index = selectableComponents.at(selectedComponent);
         ShipComponent* c = components.at(index);
         if(c) {
@@ -183,7 +180,7 @@ void Ship::onUpdate(float deltaTime) {
     // Input Thrusting
     thrusting = false;
     bool allowgeneratoregen = true;
-    if(Global::input.held&KEYPAD_UP) {
+    if(Global::input->held&KEYPAD_UP) {
         float consumption = stats->thrustenergyconsumption * deltaTime;
         if(!stats->generatorhalt && stats->generator >= consumption) {
             thrusting = true;
@@ -268,14 +265,14 @@ void Ship::onUpdate(float deltaTime) {
 void Ship::onDraw(olc::PixelGameEngine* pge) {
     pge->SetDrawTarget(layer_ship);
     SpaceObj::draw([this](Transform* tr) {
-        Global::pge->DrawPartialRotatedDecal(
+        Global::game->DrawPartialRotatedDecal(
             tr->pos, Assets::ship->Decal(), tr->ang,  
             {16.0f, 16.0f},
             {(1-thrusting)*32.0f, 0}, {(float)32.0f, (float)32.0f}
         );
         
         for(auto upgrade : upgrades)
-            upgrade->draw(Global::pge, *tr);
+            upgrade->draw(Global::game, *tr);
     });
     pge->SetDrawTarget(nullptr);
 

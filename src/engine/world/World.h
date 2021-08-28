@@ -57,7 +57,7 @@ namespace RGNDS {
 #define REGISTER_GO_COMPONENT(T) std::unordered_set<T*> map_##T;
 #include "gameobject_components.hpp"
 
-		std::unordered_set<GameObject*> new_obj;
+		std::vector<GameObject*> new_obj;
 
 		void _addGameObject(GameObject*);
 		void moveNew();

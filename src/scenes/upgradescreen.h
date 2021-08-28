@@ -10,9 +10,11 @@
 
 using namespace RGNDS;
 
+class MainGameScreen;
+
 class UpgradeScreen : public Scene {
 public:
-    UpgradeScreen( ShipStats*, int* score, float* game_difficulty );
+    UpgradeScreen(MainGameScreen* backscene);
     virtual ~UpgradeScreen();
 
     void onDraw(olc::PixelGameEngine*) override;
@@ -21,10 +23,13 @@ public:
     Scene* nextScene() override;
 
 protected:
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
     void onEnd() override;
     
 private:
+
+    MainGameScreen* backscene;
+
     ShipStats* shipstats;
     int*       score;
     UI::TextMenu selection;

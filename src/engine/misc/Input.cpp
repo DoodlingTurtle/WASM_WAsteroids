@@ -1,4 +1,5 @@
 #include "../Input.h"
+#include "../Global.h"
 
 namespace RGNDS {
 
@@ -17,13 +18,14 @@ namespace RGNDS {
         olc::ENTER
     };
 
-    Input::Input(olc::PixelGameEngine* pge)
-        :pge(pge), keys_held(0), keys_last_held(0),
-        keys_pressed(0), keys_released(0)
+    Input::Input()
+        :keys_held(0), keys_last_held(0),
+        keys_pressed(0), keys_released(0), 
+        held(0), pressed(0), released(0)
     {}
     Input::~Input() {}
 
-    void Input::updateInputs() {
+    void Input::updateInputs(olc::PixelGameEngine* pge) {
 
         unsigned int key = 0;
         for (int a = 0; a < NUM_KEYS; a++)
@@ -39,7 +41,5 @@ namespace RGNDS {
         pressed = keys_pressed;
         released = keys_released;
         held = keys_held;
-
     }
-
 }

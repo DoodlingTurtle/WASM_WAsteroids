@@ -35,9 +35,8 @@ public:
     //creation
     Asteroid();
     ~Asteroid();
-    void generateShape();
     void bringBackToLife(
-        olc::vf2d pos, bool generateNewShape, 
+        olc::vf2d pos, olc::PixelGameEngine* pge, 
         SIZES size,
         olc::vf2d direction = {0, 0},
         float velocity = -1 

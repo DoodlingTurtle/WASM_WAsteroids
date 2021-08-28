@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\assets_list.hpp" />
+    <ClInclude Include="src\config.h" />
     <ClInclude Include="src\core\DebugOverlay.h" />
     <ClInclude Include="src\engine\Animation.h" />
     <ClInclude Include="src\engine\animation\Strip.h" />
@@ -94,7 +95,6 @@
     <ClCompile Include="src\engine\animation\animation.cpp" />
     <ClCompile Include="src\engine\misc\Assets.cpp" />
     <ClCompile Include="src\engine\misc\Game.cpp" />
-    <ClCompile Include="src\engine\misc\global.cpp" />
     <ClCompile Include="src\engine\misc\Input.cpp" />
     <ClCompile Include="src\engine\misc\pge_module.cpp" />
     <ClCompile Include="src\engine\misc\Scene.cpp" />

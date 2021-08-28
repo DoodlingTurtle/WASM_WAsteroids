@@ -25,7 +25,7 @@ void SoundTest::Sound::play() {
     }
 }
 
-void SoundTest::onStart() {
+void SoundTest::onStart(olc::PixelGameEngine* pge) {
     for(int a = 0; a < CNT_SNDS; a++)
         menu.addOption(sounds[a].label);
 }
@@ -37,13 +37,13 @@ void SoundTest::onEnd() {
 }
 
 bool SoundTest::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    if(Global::input.pressed&KEYPAD_DOWN)
+    if(Global::input->pressed&KEYPAD_DOWN)
         menu.selectNext();
         
-    if(Global::input.pressed&KEYPAD_UP)
+    if(Global::input->pressed&KEYPAD_UP)
         menu.selectPrev();
 
-    if(Global::input.pressed&KEYPAD_A) {
+    if(Global::input->pressed&KEYPAD_A) {
         Mix_HaltMusic();
         Mix_HaltChannel(-1);
         int p = menu.selected();

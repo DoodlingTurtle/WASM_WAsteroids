@@ -16,7 +16,7 @@ public:
 
 protected:
     void onEnd() override;
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
 
 private:
     olc::vf2d scoreLocation;

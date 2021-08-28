@@ -15,9 +15,8 @@
 #define REGISTER_GLOBAL(type, name, defaultValue) /* to keep the diagnostics happy */
 #endif
 
-REGISTER_GLOBAL(olc::PixelGameEngine*, pge         , nullptr     )
-REGISTER_GLOBAL(ShipStats            , shipStats   , ShipStats() )
-REGISTER_GLOBAL(ScreenLayout*        , layout      , &screenLayouts[0])
+REGISTER_GLOBAL(ShipStats*           , shipStats   , nullptr     )
+REGISTER_GLOBAL(ScreenLayout*        , layout      , nullptr     )
 REGISTER_GLOBAL(Mix_Music*           , bgMusic     , nullptr     )
 REGISTER_GLOBAL(int                  , score       , 0           )
 REGISTER_GLOBAL(int                  , recordScore , 0           )

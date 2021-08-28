@@ -7,10 +7,11 @@ namespace RGNDS {
 
 	class Game : public olc::PixelGameEngine {
 	public:
-		Game();
+
+		Game(Scene* startScene);
 		~Game();
-		bool OnUserCreate() override;
-		bool OnUserUpdate(float fElapsedTime) override;
+
+		virtual bool OnUserUpdate(float fElapsedTime) override;
 
 		void pause();
 		void resume();

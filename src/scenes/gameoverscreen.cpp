@@ -6,8 +6,9 @@
 #include "../core/DebugOverlay.h"
 
 #include "./titlescreen.h"
+#include "../config.h"
 
-void GameOverScreen::onStart() { 
+void GameOverScreen::onStart(olc::PixelGameEngine* pge) { 
     scoreLocation = { 117, 5 };
 
     //TODO: Reimplement with new Engine
@@ -32,7 +33,7 @@ void GameOverScreen::onStart() {
 	DebugOverlay* overlay = new DebugOverlay();
 	overlay->addItem("RecordScore", DebugOverlay::TYPE_INT, &Global::recordScore);
 	overlay->addItem("RecordLevel", DebugOverlay::TYPE_INT, &Global::recordLevel);
-	Global::world.addGameObject(overlay);
+	Global::world->addGameObject(overlay);
 #endif
 
 }
@@ -42,14 +43,14 @@ void GameOverScreen::onEnd() {
     Global::recordLevel = std::max(Global::recordLevel, Global::level);
     Global::recordScore = std::max(Global::recordScore, Global::score);
 
-    Global::world.removeWithAttribute(GameObject::DEBUG);
+    Global::world->removeWithAttribute(GameObject::DEBUG);
     
-    Global::switchBGMusic(Assets::bgmMenu);
+    switchBGMusic(Assets::bgmMenu);
 
 }
 
 bool GameOverScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    if (Global::input.released & KEYPAD_A)
+    if (Global::input->released & KEYPAD_A)
         return false;
 
     timeline.onUpdate(deltaTime);

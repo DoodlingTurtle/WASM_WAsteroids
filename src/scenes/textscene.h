@@ -18,7 +18,7 @@ public:
     Scene* nextScene() override;
 
 protected:
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
     void onEnd() override;
 
 

@@ -21,7 +21,7 @@ void Bullet::onUpdate(float deltaTime) {
     else {
         updatePosition(deltaTime);
 
-        auto list = Global::world.allBulletHitable();
+        auto list = Global::world->allBulletHitable();
 
         Physics::Collision c;
         
@@ -39,7 +39,7 @@ void Bullet::onUpdate(float deltaTime) {
                     score = m->updateScore(score, this);
 
                 Global::score += score;
-                Global::world.addGameObject(new ScorePopup(score, pos.x, pos.y));
+                Global::world->addGameObject(new ScorePopup(score, pos.x, pos.y));
                 assignAttribute(GameObject::DEAD);
             }
         }
@@ -49,7 +49,7 @@ void Bullet::onUpdate(float deltaTime) {
 void Bullet::onDraw(olc::PixelGameEngine *pge) {
     pge->SetDrawTarget(layer_shots);
     SpaceObj::draw([this](RGNDS::Transform *tr){
-        Global::pge->DrawPartialRotatedDecal(
+        Global::game->DrawPartialRotatedDecal(
                 tr->pos, Assets::bullets->Decal(), tr->ang, 
                 decalCoords.coords + decalCoords.size / 2.0f,
                 decalCoords.coords, decalCoords.size,

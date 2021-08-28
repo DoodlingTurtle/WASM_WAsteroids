@@ -19,7 +19,7 @@ public:
     int selectedMenu();
 
 protected:
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
     void onEnd() override;
 
 private:

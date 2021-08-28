@@ -31,3 +31,8 @@ ScreenLayout screenLayouts[2] = {
     { "Desktop"  ,640     ,360     ,2       ,{64, 48}   ,4.0f    ,{32, 216}    ,{430,  4}     ,{210, 18}     ,{640,   4}     ,{ 0, 18}      ,{ 384, 348 } ,{192, -12} }
 };
 
+void switchBGMusic(Mix_Music* asset) {
+	Mix_HaltMusic();
+	if (asset) Mix_PlayMusic(asset, -1);
+}
+

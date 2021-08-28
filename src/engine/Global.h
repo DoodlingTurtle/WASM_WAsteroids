@@ -14,12 +14,9 @@ namespace RGNDS {
     class Global {
     public:
 
-
-        inline static Game game;
 #define REGISTER_GLOBAL(t, e, v) inline static t e = v;
 #include "./misc/global.hpp"
 #include "../global.hpp"
 
-        static void switchBGMusic(Mix_Music* asset);
     };
 }

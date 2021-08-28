@@ -14,7 +14,7 @@ public:
 
     bool onUpdate(olc::PixelGameEngine* pge, float deltaTime) override;
     void onDraw(olc::PixelGameEngine* pge) override;
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
     void onEnd() override;
 
     Scene* nextScene() override;

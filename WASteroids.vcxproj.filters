@@ -252,6 +252,9 @@
     <ClInclude Include="src\engine\Input.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\config.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\animation\animation.cpp">
@@ -259,9 +262,6 @@
     </ClCompile>
     <ClCompile Include="src\engine\world\world.cpp">
       <Filter>Source Files\engine\world</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\misc\global.cpp">
-      <Filter>Source Files\engine\misc</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\misc\pge_module.cpp">
       <Filter>Source Files\engine\misc</Filter>

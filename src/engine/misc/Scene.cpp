@@ -7,7 +7,7 @@ namespace RGNDS {
 
 
 	// Event handler overrideables
-	void Scene::onStart() {}
+	void Scene::onStart(olc::PixelGameEngine* pge) {}
 	bool Scene::onUpdate(olc::PixelGameEngine* pge, float dt) { return false; }
 	void Scene::onDraw(olc::PixelGameEngine* pge) {}
 	void Scene::onEnd() {}

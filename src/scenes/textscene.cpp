@@ -2,6 +2,9 @@
 
 #include "../engine/Global.h"
 #include "../engine/Assets.h"
+
+#include "./titlescreen.h"
+
 using namespace RGNDS;
 
 TextScene::TextScene(std::string assetFileName) 
@@ -13,7 +16,7 @@ TextScene::TextScene(std::string assetFileName)
 
 TextScene::~TextScene() {}
 
-void TextScene::onStart() { 
+void TextScene::onStart(olc::PixelGameEngine* pge) { 
     text = Assets::loadText(fileName); 
     help_position = Global::layout->help_position;
     help_text     = "P = go back";
@@ -21,8 +24,10 @@ void TextScene::onStart() {
 void TextScene::onEnd() { text = ""; help_text = ""; }
 
 bool TextScene::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    if (Global::input.pressed & (KEYPAD_A))
+    if (Global::input->pressed & (KEYPAD_A))
         return false;
+
+    return true;
 }
 
 void TextScene::onDraw(olc::PixelGameEngine* pge) {
@@ -31,8 +36,7 @@ void TextScene::onDraw(olc::PixelGameEngine* pge) {
 }
 
 Scene* TextScene::nextScene() {
-    return nullptr;
-    //TODO: replace with propper content
+    return new TitleScreen();
 }
 
 

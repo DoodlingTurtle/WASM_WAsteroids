@@ -1,5 +1,6 @@
 #include "./World.h"
 #include "./Object.h"
+#include "../Macros.h"
 
 namespace RGNDS {
 	/*==============================================================================
@@ -37,7 +38,7 @@ namespace RGNDS {
 	 *============================================================================*/
 	GameWorld::GameWorld() {
 
-		new_obj = std::unordered_set<GameObject*>();
+		new_obj = std::vector<GameObject*>();
 
 		attribute_maps.emplace(GameObject::ALL, std::unordered_set<GameObject*>());
 
@@ -55,7 +56,11 @@ namespace RGNDS {
 	GameWorld::~GameWorld() {
 		auto list = attribute_maps[GameObject::ALL];
 		for (auto go : list)
-			if (go->persistent)
+			if (!go->persistent)
+				delete go;
+
+		for (auto go : new_obj)
+			if (!go->persistent)
 				delete go;
 	}
 
@@ -68,12 +73,15 @@ namespace RGNDS {
 	}
 
 	void GameWorld::addGameObject(GameObject* go) {
-		new_obj.emplace(go);
+		new_obj.push_back(go);
 	}
 
 	void GameWorld::moveNew() {
+		if (new_obj.size() > 0) Debug("Add " << new_obj.size() << " GO(s)");
 		for (auto go : new_obj)
 			_addGameObject(go);
+		
+		new_obj.clear();
 	}
 
 	template <typename T>

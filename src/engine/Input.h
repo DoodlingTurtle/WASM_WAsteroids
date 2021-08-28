@@ -23,17 +23,14 @@ namespace RGNDS {
 
     class Input {
     public:
-        Input(olc::PixelGameEngine*);
+        Input();
         virtual ~Input();
 
-        void updateInputs();
+        void updateInputs(olc::PixelGameEngine* pge);
 
         unsigned int pressed;
         unsigned int released;
         unsigned int held;
-
-    protected:
-        olc::PixelGameEngine* pge;
 
     private:
         static olc::Key keyMap[NUM_KEYS];

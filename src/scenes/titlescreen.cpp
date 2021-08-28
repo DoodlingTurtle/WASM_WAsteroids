@@ -5,6 +5,10 @@
 #include "../config.h"
 #include "../gameobjects/asteroids.h"
 
+#include "./soundtest.h"
+#include "./textscene.h"
+#include "./maingame.h"
+
 using namespace RGNDS;
 
 TitleScreen::TitleScreen() 
@@ -19,28 +23,31 @@ TitleScreen::TitleScreen()
     menu.addOption("new game");
     menu.addOption("help");
     menu.addOption("credits");
+    menu.addOption("quit");
 #ifdef DEBUG_BUILD
     menu.addOption("sound test");
 #endif
 }
 
-void TitleScreen::onStart() {
-    Global::world.removeWithAttribute(GameObject::ALL);    
+void TitleScreen::onStart(olc::PixelGameEngine* pge) {
+    Global::world->removeWithAttribute(GameObject::ALL);    
     Asteroid::spawn(5);
 }
 
 bool TitleScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
-    if (Global::input.pressed & KEYPAD_DOWN)
+
+    if (Global::input->pressed & KEYPAD_DOWN)
         menu.selectNext();
-    else if (Global::input.pressed & KEYPAD_UP)
+    else if (Global::input->pressed & KEYPAD_UP)
         menu.selectPrev();
-    else if (Global::input.pressed & (KEYPAD_A))
+    else if (Global::input->pressed & (KEYPAD_A))
         return false;
 
     return true;
 }
 
 void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
+
 
     pge->DrawString(Global::layout->titleScreen_title_placement, "WASteroids", olc::WHITE, Global::layout->titleScreen_title_scale);
     pge->FillRect(
@@ -56,11 +63,18 @@ void TitleScreen::onDraw(olc::PixelGameEngine* pge) {
     pge->DrawString(help_placement, help_text);
     
 }
-void TitleScreen::onEnd() { Global::world.removeWithAttribute(GameObject::ALL); }
+void TitleScreen::onEnd() { Global::world->removeWithAttribute(GameObject::ALL); }
 
 int TitleScreen::selectedMenu(){ return menu.selected(); }
 
 Scene* TitleScreen::nextScene() {
+    switch (menu.selected()) {
+    case 0: return new MainGameScreen(); break;
+    case 1: return new TextScene("help.txt"); break;
+    case 2: return new TextScene("credits.txt"); break;
+    case 3: return nullptr; break;
+    case 4: return new SoundTest(); break;
+    }
+
     return nullptr;
-    //TODO: change output based on selected menu entry
 }

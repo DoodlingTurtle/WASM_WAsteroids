@@ -17,7 +17,7 @@ namespace RGNDS {
 
 		virtual Scene* nextScene() = 0;
 
-		virtual void onStart();
+		virtual void onStart(olc::PixelGameEngine* pge);
 		virtual void onEnd();
 
 	protected:

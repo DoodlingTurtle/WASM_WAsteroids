@@ -4,6 +4,8 @@
 
 #include "../scenes/titlescreen.h"
 
+#include "../config.h"
+
 using namespace RGNDS;
 
 LoadScreen::LoadScreen()
@@ -13,7 +15,7 @@ LoadScreen::LoadScreen()
 LoadScreen::~LoadScreen() {}
 
 bool LoadScreen::onUpdate(olc::PixelGameEngine *pge, float deltaTime){
-    return !Assets::init(&msg); 
+   return !Assets::init(&msg); 
 }
 
 void LoadScreen::onDraw(olc::PixelGameEngine *pge) {
@@ -22,7 +24,7 @@ void LoadScreen::onDraw(olc::PixelGameEngine *pge) {
 
 void LoadScreen::onEnd() { 
     Assets::record->setup({ 72, 12 }, 30.0f);
-    Global::switchBGMusic(Assets::bgmMenu);
+    switchBGMusic(Assets::bgmMenu);
 };
 
 Scene* LoadScreen::nextScene() { return new TitleScreen(); }

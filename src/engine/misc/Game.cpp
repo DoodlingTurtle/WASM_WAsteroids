@@ -4,53 +4,61 @@
 #include <ctime>
 
 #include "../Global.h"
+#include "../world/World.h"
+#include "../Input.h"
 
 namespace RGNDS {
 	/*==============================================================================
 	 * Game
 	 *============================================================================*/
 
-	Game::Game()
-		: olc::PixelGameEngine(), currentScene(nullptr)
+	Game::Game( Scene* startScene)
+		:olc::PixelGameEngine(), currentScene(startScene), paused(false)
 	{
 		// Initialize functions
 		srand(time(nullptr));
+		Global::game = this;
+		Global::world = new GameWorld();
+		Global::input = new Input();
 
-		paused = false;
 	}
 
 	Game::~Game() {
 		if (currentScene && !currentScene->persistent)
 			delete currentScene;
+
+		Global::game = nullptr;
+		delete Global::world;
+		delete Global::input;
 	}
 
 	void Game::pause() { paused = true; }
 	void Game::resume() { paused = false; }
 
-	bool Game::OnUserCreate() { return true; }
 	bool Game::OnUserUpdate(float fElapsedTime) {
 
-        Global::input.updateInputs();
+        Global::input->updateInputs(this);
 
 		if (currentScene != nullptr) {
-
-			if(!paused) {
-				Global::world.moveNew();
-
-				for (auto go : Global::world.allUpdateable())
+			if (!paused) {
+				Global::world->moveNew();
+				for (auto go : Global::world->allUpdateable())
 					go->onUpdate(fElapsedTime);
+			}
 
-				// Remove Dead GOs
-				for (auto go : Global::world.findByAttribute(GameObject::DEAD))
-					Global::world.removeGameObject(go);
+			bool draw = currentScene->onUpdate(this, fElapsedTime);
+
+			if (!paused){
+				for (auto go : Global::world->findByAttribute(GameObject::DEAD))
+					Global::world->removeGameObject(go);
 			}
 
 			// if the scene is activate after the logic update
-			if (currentScene->onUpdate(this, fElapsedTime)) {
+			if (draw) {
 				Clear(olc::BLANK);
 
 				// Draw World
-				for (auto go : Global::world.allDrawable())
+				for (auto go : Global::world->allDrawable())
 					go->onDraw(this);
 
 				// Draw Scene
@@ -65,11 +73,12 @@ namespace RGNDS {
 
 				currentScene = s;
 				if (currentScene)
-					currentScene->onStart();
+					currentScene->onStart(this);
 				else
 					return false;
 			}
 
+			// Remove Dead GOs
 		}
 
 		return true;

@@ -27,8 +27,6 @@ public:
     
     float game_difficulty;        // difficulty goes from 1 to 16;
 
-    GAME_STATE getState();
-
     Scene* nextScene() override;
 
 #ifdef DEBUG_BUILD
@@ -36,7 +34,7 @@ public:
 #endif
     
 protected:
-    void onStart() override;
+    void onStart(olc::PixelGameEngine*) override;
     void onEnd() override;
 
     GAME_STATE state;
