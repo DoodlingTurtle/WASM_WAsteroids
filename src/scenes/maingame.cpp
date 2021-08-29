@@ -14,13 +14,17 @@
 using namespace RGNDS;
 
 MainGameScreen::MainGameScreen() 
-    : state(STATE_LOST), game_difficulty(0.0f), scoreTimer(0.0f)
+    : state(MainGameScreen::STATE_LOST), game_difficulty(0.0f), scoreTimer(0.0f)
 { 
 // setup the scoreboard
     scorelocation.pos = { 5.0f, 5.0f };
     scorelocation.scale = 2;
 
     switchBGMusic(Assets::bgmGame);
+
+    Global::shipStats->resetToLV1();
+    Global::level = 0;
+    Global::score = 0;
 }
 
 #ifdef DEBUG_BUILD
@@ -30,6 +34,7 @@ void MainGameScreen::endLevel() { state = MainGameScreen::STATE_WON; }
 void MainGameScreen::onStart(olc::PixelGameEngine* pge) {
     if(state != MainGameScreen::STATE_RUNNING) {
         game_difficulty += 1.0f;
+        Global::level++;
 
         if(game_difficulty>16.0f)
             game_difficulty = 16.0f;

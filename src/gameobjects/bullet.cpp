@@ -1,7 +1,7 @@
 #include "./bullet.h"
 #include "./asteroids.h"
 #include "./scorepopup.h"
-#include "../engine/global.h"
+#include "../engine/Global.h"
 #include "../engine/Assets.h"
 
 #include <SDL/SDL_mixer.h>

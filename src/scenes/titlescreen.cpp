@@ -23,7 +23,9 @@ TitleScreen::TitleScreen()
     menu.addOption("new game");
     menu.addOption("help");
     menu.addOption("credits");
+#ifndef OLC_PLATFORM_EMSCRIPTEN
     menu.addOption("quit");
+#endif
 #ifdef DEBUG_BUILD
     menu.addOption("sound test");
 #endif
