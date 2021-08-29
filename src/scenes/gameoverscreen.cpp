@@ -3,7 +3,7 @@
 
 #include "../engine/Global.h"
 #include "../engine/Assets.h"
-#include "../core/DebugOverlay.h"
+#include "../engine/ui/DebugOverlay.h"
 
 #include "./titlescreen.h"
 #include "../config.h"
@@ -59,9 +59,9 @@ void GameOverScreen::onStart(olc::PixelGameEngine* pge) {
     }
 
 #ifdef DEBUG_BUILD 
-	DebugOverlay* overlay = new DebugOverlay();
-	overlay->addItem("RecordScore", DebugOverlay::TYPE_INT, &Global::recordScore);
-	overlay->addItem("RecordLevel", DebugOverlay::TYPE_INT, &Global::recordLevel);
+	auto overlay = new UI::DebugOverlay();
+	overlay->addItem("RecordScore", UI::DebugOverlay::TYPE_INT, &Global::recordScore);
+	overlay->addItem("RecordLevel", UI::DebugOverlay::TYPE_INT, &Global::recordLevel);
 	Global::world->addGameObject(overlay);
 #endif
 

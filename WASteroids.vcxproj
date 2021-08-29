@@ -33,7 +33,6 @@
   <ItemGroup>
     <ClInclude Include="src\assets_list.hpp" />
     <ClInclude Include="src\config.h" />
-    <ClInclude Include="src\core\DebugOverlay.h" />
     <ClInclude Include="src\engine\Animation.h" />
     <ClInclude Include="src\engine\animation\Strip.h" />
     <ClInclude Include="src\engine\animation\strips\SpriteSheetStrip.h" />
@@ -53,6 +52,8 @@
     <ClInclude Include="src\engine\SpriteSheet.h" />
     <ClInclude Include="src\engine\Transform.h" />
     <ClInclude Include="src\engine\UI.h" />
+    <ClInclude Include="src\engine\ui\DebugOverlay.h" />
+    <ClInclude Include="src\engine\ui\DebugOverlay.hpp" />
     <ClInclude Include="src\engine\ui\TextMenu.h" />
     <ClInclude Include="src\engine\World.h" />
     <ClInclude Include="src\engine\world\components\Drawable.h" />
@@ -94,7 +95,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\config.cpp" />
-    <ClCompile Include="src\core\DebugOverlay.cpp" />
     <ClCompile Include="src\engine\animation\animation.cpp" />
     <ClCompile Include="src\engine\animation\strips\strips.cpp" />
     <ClCompile Include="src\engine\misc\Assets.cpp" />
