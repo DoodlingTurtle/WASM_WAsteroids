@@ -18,7 +18,7 @@ TitleScreen::TitleScreen()
 
     help_placement = Global::layout->help_position;
     help_text = std::string("W = up   S = down   P = confirm");
-    version_text = "alpha 0.5";
+    version_text = "alpha 0.6";
 
     menu.addOption("new game");
     menu.addOption("help");

@@ -52,7 +52,7 @@ public:
 
     // Getters
     SIZES getSize();
-    std::vector<Physics::Collision::Circle> getColliders();
+    std::vector<Physics::Collision::Circle> getColliders() override;
     olc::Sprite* getSprite();   
 
     // Setters

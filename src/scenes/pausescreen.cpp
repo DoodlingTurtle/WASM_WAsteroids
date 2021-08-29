@@ -20,6 +20,7 @@ PauseScreen::PauseScreen(Scene* backgroundProvider) {
 
     menu.addOption("Resume");
     menu.addOption("Exit");
+
 #ifdef DEBUG_BUILD
     menu.addOption("[D] next Level");
     menu.addOption("[D] instand lose");
@@ -52,29 +53,13 @@ void PauseScreen::onDraw(olc::PixelGameEngine* pge) {
     pge->DrawStringDecal(help_position, help_text, olc::WHITE);
 }
 
-#ifdef DEBUG_BUILD
-bool PauseScreen::skipLevel() {
-    return menu.selected() == 2;
-}
-#endif
-
 void PauseScreen::onStart(olc::PixelGameEngine* pge) { 
     Global::game->pause();
     Global::game->EnableLayer(layer_blackout, true); }
 
 void PauseScreen::onEnd() { 
     Global::game->resume();
-    Global::game->EnableLayer(layer_blackout, false); 
-    
-#ifdef DEBUG_BUILD
-    if (menu.selected() == 3) {
-        Global::score += 523346;
-        Global::level += 893;
-        (*(Global::world->findByAttribute(GameObject::PLAYER_SHIP).begin()))->assignAttribute(GameObject::DEAD); 
-        menu.setSelection(0);
-    }
-#endif
-}
+    Global::game->EnableLayer(layer_blackout, false); }
 
 Scene* PauseScreen::nextScene() {
 
@@ -96,6 +81,8 @@ Scene* PauseScreen::nextScene() {
         return new UpgradeScreen((MainGameScreen*)backgroundProvider);
 
     case 3: /* game over */
+        Global::score = 523346;
+        Global::level = 893;
         return new GameOverScreen();
 
     }

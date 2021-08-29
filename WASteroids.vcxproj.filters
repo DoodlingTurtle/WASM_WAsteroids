@@ -255,6 +255,15 @@
     <ClInclude Include="src\config.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\animation\strips\LerpStrip.h">
+      <Filter>Source Files\engine\animation\strips</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\animation\strips\SpriteSheetStrip.h">
+      <Filter>Source Files\engine\animation\strips</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\animation\strips\TextStrip.h">
+      <Filter>Source Files\engine\animation\strips</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\animation\animation.cpp">
@@ -364,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="src\engine\misc\Game.cpp">
       <Filter>Source Files\engine\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\animation\strips\strips.cpp">
+      <Filter>Source Files\engine\animation\strips</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

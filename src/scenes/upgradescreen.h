@@ -3,7 +3,7 @@
 #include <string>
 
 #include "../engine/Transform.h"
-#include "../engine/ui/Textmenu.h"
+#include "../engine/ui/TextMenu.h"
 #include "../engine/Scene.h"
 
 #include "../gameobjects/ship/shipstats.h"

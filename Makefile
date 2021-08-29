@@ -9,7 +9,7 @@ RELEASE_FLAGS:=$(COMMON_FLAGS) -O3
 DEBUG_FLAGS:=$(COMMON_FLAGS) -Wuninitialized -DDEBUG_BUILD --emrun
 
 FLAGS:=$(DEBUG_FLAGS)
-CPPSOURCEFILES:=$(wildcard ./*/*/*/*.cpp) $(wildcard ./*/*/*.cpp) $(wildcard */*.cpp) 
+CPPSOURCEFILES:=$(wildcard ./*/*/*/*/*.cpp) $(wildcard ./*/*/*/*.cpp) $(wildcard ./*/*/*.cpp) $(wildcard */*.cpp) 
 OBJFILES:=$(patsubst %.cpp,%.cpp.o,$(CPPSOURCEFILES)) 
 
 

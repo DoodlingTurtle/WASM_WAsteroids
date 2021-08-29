@@ -60,7 +60,7 @@ namespace RGNDS::Animation {
 
 		//DONE: Update All visible strips
 		for (auto strip = playingStrips.begin(); strip != playingStrips.end(); ) {
-			if (strip->s->onTimelinePlay(playHead, playHead - strip->t)) {
+			if (strip->s->onTimelinePlay(playHead, playHead - strip->t, dt)) {
 				strip++;
 			}
 			else if (strip->l > 0 || strip->l == -1) {

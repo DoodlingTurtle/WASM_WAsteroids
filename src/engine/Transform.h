@@ -27,6 +27,8 @@ namespace RGNDS {
         float ang = 0.0;
         olc::vf2d dir = {1.0f, 0.0f};
 
+        olc::vf2d origin = { 0.0f, 0.0f };
+
     };
 
 }

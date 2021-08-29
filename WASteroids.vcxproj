@@ -36,6 +36,9 @@
     <ClInclude Include="src\core\DebugOverlay.h" />
     <ClInclude Include="src\engine\Animation.h" />
     <ClInclude Include="src\engine\animation\Strip.h" />
+    <ClInclude Include="src\engine\animation\strips\SpriteSheetStrip.h" />
+    <ClInclude Include="src\engine\animation\strips\LerpStrip.h" />
+    <ClInclude Include="src\engine\animation\strips\TextStrip.h" />
     <ClInclude Include="src\engine\animation\Timeline.h" />
     <ClInclude Include="src\engine\Assets.h" />
     <ClInclude Include="src\engine\Engine.h" />
@@ -93,6 +96,7 @@
     <ClCompile Include="src\core\config.cpp" />
     <ClCompile Include="src\core\DebugOverlay.cpp" />
     <ClCompile Include="src\engine\animation\animation.cpp" />
+    <ClCompile Include="src\engine\animation\strips\strips.cpp" />
     <ClCompile Include="src\engine\misc\Assets.cpp" />
     <ClCompile Include="src\engine\misc\Game.cpp" />
     <ClCompile Include="src\engine\misc\Input.cpp" />

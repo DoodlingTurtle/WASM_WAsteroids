@@ -39,18 +39,6 @@ namespace RGNDS {
 				*target = startValue - (startValue - targetValue) * (playHead/playTime);
 			}
 		}
-		bool onTimelinePlay(float totalPlaytime, float playHead) {
-			if(!bFinished && playHead < playTime) {
-				if (playHead > playTime) 
-					playHead = playTime;
-
-				bFinished = (playTime == playHead);
-
-				*target = startValue - (startValue - targetValue) * (playHead/playTime);
-			}
-
-			return !bFinished;
-		}
 		bool finished(){ return bFinished; }
 		bool stop() { bFinished = true; }
 
@@ -60,7 +48,6 @@ namespace RGNDS {
 		T startValue;
 		T targetValue;
 
-	private:
 		float playHead;
 		float playTime;
 
