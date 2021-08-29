@@ -7,11 +7,19 @@
 #include <SDL/SDL_mixer.h>
 
 Bullet::Bullet(float lifetime, const DecalRect sheetCoords, float radius)
-    : SpaceObj(radius), GameObject({GameObject::BULLET})
-, lifetime(lifetime), decalCoords(sheetCoords) , radius(radius)
+    : SpaceObj(radius), GameObject({ GameObject::BULLET })
+    , lifetime(lifetime), totalLifetime(lifetime), decalCoords(sheetCoords), radius(radius)
+    , isClone(false)
 {}
 
-Bullet::~Bullet() {}
+Bullet::~Bullet() {
+    if (!isClone) {
+        for (auto m : modifiers)
+            delete m;
+    }
+    
+    modifiers.clear();
+}
 
 void Bullet::onUpdate(float deltaTime) {
 
@@ -65,7 +73,13 @@ Bullet* Bullet::clone(olc::vf2d pos, olc::vf2d dir, float velocity) {
     b->moveVelocity = velocity + 72.0f;
     b->pos = pos;
     b->setDirection(dir);
+    b->modifiers = modifiers;
+    b->isClone = true;
 
     return b;
 }
 
+float Bullet::getLifetime() { return lifetime/totalLifetime; }
+
+void Bullet::addModifier(BulletModifier* m) { 
+    modifiers.push_back(m); }

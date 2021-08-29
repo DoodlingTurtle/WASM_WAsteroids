@@ -49,14 +49,17 @@
     <Filter Include="Source Files\scenes">
       <UniqueIdentifier>{9d31f0ae-8d10-4ac9-836f-ca5f284b6add}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\core">
-      <UniqueIdentifier>{90f2f246-2d79-4542-bd59-7d4c3fef6291}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\engine\ui">
       <UniqueIdentifier>{2a8b17cb-4f49-4509-9203-db5efb4b4eff}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\engine\animation\strips">
       <UniqueIdentifier>{8bbbadae-1bb5-4abe-bba5-35ce1226f686}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\assets\upgrades">
+      <UniqueIdentifier>{ad4c8d1b-6390-44a7-be56-ca5b060a6c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gameobjects\bullets">
+      <UniqueIdentifier>{c6aab066-86b1-44e9-8f4f-075b27e7d6aa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +84,21 @@
   <ItemGroup>
     <Text Include="bugs.txt">
       <Filter>Resource Files\assets</Filter>
+    </Text>
+    <Text Include="assets\upgrades\none.txt">
+      <Filter>Resource Files\assets\upgrades</Filter>
+    </Text>
+    <Text Include="assets\upgrades\shield.txt">
+      <Filter>Resource Files\assets\upgrades</Filter>
+    </Text>
+    <Text Include="assets\upgrades\gencap.txt">
+      <Filter>Resource Files\assets\upgrades</Filter>
+    </Text>
+    <Text Include="assets\upgrades\genreg.txt">
+      <Filter>Resource Files\assets\upgrades</Filter>
+    </Text>
+    <Text Include="assets\upgrades\snipeshot.txt">
+      <Filter>Resource Files\assets\upgrades</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
@@ -267,6 +285,12 @@
     <ClInclude Include="src\engine\ui\DebugOverlay.hpp">
       <Filter>Source Files\engine\ui</Filter>
     </ClInclude>
+    <ClInclude Include="Snipeshot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameobjects\bullets\SnipeShot.h">
+      <Filter>Source Files\gameobjects\bullets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\animation\animation.cpp">
@@ -359,9 +383,6 @@
     <ClCompile Include="src\scenes\soundtest.cpp">
       <Filter>Source Files\scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\config.cpp">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\ui\ui.cpp">
       <Filter>Source Files\engine\ui</Filter>
     </ClCompile>
@@ -376,6 +397,12 @@
     </ClCompile>
     <ClCompile Include="src\engine\animation\strips\strips.cpp">
       <Filter>Source Files\engine\animation\strips</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\bullets\SnipeShot.cpp">
+      <Filter>Source Files\gameobjects\bullets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

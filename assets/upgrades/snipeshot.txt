@@ -1,0 +1,5 @@
+Grants a bonus for hitting
+Asteroids that are further away.
+
+You cannon will cosume slightly
+more energy though.

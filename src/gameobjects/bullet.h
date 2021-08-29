@@ -32,10 +32,18 @@ public:
    
     Bullet* clone(olc::vf2d pos, olc::vf2d dir, float acceleration);
 
+    float getLifetime();
+
+    void addModifier(BulletModifier*);
+
 protected:
     static olc::Renderable spriteSheet;
-    float lifetime, radius;
+    float totalLifetime, lifetime, radius;
     std::vector<BulletModifier*> modifiers;
 
     DecalRect decalCoords;
+
+private:
+    bool isClone;
+
 };

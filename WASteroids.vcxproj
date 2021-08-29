@@ -28,9 +28,15 @@
     <Image Include="assets\sprites\shot.png" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="assets\upgrades\gencap.txt" />
+    <Text Include="assets\upgrades\genreg.txt" />
+    <Text Include="assets\upgrades\none.txt" />
+    <Text Include="assets\upgrades\shield.txt" />
+    <Text Include="assets\upgrades\snipeshot.txt" />
     <Text Include="bugs.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Snipeshot.h" />
     <ClInclude Include="src\assets_list.hpp" />
     <ClInclude Include="src\config.h" />
     <ClInclude Include="src\engine\Animation.h" />
@@ -64,6 +70,7 @@
     <ClInclude Include="src\gamecomponents.h" />
     <ClInclude Include="src\gameobjects\asteroids.h" />
     <ClInclude Include="src\gameobjects\bullet.h" />
+    <ClInclude Include="src\gameobjects\bullets\SnipeShot.h" />
     <ClInclude Include="src\gameobjects\bullet_modifier.h" />
     <ClInclude Include="src\gameobjects\scorepopup.h" />
     <ClInclude Include="src\gameobjects\ship.h" />
@@ -94,7 +101,7 @@
     <ClInclude Include="src\wraparoundrenderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\config.cpp" />
+    <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\engine\animation\animation.cpp" />
     <ClCompile Include="src\engine\animation\strips\strips.cpp" />
     <ClCompile Include="src\engine\misc\Assets.cpp" />
@@ -109,6 +116,7 @@
     <ClCompile Include="src\engine\world\world.cpp" />
     <ClCompile Include="src\gameobjects\asteroids.cpp" />
     <ClCompile Include="src\gameobjects\bullet.cpp" />
+    <ClCompile Include="src\gameobjects\bullets\SnipeShot.cpp" />
     <ClCompile Include="src\gameobjects\scorepopup.cpp" />
     <ClCompile Include="src\gameobjects\ship.cpp" />
     <ClCompile Include="src\gameobjects\ship\shipengine.cpp" />

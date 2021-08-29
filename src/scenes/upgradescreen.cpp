@@ -8,6 +8,7 @@
 #include "../engine/Assets.h"
 
 #include "../gameobjects/ship/shipupgrade_shieldgenerator.h"
+#include "../gameobjects/bullets/SnipeShot.h"
 
 #include "./maingame.h"
 
@@ -15,27 +16,28 @@ using namespace RGNDS;
 
 #define ERROR_PRICE_TO_HIGH "You don't have enough points"
 
-#define NUM_TOTAL_UPGRADES 4
+#define NUM_TOTAL_UPGRADES 5
 
-static int costs[NUM_TOTAL_UPGRADES] = {
-       0,
-    1000, 
-    2050, 
-    3500 
+struct Upgrade {
+    int price;
+    const char* title;
+    const char* descriptionFile;
+    int influence;
+    std::string description;
 };
 
-static const char* labels[NUM_TOTAL_UPGRADES] = {
-    "none",
-    "+1 Shield use",
-    "Generator capacity up",
-    "Generator speed + 50%"
+static Upgrade upgradeList[] = {
+    {   0, "none"                 , "upgrades/none.txt"     , 0   },
+    {1000, "+1 Shield use"        , "upgrades/shield.txt"   , 40  },
+    {2050, "Generator capacity up", "upgrades/gencap.txt"   , 30  },
+    {3500, "Generator speed + 50%", "upgrades/genreg.txt"   , 30  },
+    {2080, "Snipe Shot"           , "upgrades/snipeshot.txt", 100 }
 };
 
-static const char* files[NUM_TOTAL_UPGRADES] = {
-    "upgrades/none.txt",
-    "upgrades/shield.txt",
-    "upgrades/gencap.txt",
-    "upgrades/genreg.txt"
+std::vector<std::vector<int>> categorielist = {
+    { 1 },          /* Acitvateables */
+    { 2, 3 },       /* Ship Control */
+    { 4 }           /* Weapons */
 };
 
 
@@ -60,38 +62,27 @@ UpgradeScreen::~UpgradeScreen(){}
 
 
 void UpgradeScreen::onStart(olc::PixelGameEngine* pge){
-    // Shield is always available    
-    upgrade_data.push_back(1);
 
-// Randomize the other upgrades        
-// TODO: (DoTu) add more upgrade options
-    int rnd = 2 + (RandF()*2.0f);
-    upgrade_data.push_back(rnd);
+    // Unload previous loaded description
+    for (auto upg : upgrade_data)
+        upgradeList[upg].description = "";
+    upgrade_data.clear();
 
-// Append the None Option
+    // Add one purchaseable from each Group
+    for (auto grp : categorielist) {
+        if (grp.size() > 1)
+            upgrade_data.push_back(grp.at(rand() % grp.size()));
+        else
+            upgrade_data.push_back(grp.at(0));
+    }
+
     upgrade_data.push_back(0);
 
-    auto _readDescription = [this](const char* filename) {
-        std::string str;
+    for (auto upg : upgrade_data) {
+        Upgrade* u = &upgradeList[upg];
 
-        FILE* f = fopen(filename, "rb");
-        if(f) {
-            while(!feof(f)) {
-                char buffer[1024] { 0 };
-                fgets(buffer, 1024, f);
-                
-                str += std::string(buffer);
-            }
-
-            fclose(f);
-        }
-
-        return str;
-    };
-
-    for(auto u : upgrade_data) {
-        selection.addOption(labels[u]);
-        description.push_back(Assets::loadText(files[u]));
+        selection.addOption(u->title);
+        u->description = Assets::loadText(u->descriptionFile);
     }
 
     showError = false;
@@ -100,7 +91,6 @@ void UpgradeScreen::onStart(olc::PixelGameEngine* pge){
 
 void UpgradeScreen::onEnd() {
     upgrade_data.clear();
-    description.clear();
     selection.clearOptions();
 }
 
@@ -113,7 +103,7 @@ bool UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     else if(Global::input->pressed&(KEYPAD_A|KEYPAD_START))
     {
         int selected = upgrade_data.at(selection.selected());
-        int cost = costs[selected] * (backscene->game_difficulty);
+        int cost = upgradeList[selected].price * (backscene->game_difficulty);
 
         if(Global::score >= cost) {
             Global::score -= cost;
@@ -133,6 +123,11 @@ bool UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
                 case 3: // Generator regen
                     Global::shipStats->generatorrecovery *= 1.5f;
+                    break;
+
+                case 4: // snipe upgrade
+                    Global::shipStats->shotenergyconsumption *= 1.2f;
+                    Global::shipStats->prototypeBullet->addModifier(new SnipeShot());
                     break;
 
             }
@@ -180,7 +175,7 @@ void UpgradeScreen::onDraw(olc::PixelGameEngine* pge) {
 
     pge->DrawStringDecal(
             descriptionlocation, 
-            description[selection.selected()], 
+            upgradeList[upgrade_data.at(selection.selected())].description,
             olc::WHITE
     );
 
@@ -188,7 +183,7 @@ void UpgradeScreen::onDraw(olc::PixelGameEngine* pge) {
     std::sprintf(
             str,
             "cost: % 24d", 
-            (int)(costs[upgrade_data.at(selection.selected())] * (backscene->game_difficulty))
+            (int)(upgradeList[upgrade_data.at(selection.selected())].price * (backscene->game_difficulty))
     );
     _printPGE(pge, costlocation, str, olc::WHITE);
    

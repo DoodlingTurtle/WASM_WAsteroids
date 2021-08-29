@@ -1,5 +1,4 @@
-#ifndef __BulletModifier_H__
-#define __BulletModifier_H__
+#pragma once
 
 #include <vector>
 #include "spaceobj.h"
@@ -11,5 +10,3 @@ public:
     virtual int updateScore(int currentScore, Bullet*) = 0;
 
 };
-
-#endif
