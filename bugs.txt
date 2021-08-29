@@ -1,5 +1,0 @@
-- TitleScreen is missing "Exit" option
-- Alt+F4 is not working
-
-- more controll BGMusic for maingame needed
- (build function to start the loop in the middle of the track, since beginning and and are so different)
