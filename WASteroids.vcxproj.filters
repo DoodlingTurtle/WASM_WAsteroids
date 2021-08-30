@@ -100,6 +100,9 @@
     <Text Include="assets\upgrades\snipeshot.txt">
       <Filter>Resource Files\assets\upgrades</Filter>
     </Text>
+    <Text Include="assets\upgrades\bullethell.txt">
+      <Filter>Resource Files\assets\upgrades</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\Animation.h">
@@ -291,6 +294,9 @@
     <ClInclude Include="src\gameobjects\bullets\SnipeShot.h">
       <Filter>Source Files\gameobjects\bullets</Filter>
     </ClInclude>
+    <ClInclude Include="src\gameobjects\ship\Upgrade_BulletHell.h">
+      <Filter>Source Files\gameobjects\ship</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\animation\animation.cpp">
@@ -403,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="src\gameobjects\bullets\SnipeShot.cpp">
       <Filter>Source Files\gameobjects\bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\ship\Upgrade_BulletHell.cpp">
+      <Filter>Source Files\gameobjects\ship</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

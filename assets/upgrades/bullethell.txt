@@ -1,0 +1,5 @@
+A one time use burst of bullets
+around the ship.
+
+It will drain all energy from the
+ships generator.

@@ -28,6 +28,7 @@
     <Image Include="assets\sprites\shot.png" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="assets\upgrades\bullethell.txt" />
     <Text Include="assets\upgrades\gencap.txt" />
     <Text Include="assets\upgrades\genreg.txt" />
     <Text Include="assets\upgrades\none.txt" />
@@ -81,6 +82,7 @@
     <ClInclude Include="src\gameobjects\ship\shipupgrade_shield.h" />
     <ClInclude Include="src\gameobjects\ship\shipupgrade_shieldgenerator.h" />
     <ClInclude Include="src\gameobjects\ship\ship_component.h" />
+    <ClInclude Include="src\gameobjects\ship\Upgrade_BulletHell.h" />
     <ClInclude Include="src\gameobject_attributes.hpp" />
     <ClInclude Include="src\gameobject_components.hpp" />
     <ClInclude Include="src\global.hpp" />
@@ -124,6 +126,7 @@
     <ClCompile Include="src\gameobjects\ship\shipupgrade_cannon.cpp" />
     <ClCompile Include="src\gameobjects\ship\shipupgrade_shield.cpp" />
     <ClCompile Include="src\gameobjects\ship\shipupgrade_shieldgenerator.cpp" />
+    <ClCompile Include="src\gameobjects\ship\Upgrade_BulletHell.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\particles\asteroid_particles.cpp" />
     <ClCompile Include="src\particles\ship_explosion.cpp" />

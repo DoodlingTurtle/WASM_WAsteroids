@@ -29,7 +29,7 @@ bool ShipUpgrade_ShieldGenerator::drawShipComponent(ShipStats* stats, Ship* ship
 
 
     pge->DrawStringDecal(
-        { coords.x, coords.y } , "Shield", olc::WHITE, {1.0f, 1.0f});
+        { coords.x, coords.y } , "Shield (" + std::to_string(cntInstances) + "x)", olc::WHITE, {1.0f, 1.0f});
     return true;
 };
 
