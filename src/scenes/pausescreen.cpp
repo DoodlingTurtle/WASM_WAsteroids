@@ -70,15 +70,15 @@ Scene* PauseScreen::nextScene() {
 
     switch (menu.selected()) {
 
+    case 2: /* Skip Level */
+        Global::score += Global::world->countWithAttribute(GameObject::ASTEROID) * 2100;
+        Global::world->removeWithAttribute(GameObject::ASTEROID);
     case 0: /* resume */
         return backgroundProvider;
 
     case 1: /* exit */
         switchBGMusic(Assets::bgmMenu);
         return new TitleScreen();
-
-    case 2: /* Skip Level */
-        return new UpgradeScreen((MainGameScreen*)backgroundProvider);
 
     case 3: /* game over */
         Global::score = 523346;
