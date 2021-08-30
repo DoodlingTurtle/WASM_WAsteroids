@@ -12,7 +12,7 @@ namespace RGNDS {
         olc::J,
         olc::K,
         olc::P,
-        olc::K,
+        olc::O,
         olc::L,
         olc::BACK,
         olc::ENTER

@@ -13,6 +13,10 @@
 
 #include "../particles/ship_explosion.h"
 
+#ifdef DEBUG_BUILD
+#include "../engine/ui/DebugOverlay.h"
+#endif
+
 #define SHIP_MAX_VELOCITY 256.0f
 #define SHIP_DEFAULT_RADIUS 16.0f
 
@@ -49,6 +53,11 @@ Ship::Ship()
     this->addUpgrade(new ShipUpgrade_Shield());
     this->addUpgrade(new ShipUpgrade_Cannon());
 
+#ifdef DEBUG_BUILD
+    auto overlay = new RGNDS::UI::DebugOverlay();
+    overlay->addItem("selected slot", RGNDS::UI::DebugOverlay::TYPE_INT, &selectedComponent);
+    Global::world->addGameObject(overlay);
+#endif
 }
 
 Ship::~Ship() {
@@ -120,9 +129,6 @@ Physics::Collision::Circle Ship::getCollider() {
 
 void Ship::onUpdate(float deltaTime) {
 
-//check asteroids collision
-//TODO: change to ship_killer
-
     if (currentShield) {
         auto list = Global::world->allShipShieldDeflectable();
         Physics::Collision c;
@@ -156,26 +162,33 @@ void Ship::onUpdate(float deltaTime) {
     if(Global::input->held&KEYPAD_LEFT) setAngleRel(-angRes*deltaTime); 
 
     // Input Component selection
-    if(Global::input->pressed&KEYPAD_X) selectedComponent--;
-    if(Global::input->pressed&KEYPAD_Y) selectedComponent++;
+    if(Global::input->pressed&KEYPAD_X) 
+        selectedComponent--;
+    if(Global::input->pressed&KEYPAD_Y) 
+        selectedComponent++;
 
     int sz = selectableComponents.size()-1;
-    if(selectedComponent < 0)   selectedComponent = 0;
-    if(selectedComponent > sz)  selectedComponent = sz; 
 
-    // Activate component with A-Key (P on the Keybaord)
-    if(sz > -1 && Global::input->pressed&KEYPAD_A) {
-        int index = selectableComponents.at(selectedComponent);
-        ShipComponent* c = components.at(index);
-        if(c) {
-            if(!c->invokeShipComponent(stats, this)) {
-                delete c;
-                c = nullptr;
-            }
+    if (sz > -1) {
+        if (selectedComponent > sz)
+            selectedComponent = sz;
+        if (selectedComponent < 0)
+            selectedComponent = 0;
+
+        if (Global::input->pressed & KEYPAD_A) {
+
+			int index = selectableComponents.at(selectedComponent);
+			ShipComponent* c = components.at(index);
+			if(c) {
+				if(!c->invokeShipComponent(stats, this)) {
+					delete c;
+					c = nullptr;
+				}
+			}
+			if(!c) components.erase(components.begin()+index);
         }
-        if(!c) components.erase(components.begin()+index);
-    }
 
+    }
 
     // Input Thrusting
     thrusting = false;
