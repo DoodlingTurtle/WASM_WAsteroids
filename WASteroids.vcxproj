@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="assets\upgrades\bullethell.txt" />
+    <Text Include="assets\upgrades\dualshot.txt" />
     <Text Include="assets\upgrades\gencap.txt" />
     <Text Include="assets\upgrades\genreg.txt" />
     <Text Include="assets\upgrades\none.txt" />
@@ -37,7 +38,6 @@
     <Text Include="bugs.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Snipeshot.h" />
     <ClInclude Include="src\assets_list.hpp" />
     <ClInclude Include="src\config.h" />
     <ClInclude Include="src\engine\Animation.h" />
@@ -75,10 +75,13 @@
     <ClInclude Include="src\gameobjects\bullet_modifier.h" />
     <ClInclude Include="src\gameobjects\scorepopup.h" />
     <ClInclude Include="src\gameobjects\ship.h" />
+    <ClInclude Include="src\gameobjects\ship\cannons\BasicCannon.h" />
+    <ClInclude Include="src\gameobjects\ship\cannons\DualCannon.h" />
+    <ClInclude Include="src\gameobjects\ship\MultiUseUpgrade.h" />
+    <ClInclude Include="src\gameobjects\ship\ShipCannon.h" />
     <ClInclude Include="src\gameobjects\ship\shipengine.h" />
     <ClInclude Include="src\gameobjects\ship\shipstats.h" />
     <ClInclude Include="src\gameobjects\ship\shipupgrade.h" />
-    <ClInclude Include="src\gameobjects\ship\shipupgrade_cannon.h" />
     <ClInclude Include="src\gameobjects\ship\shipupgrade_shield.h" />
     <ClInclude Include="src\gameobjects\ship\shipupgrade_shieldgenerator.h" />
     <ClInclude Include="src\gameobjects\ship\ship_component.h" />
@@ -121,9 +124,11 @@
     <ClCompile Include="src\gameobjects\bullets\SnipeShot.cpp" />
     <ClCompile Include="src\gameobjects\scorepopup.cpp" />
     <ClCompile Include="src\gameobjects\ship.cpp" />
+    <ClCompile Include="src\gameobjects\ship\cannons\BasicCannon.cpp" />
+    <ClCompile Include="src\gameobjects\ship\cannons\DualCannon.cpp" />
+    <ClCompile Include="src\gameobjects\ship\MultiUseUpgrade.cpp" />
     <ClCompile Include="src\gameobjects\ship\shipengine.cpp" />
     <ClCompile Include="src\gameobjects\ship\shipstats.cpp" />
-    <ClCompile Include="src\gameobjects\ship\shipupgrade_cannon.cpp" />
     <ClCompile Include="src\gameobjects\ship\shipupgrade_shield.cpp" />
     <ClCompile Include="src\gameobjects\ship\shipupgrade_shieldgenerator.cpp" />
     <ClCompile Include="src\gameobjects\ship\Upgrade_BulletHell.cpp" />

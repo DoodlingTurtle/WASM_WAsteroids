@@ -1,0 +1,5 @@
+A cannon, that fires 2 shots
+at the same time.
+
+Fireing it will consume more 
+energy.

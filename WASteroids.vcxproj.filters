@@ -61,6 +61,9 @@
     <Filter Include="Source Files\gameobjects\bullets">
       <UniqueIdentifier>{c6aab066-86b1-44e9-8f4f-075b27e7d6aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\gameobjects\ship\cannons">
+      <UniqueIdentifier>{be9ef181-64e1-48f8-8e8c-a98ea3c89712}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">
@@ -101,6 +104,9 @@
       <Filter>Resource Files\assets\upgrades</Filter>
     </Text>
     <Text Include="assets\upgrades\bullethell.txt">
+      <Filter>Resource Files\assets\upgrades</Filter>
+    </Text>
+    <Text Include="assets\upgrades\dualshot.txt">
       <Filter>Resource Files\assets\upgrades</Filter>
     </Text>
   </ItemGroup>
@@ -190,9 +196,6 @@
       <Filter>Source Files\gameobjects\ship</Filter>
     </ClInclude>
     <ClInclude Include="src\gameobjects\ship\shipupgrade.h">
-      <Filter>Source Files\gameobjects\ship</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameobjects\ship\shipupgrade_cannon.h">
       <Filter>Source Files\gameobjects\ship</Filter>
     </ClInclude>
     <ClInclude Include="src\gameobjects\ship\shipupgrade_shield.h">
@@ -288,13 +291,22 @@
     <ClInclude Include="src\engine\ui\DebugOverlay.hpp">
       <Filter>Source Files\engine\ui</Filter>
     </ClInclude>
-    <ClInclude Include="Snipeshot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\gameobjects\bullets\SnipeShot.h">
       <Filter>Source Files\gameobjects\bullets</Filter>
     </ClInclude>
     <ClInclude Include="src\gameobjects\ship\Upgrade_BulletHell.h">
+      <Filter>Source Files\gameobjects\ship</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameobjects\ship\ShipCannon.h">
+      <Filter>Source Files\gameobjects\ship</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameobjects\ship\cannons\BasicCannon.h">
+      <Filter>Source Files\gameobjects\ship\cannons</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameobjects\ship\cannons\DualCannon.h">
+      <Filter>Source Files\gameobjects\ship\cannons</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameobjects\ship\MultiUseUpgrade.h">
       <Filter>Source Files\gameobjects\ship</Filter>
     </ClInclude>
   </ItemGroup>
@@ -339,9 +351,6 @@
       <Filter>Source Files\gameobjects\ship</Filter>
     </ClCompile>
     <ClCompile Include="src\gameobjects\ship\shipstats.cpp">
-      <Filter>Source Files\gameobjects\ship</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gameobjects\ship\shipupgrade_cannon.cpp">
       <Filter>Source Files\gameobjects\ship</Filter>
     </ClCompile>
     <ClCompile Include="src\gameobjects\ship\shipupgrade_shield.cpp">
@@ -412,6 +421,15 @@
     </ClCompile>
     <ClCompile Include="src\gameobjects\ship\Upgrade_BulletHell.cpp">
       <Filter>Source Files\gameobjects\ship</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\ship\cannons\BasicCannon.cpp">
+      <Filter>Source Files\gameobjects\ship\cannons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\ship\MultiUseUpgrade.cpp">
+      <Filter>Source Files\gameobjects\ship</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\ship\cannons\DualCannon.cpp">
+      <Filter>Source Files\gameobjects\ship\cannons</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

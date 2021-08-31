@@ -59,13 +59,11 @@ void Asteroid::bringBackToLife(
 	olc::vf2d direction, float velocity
 ) {
 
-	if (direction.x == 0 && direction.y == 0)
-		setRandomDirection();
-	else
-		setDirection(direction);
+	if (direction.x == 0 && direction.y == 0) setRandomDirection();
+	else setDirection(direction);
 
 	if (velocity < 0.00) moveVelocity = (float)(rand() % 21 + 9);
-	else                moveVelocity = velocity;
+	else                 moveVelocity = velocity;
 
 	spinSpeed = (RandF() * 0.5 + 0.5) * 0.0625; // Spin by 360� every 16 Seconds (at max spinspeed)
 
@@ -245,7 +243,6 @@ void Asteroid::playSFX() {
 }
 
 
-
 void Asteroid::spawn(
 	int nr,
 	SIZES size,
@@ -260,8 +257,8 @@ void Asteroid::spawn(
 
 	for (int a = 0; a < MAX_ASTEROIDS && nr > 0; a++) {
 		Asteroid* ast = new Asteroid();
-		if (x == 0) sx = (rand() % APP_SCREEN_WIDTH);
-		if (y == 0) sy = (rand() % APP_SCREEN_HEIGHT);
+		if (x == 0) sx = (rand() % Global::layout->app_width);
+		if (y == 0) sy = (rand() % Global::layout->app_height);
 
 		ast->bringBackToLife(
 			{ sx, sy }, Global::game,

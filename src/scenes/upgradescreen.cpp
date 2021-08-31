@@ -10,6 +10,7 @@
 #include "../gameobjects/ship/shipupgrade_shieldgenerator.h"
 #include "../gameobjects/ship/Upgrade_BulletHell.h"
 #include "../gameobjects/bullets/SnipeShot.h"
+#include "../gameobjects/ship/cannons/DualCannon.h"
 
 #include "./maingame.h"
 
@@ -32,22 +33,23 @@ static Upgrade upgradeList[] = {
 	{ 700, "+1 Shield use"        , "upgrades/shield.txt"    , 80  },
 	{2050, "Generator capacity up", "upgrades/gencap.txt"    , 30  },
 	{3500, "Generator speed + 50%", "upgrades/genreg.txt"    , 30  },
-	{2080, "Snipe Shot"           , "upgrades/snipeshot.txt" , 100 },
+	{2080, "Snipe Shot"           , "upgrades/snipeshot.txt" , 20  },
 
 	{ 400, "Bullet Hell"          , "upgrades/bullethell.txt", 20  },
+	{1200, "Dual Shot"            , "upgrades/dualshot.txt"  , 80  }
 };
 
 #ifdef DEBUG_BUILD
 std::vector<std::vector<int>> categorielist = {
 	{ 1 }, { 5 },    /* Acitvateables */
 	{ 2 }, { 3 },    /* Ship Control */
-	{ 4 }        /* Weapons */
+	{ 4 }, { 6 }        /* Weapons */
 };
 #else
 std::vector<std::vector<int>> categorielist = {
 	{ 1, 5 },    /* Acitvateables */
 	{ 2, 3 },    /* Ship Control */
-	{ 4 }        /* Weapons */
+	{ 4, 6 }     /* Weapons */
 };
 #endif
 
@@ -137,12 +139,18 @@ bool UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 				break;
 
 			case 4: // snipe upgrade
-				Global::shipStats->shotenergyconsumption *= 1.2f;
+				Global::shipStats->shotenergyconsumption += 6.0f;
 				Global::shipStats->prototypeBullet->addModifier(new SnipeShot());
 				break;
 
 			case 5: // Bullet hell
 				Global::shipStats->registerNewComponent(new UpgradeBulletHell());
+				break;
+
+			case 6: // DualShot
+				delete Global::shipStats->shipCannon;
+				Global::shipStats->shipCannon = new DualCannon();
+				Global::shipStats->shotenergyconsumption += 10;
 				break;
 
 			}

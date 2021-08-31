@@ -1,7 +1,8 @@
 #include "./shipstats.h"
+#include "./cannons/BasicCannon.h"
 
-ShipStats::ShipStats() 
-:prototypeBullet(nullptr)
+ShipStats::ShipStats()
+    :prototypeBullet(nullptr), shipCannon(nullptr)
 { resetToLV1(); }
 
 static void _clearComponents(std::vector<ShipComponent*> &components) {
@@ -13,6 +14,8 @@ static void _clearComponents(std::vector<ShipComponent*> &components) {
 
 ShipStats::~ShipStats() {
     _clearComponents(components);
+    if (prototypeBullet) delete prototypeBullet;
+    if (shipCannon) delete shipCannon;
 }
 
 void ShipStats::resetToLV1() {
@@ -21,17 +24,18 @@ void ShipStats::resetToLV1() {
     shotenergyconsumption = 30;
     thrustenergyconsumption = 45;
     generatorrecovery = 30;
-    shielduses = 0;
     generatorlock = 2;
     generatorunlock = 25;
     generatorhalt = false;
 
     _clearComponents(components);
 
-    if(prototypeBullet)
-        delete prototypeBullet;
-
+    if(prototypeBullet) delete prototypeBullet;
     prototypeBullet = new Bullet();
+
+    if (shipCannon) delete shipCannon;
+    shipCannon = new BasicCannon();
+
 }
 
 
@@ -39,7 +43,6 @@ static void _transfereComponents(
     std::vector<ShipComponent*>* from, 
     std::vector<ShipComponent*>* to
 ) {
-
     for(int a = 0; a < from->size(); a++)
         to->push_back(from->at(a));
 

@@ -5,11 +5,7 @@
 /*==============================================================================
  * UpgradeBulletHell
  *============================================================================*/
-
-int UpgradeBulletHell::instances = 0;
-
-UpgradeBulletHell::UpgradeBulletHell() { instances++; }
-UpgradeBulletHell::~UpgradeBulletHell() { instances--; }
+UpgradeBulletHell::UpgradeBulletHell() : MultiUseUpgrade(1) {}
 
 bool UpgradeBulletHell::invokeShipComponent(ShipStats* stats, Ship* ship) {
 
@@ -33,18 +29,16 @@ bool UpgradeBulletHell::invokeShipComponent(ShipStats* stats, Ship* ship) {
 		ang += step;
 	}
 
+	stats->generator = 0.0f;
+
 	return false;
 }
-
-bool UpgradeBulletHell::updateShipComponent(float deltaTime) { draw = true;  return true; }
 
 bool UpgradeBulletHell::drawShipComponent(ShipStats* stats, Ship* ship, olc::PixelGameEngine* pge, olc::vf2d componentListIconCoordinates) {
-
-	if (draw) {
-		pge->DrawStringDecal(componentListIconCoordinates, "Bullet Hell (" + std::to_string(instances) + "x)");
-		draw = false;
+	if (allowDraw()) {
+		pge->DrawStringDecal(componentListIconCoordinates, "Bullet Hell (" + std::to_string(getInstances()) + "x)");
 		return true;
 	}
-
-	return false;
+	else return false;
 }
+

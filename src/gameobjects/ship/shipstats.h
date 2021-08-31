@@ -3,6 +3,8 @@
 
 #include <vector>
 #include "./ship_component.h"
+#include "./ShipCannon.h"
+
 #include "gameobjects/bullet.h"
 
 class ShipStats {
@@ -19,7 +21,6 @@ public:
     float generatorrecovery;
     
     bool generatorhalt;
-    int shielduses;
 
     void resetToLV1();
 
@@ -28,8 +29,8 @@ public:
 
     void registerNewComponent(ShipComponent* comp);
 
-
-    Bullet* prototypeBullet;
+    Bullet*     prototypeBullet;
+    ShipCannon* shipCannon;
 
 protected:
     std::vector<ShipComponent*> components;
