@@ -27,6 +27,12 @@ namespace RGNDS {
 
     void Input::updateInputs(olc::PixelGameEngine* pge) {
 
+        //TODO: Turn this into ALT+F4 (somehow)
+        _exit = (
+            pge->GetKey(olc::F4).bPressed &&
+            pge->GetKey(olc::CTRL).bHeld
+        );
+
         unsigned int key = 0;
         for (int a = 0; a < NUM_KEYS; a++)
             if (pge->GetKey(keyMap[a]).bPressed || pge->GetKey(keyMap[a]).bHeld)
@@ -42,4 +48,6 @@ namespace RGNDS {
         released = keys_released;
         held = keys_held;
     }
+
+    bool Input::exitCombo() { return _exit; }
 }

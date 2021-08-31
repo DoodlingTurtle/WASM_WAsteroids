@@ -32,8 +32,12 @@ namespace RGNDS {
         unsigned int released;
         unsigned int held;
 
+        bool exitCombo();
+
     private:
         static olc::Key keyMap[NUM_KEYS];
+
+        bool _exit;
 
         // These are the true inputs (cant be manipulated)
         unsigned int keys_last_held;

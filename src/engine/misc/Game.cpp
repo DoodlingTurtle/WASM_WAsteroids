@@ -38,7 +38,8 @@ namespace RGNDS {
 	bool Game::OnUserUpdate(float fElapsedTime) {
 
         Global::input->updateInputs(this);
-
+		if (Global::input->exitCombo()) return false;
+		
 		if (currentScene != nullptr) {
 			if (!paused) {
 				Global::world->moveNew();
