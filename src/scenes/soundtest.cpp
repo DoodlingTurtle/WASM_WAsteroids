@@ -2,25 +2,29 @@
 #include "../engine/Global.h"
 using namespace RGNDS;
 
-#define CNT_SNDS 7
+#define CNT_SNDS 11 
 SoundTest::Sound SoundTest::sounds[CNT_SNDS] = {
-   {SoundTest::TYPE_SFX, "Ship fire"     , { .c=&Assets::bullet_fire_1  }},
-   {SoundTest::TYPE_SFX, "Ship explosion", { .c=&Assets::shipExplode    }},
-   {SoundTest::TYPE_SFX, "Ship thrust"   , { .c=&Assets::shipThrust     }},
+   {SOUNDTYPE::TYPE_SFX, "Ship fire"     , { .c=&Assets::bullet_fire_1  }},
+   {SOUNDTYPE::TYPE_SFX, "Ship explosion", { .c=&Assets::shipExplode    }},
+   {SOUNDTYPE::TYPE_SFX, "Ship thrust"   , { .c=&Assets::shipThrust     }},
 
-   {SoundTest::TYPE_SFX, "asteroid hit 1", { .c=&Assets::asteroid_hit_1 }},
-   {SoundTest::TYPE_SFX, "asteroid hit 2", { .c=&Assets::asteroid_hit_2 }},
+   {SOUNDTYPE::TYPE_SFX, "asteroid hit 1", { .c=&Assets::asteroid_hit_1 }},
+   {SOUNDTYPE::TYPE_SFX, "asteroid hit 2", { .c=&Assets::asteroid_hit_2 }},
 
-   {SoundTest::TYPE_BGM, "menu bgm"      , { .m=&Assets::bgmMenu        }},
-   {SoundTest::TYPE_BGM, "game bgm"      , { .m=&Assets::bgmGame        }}
+   {SOUNDTYPE::TYPE_BGM, "menu bgm"      , { .m=&Assets::bgmMenu        }},
+   {SOUNDTYPE::TYPE_BGM, "lv1 bgm"       , { .m=&Assets::bgmLV01        }},
+   {SOUNDTYPE::TYPE_BGM, "lv2 bgm"       , { .m=&Assets::bgmLV02        }},
+   {SOUNDTYPE::TYPE_BGM, "lv3 bgm"       , { .m=&Assets::bgmLV03        }},
+   {SOUNDTYPE::TYPE_BGM, "lv4 bgm"       , { .m=&Assets::bgmLV04        }},
+   {SOUNDTYPE::TYPE_BGM, "lv5 bgm"       , { .m=&Assets::bgmLV05        }}
 };
 
 void SoundTest::Sound::play() {
     switch(t) {
-        case SoundTest::TYPE_SFX: 
+        case SOUNDTYPE::TYPE_SFX: 
             Mix_PlayChannel(-1, *r.c, 0); break;
 
-        case SoundTest::TYPE_BGM: 
+        case SOUNDTYPE::TYPE_BGM: 
             Mix_PlayMusic(*r.m, 0); break;
     }
 }

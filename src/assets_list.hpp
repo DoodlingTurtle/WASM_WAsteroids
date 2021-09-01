@@ -21,7 +21,6 @@
 #endif
 
 REGISTER_ASSET(bgmMenu        ,Mix_Music          ,"./assets/music/james_gargette/kuia.oga"              ,m  ,BGM         )
-REGISTER_ASSET(bgmGame        ,Mix_Music          ,"./assets/music/james_gargette/oioioioioioi.oga"      ,m  ,BGM         )
 											        
 REGISTER_ASSET(ship           ,olc::Renderable    ,"./assets/sprites/ship.png",                           r  ,SPRITE      )
 REGISTER_ASSET(shipThrust     ,Mix_Chunk          ,"./assets/sfx/cc0_nocredit/loop_ambient_01.ogg"       ,c  ,SFX         )
@@ -37,5 +36,11 @@ REGISTER_ASSET(asteroid_hit_1 ,Mix_Chunk          ,"./assets/sfx/cc0_nocredit/ex
 REGISTER_ASSET(asteroid_hit_2 ,Mix_Chunk          ,"./assets/sfx/cc0_nocredit/explosion_02.ogg"          ,c  ,SFX         )
 
 REGISTER_ASSET(record         ,RGNDS::SpriteSheet ,"./assets/sprites/record.png"                         ,sh ,SPRITESHEET )
+
+REGISTER_ASSET(bgmLV01        ,Mix_Music          ,"./assets/music/james_gargette/lv01.oga"              ,m  ,BGM         )
+REGISTER_ASSET(bgmLV02        ,Mix_Music          ,"./assets/music/james_gargette/lv02.oga"              ,m  ,BGM         )
+REGISTER_ASSET(bgmLV03        ,Mix_Music          ,"./assets/music/james_gargette/lv03.oga"              ,m  ,BGM         )
+REGISTER_ASSET(bgmLV04        ,Mix_Music          ,"./assets/music/james_gargette/lv04.oga"              ,m  ,BGM         )
+REGISTER_ASSET(bgmLV05        ,Mix_Music          ,"./assets/music/james_gargette/lv05.oga"              ,m  ,BGM         )
 
 #undef REGISTER_ASSETREGISTER_ASSET

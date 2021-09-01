@@ -13,26 +13,30 @@
 
 using namespace RGNDS;
 
+Mix_Music** MainGameScreen::bgMusic[BGM_TRACKS] = {
+    &Assets::bgmLV01,
+    &Assets::bgmLV02,
+    &Assets::bgmLV03,
+    &Assets::bgmLV04,
+    &Assets::bgmLV05
+};
+
 MainGameScreen::MainGameScreen() 
-    : state(MainGameScreen::STATE_LOST), game_difficulty(0.0f), scoreTimer(0.0f)
+    : state(GAME_STATE::STATE_LOST), game_difficulty(0.0f), scoreTimer(0.0f)
 { 
 // setup the scoreboard
     scorelocation.pos = { 5.0f, 5.0f };
     scorelocation.scale = 2;
-
-    switchBGMusic(Assets::bgmGame);
+    switchBGMusic(nullptr);
 
     Global::shipStats->resetToLV1();
     Global::level = 0;
     Global::score = 0;
+
 }
 
-#ifdef DEBUG_BUILD
-void MainGameScreen::endLevel() { state = MainGameScreen::STATE_WON; }
-#endif
-
 void MainGameScreen::onStart(olc::PixelGameEngine* pge) {
-    if(state != MainGameScreen::STATE_RUNNING) {
+    if(state != GAME_STATE::STATE_RUNNING) {
         game_difficulty += 1.0f;
         Global::level++;
 
@@ -48,10 +52,20 @@ void MainGameScreen::onStart(olc::PixelGameEngine* pge) {
     // Initialize the asteroids
         Asteroid::spawn( (int)game_difficulty, Asteroid::SIZE_LARGE, ship);
     }
-    state = MainGameScreen::STATE_RUNNING;
+    state = GAME_STATE::STATE_RUNNING;
+}
+
+void MainGameScreen::updateBGM() {
+    if (!Mix_PlayingMusic()) {
+        int track = std::min(4, (int)floor(this->game_difficulty / 1.2f));
+        Mix_PlayMusic(*bgMusic[track], 0);
+    }
 }
 
 bool MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
+
+// Check Music Loop
+    updateBGM();
 
 // Check for Pause Key
     if(Global::input->pressed&KEYPAD_SELECT){ 
@@ -60,13 +74,13 @@ bool MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 // Check Win loos state
     // If no asteroids = game won
     if(Global::world->countWithAttribute(GameObject::ASTEROID) == 0) {
-        state = STATE_WON; 
+        state = GAME_STATE::STATE_WON; 
         return false;
     }
 
     // If no ship or ship explosition = game lost 
     if(Global::world->countWithAttribute(GameObject::MAINGAME_COMPONENT) == 0) {
-        state = STATE_LOST; 
+        state = GAME_STATE::STATE_LOST; 
         return false;
     }
 
@@ -97,21 +111,21 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
 }
 
 void MainGameScreen::onEnd() {
-    if(state != MainGameScreen::STATE_RUNNING)
+    if(state != GAME_STATE::STATE_RUNNING)
         Global::world->removeWithAttribute(GameObject::ALL);
 }
 
 Scene* MainGameScreen::nextScene() {
     switch(state){
-    case STATE_RUNNING: 
+    case GAME_STATE::STATE_RUNNING: 
         this->persistent = true;
         return new PauseScreen(this);
 
-    case STATE_LOST:
+    case GAME_STATE::STATE_LOST:
         this->persistent = false;
         return new GameOverScreen();
 
-    case STATE_WON: 
+    case GAME_STATE::STATE_WON: 
         this->persistent = true;
         return new UpgradeScreen (this);
 

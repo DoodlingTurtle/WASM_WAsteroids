@@ -4,12 +4,13 @@
 #include "../engine/ui/TextMenu.h"
 
 #include "./engine/Scene.h"
+#include "./maingame.h"
 
 using namespace RGNDS;
 
 class PauseScreen : public Scene {
 public:
-    PauseScreen(Scene* backgroundProvider);
+    PauseScreen(MainGameScreen* backgroundProvider);
     virtual~PauseScreen();
 
     bool onUpdate(olc::PixelGameEngine* pge, float deltaTime) override;
@@ -19,14 +20,8 @@ public:
 
     Scene* nextScene() override;
 
-#ifdef DEBUG_BUILD
-    bool skipLevel();
-#endif
-
-    bool endGame();
-
 protected:
-    Scene* backgroundProvider;
+    MainGameScreen* backgroundProvider;
 
 private:
     UI::TextMenu menu;

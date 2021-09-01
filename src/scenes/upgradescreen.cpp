@@ -109,6 +109,8 @@ void UpgradeScreen::onEnd() {
 
 bool UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
+	backscene->updateBGM();
+
 	if (Global::input->pressed & KEYPAD_DOWN)
 		selection.selectNext();
 	else if (Global::input->pressed & KEYPAD_UP)

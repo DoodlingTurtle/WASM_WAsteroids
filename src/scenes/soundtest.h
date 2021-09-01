@@ -13,7 +13,7 @@ using namespace RGNDS;
 class SoundTest: public Scene {
 public:
 
-    enum SOUNDTYPE {
+    enum class SOUNDTYPE {
         TYPE_SFX,
         TYPE_BGM
     };

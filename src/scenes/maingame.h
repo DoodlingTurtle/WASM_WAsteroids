@@ -7,20 +7,20 @@
 #include "../gameobjects/ship.h"
 #include "../particles/ship_explosion.h"
 
+#define BGM_TRACKS 5
+
 using namespace RGNDS;
 
 class MainGameScreen : public Scene {
 
 public:
-    
-    enum GAME_STATE {
+    enum class GAME_STATE {
         STATE_RUNNING,
         STATE_WON,
         STATE_LOST
     };
 
     MainGameScreen();
-    void reset();
 
     bool onUpdate(olc::PixelGameEngine* pge, float dt) override;
     void onDraw(olc::PixelGameEngine* pge) override;
@@ -29,10 +29,8 @@ public:
 
     Scene* nextScene() override;
 
-#ifdef DEBUG_BUILD
-    void endLevel();
-#endif
-    
+    void updateBGM();
+
 protected:
     void onStart(olc::PixelGameEngine*) override;
     void onEnd() override;
@@ -42,4 +40,6 @@ protected:
 private:
     RGNDS::Transform scorelocation;
     float scoreTimer;
+
+    static Mix_Music** bgMusic[BGM_TRACKS];
 };

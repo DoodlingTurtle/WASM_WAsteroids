@@ -9,7 +9,7 @@
 
 using namespace RGNDS;
 
-PauseScreen::PauseScreen(Scene* backgroundProvider) {
+PauseScreen::PauseScreen(MainGameScreen* backgroundProvider) {
     this->backgroundProvider = backgroundProvider;
 
     menu.transform.pos = olc::vf2d{ 48, 80 } + Global::layout->screen_offset;
@@ -31,6 +31,8 @@ PauseScreen::~PauseScreen() {}
 
 bool PauseScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
      
+	backgroundProvider->updateBGM();
+
     if(Global::input->pressed&KEYPAD_DOWN)
         menu.selectNext();
     else if(Global::input->pressed&KEYPAD_UP)
