@@ -5,8 +5,8 @@
 #include "../../engine/Transform.h"
 #include "../../engine/physics/Collision.h"
 
-#include "./gameobjects/asteroids.h"
-#include "./gameobjects/ship.h"
+#include "../asteroids.h"
+#include "../ship.h"
 
 #include "./shipstats.h"
 #include "./shipupgrade.h"

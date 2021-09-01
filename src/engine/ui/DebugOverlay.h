@@ -1,10 +1,8 @@
 #pragma once
 
-#include "../engine/olcPixelGameEngine.h"
-#include "../engine/world/Object.h"
-#include "../engine/world/components/Drawable.h"
-
-#include "../gamecomponents.h"
+#include "../olcPixelGameEngine.h"
+#include "../world/Object.h"
+#include "../world/components/Drawable.h"
 
 using namespace RGNDS;
 

@@ -1,8 +1,8 @@
 #ifndef __RGNDS_TRANSFORM_CPP__
 #define __RGNDS_TRANSFORM_CPP__
 
-#include "config.h"
 #include "../Transform.h"
+#include "../Macros.h"
 #include <math.h>
 
 namespace RGNDS {
@@ -44,10 +44,10 @@ namespace RGNDS {
     void Transform::translate(olc::vf2d* in, olc::vf2d* out) {
         olc::vf2d p = *in;
         /*
-        +-  -+    +--                  --+   +-  -+
+        +-   -+   +--                  --+   +-  -+
         |out.x| = | cos(ang), - sin(ang) | * |in.x|
         |out.y|   | sin(ang),   cos(ang) |   |in.y|
-        +-  -+    +--                  --+   +-  -+
+        +-   -+   +--                  --+   +-  -+
         */
         out->x = dir.x * p.x + -dir.y * p.y;
         out->y = dir.y * p.x +  dir.x * p.y; 

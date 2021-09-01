@@ -5,7 +5,7 @@
 #include "./ship_component.h"
 #include "./ShipCannon.h"
 
-#include "gameobjects/bullet.h"
+#include "../bullet.h"
 
 class ShipStats {
 public: 

@@ -1,5 +1,4 @@
 #include "./asteroid_particles.h"
-#include "config.h"
 
 /*#############################################################################
  * AsteroidExplosion

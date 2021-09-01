@@ -3,7 +3,7 @@
 #include "../engine/olcPixelGameEngine.h"
 #include "../engine/ui/TextMenu.h"
 
-#include "./engine/Scene.h"
+#include "../engine/Scene.h"
 #include "./maingame.h"
 
 using namespace RGNDS;

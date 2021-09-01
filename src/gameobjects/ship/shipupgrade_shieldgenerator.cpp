@@ -1,8 +1,7 @@
 #include "./shipupgrade_shieldgenerator.h"
 #include "./shipupgrade_shield.h"
 
-#include "gameobjects/ship.h"
-#include "config.h"
+#include "../ship.h"
 
 ShipUpgrade_ShieldGenerator::ShipUpgrade_ShieldGenerator() : MultiUseUpgrade(0) { }
 

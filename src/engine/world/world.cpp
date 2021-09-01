@@ -106,7 +106,7 @@ namespace RGNDS {
 
 #define REGISTER_GO_COMPONENT(T) T* go_##T = dcast<T>(go);\
         if(go_##T) map_##T.emplace(go_##T); 
-#include "gameobject_components.hpp"
+#include "../../gameobject_components.hpp"
 
 		go->world = this;
 	}
@@ -130,7 +130,7 @@ namespace RGNDS {
 		map_Drawable.erase(dynamic_cast<World::Drawable*>(go));
 
 #define REGISTER_GO_COMPONENT(T) map_##T.erase(dynamic_cast<T*>(go)); 
-#include "gameobject_components.hpp"
+#include "../../gameobject_components.hpp"
 
 		if (!go->persistent)
 			delete go;

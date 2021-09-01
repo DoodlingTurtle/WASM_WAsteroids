@@ -5,7 +5,7 @@
 #include "./components/Drawable.h"
 
 #define __HPP_HEADER__
-#include "gameobject_components.hpp"
+#include "../../gameobject_components.hpp"
 #undef __HPP_HEADER__
 
 #include <unordered_set>
@@ -24,7 +24,7 @@ namespace RGNDS {
 			COMP_Updateable,
 			COMP_Drawable,
 #define REGISTER_GO_COMPONENT(cla) COMP_ ## cla,
-#include "gameobject_components.hpp"
+#include "../../gameobject_components.hpp"
 		};
 
 		struct ObjList { GameObject* gameObject; };
@@ -41,13 +41,13 @@ namespace RGNDS {
 		std::unordered_set<World::Updateable*> allUpdateable();
 		std::unordered_set<World::Drawable*> allDrawable();
 #define REGISTER_GO_COMPONENT(T) std::unordered_set<T*> all##T();
-#include "gameobject_components.hpp"
+#include "../../gameobject_components.hpp"
 
 
 		int countUpdateable();
 		int countDrawable();
 #define REGISTER_GO_COMPONENT(T) int count##T();
-#include "gameobject_components.hpp"
+#include "../../gameobject_components.hpp"
 
 	private:
 		std::unordered_map<GameObject::ATTR, GameObjectList> attribute_maps;
@@ -55,7 +55,7 @@ namespace RGNDS {
 		std::unordered_set<World::Updateable*> map_Updateable;
 		std::unordered_set<World::Drawable*> map_Drawable;
 #define REGISTER_GO_COMPONENT(T) std::unordered_set<T*> map_##T;
-#include "gameobject_components.hpp"
+#include "../../gameobject_components.hpp"
 
 		std::vector<GameObject*> new_obj;
 

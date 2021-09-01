@@ -2,7 +2,7 @@
 #define __ShipUpgrade_H__
 
 #include <vector>
-#include "spaceobj.h"
+#include "../../engine/Transform.h"
 
 #include "./shipstats.h"
 
