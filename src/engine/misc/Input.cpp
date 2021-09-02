@@ -30,7 +30,7 @@ namespace RGNDS {
         //TODO: Turn this into ALT+F4 (somehow)
         _exit = (
             pge->GetKey(olc::F4).bPressed &&
-            pge->GetKey(olc::CTRL).bHeld
+            pge->GetKey(olc::ALT).bHeld
         );
 
         unsigned int key = 0;
