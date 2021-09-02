@@ -64,10 +64,19 @@
     <Filter Include="Source Files\gameobjects\ship\cannons">
       <UniqueIdentifier>{be9ef181-64e1-48f8-8e8c-a98ea3c89712}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\assets\sfx">
+      <UniqueIdentifier>{5cbe1a27-d29b-4233-91b7-994a1c503521}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\sfx\bfxr_sounds\Laser1.oga">
+      <Filter>Resource Files\assets\sfx</Filter>
+    </None>
+    <None Include="assets\sfx\bfxr_sounds\Laser2.oga">
+      <Filter>Resource Files\assets\sfx</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -85,9 +94,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="bugs.txt">
-      <Filter>Resource Files\assets</Filter>
-    </Text>
     <Text Include="assets\upgrades\none.txt">
       <Filter>Resource Files\assets\upgrades</Filter>
     </Text>
@@ -108,6 +114,9 @@
     </Text>
     <Text Include="assets\upgrades\dualshot.txt">
       <Filter>Resource Files\assets\upgrades</Filter>
+    </Text>
+    <Text Include="bugs.txt">
+      <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\sfx\bfxr_sounds\Laser1.oga" />
+    <None Include="assets\sfx\bfxr_sounds\Laser2.oga" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +256,8 @@
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
