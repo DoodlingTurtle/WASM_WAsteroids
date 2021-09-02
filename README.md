@@ -5,8 +5,6 @@ project for the Nintendo DS.
 The game is based on the 
 [OneLoneCoder PixelGameEngine](https://github.com/OneLoneCoder/olcPixelGameEngine).
 
-
-
 The Game can be played here: [https://doodlingturtle.github.io/WASM_WAsteroids/](https://doodlingturtle.github.io/WASM_WAsteroids/)
 
 The target platform is WebAssembly. So this will run on every platform that has 
@@ -104,7 +102,6 @@ There are a lot more things todo behind the scenes however.
     - speed modifiers
   - score multiplyers / bonuses
 - Add Touch controls
-
 
 - Store highscores and Settings via LocalStorage in the Browser
 

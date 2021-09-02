@@ -73,6 +73,7 @@
     <ClInclude Include="src\gameobjects\bullet.h" />
     <ClInclude Include="src\gameobjects\bullets\SnipeShot.h" />
     <ClInclude Include="src\gameobjects\bullet_modifier.h" />
+    <ClInclude Include="src\gameobjects\player_ship.h" />
     <ClInclude Include="src\gameobjects\scorepopup.h" />
     <ClInclude Include="src\gameobjects\ship.h" />
     <ClInclude Include="src\gameobjects\ship\cannons\BasicCannon.h" />
@@ -122,6 +123,7 @@
     <ClCompile Include="src\gameobjects\asteroids.cpp" />
     <ClCompile Include="src\gameobjects\bullet.cpp" />
     <ClCompile Include="src\gameobjects\bullets\SnipeShot.cpp" />
+    <ClCompile Include="src\gameobjects\player_ship.cpp" />
     <ClCompile Include="src\gameobjects\scorepopup.cpp" />
     <ClCompile Include="src\gameobjects\ship.cpp" />
     <ClCompile Include="src\gameobjects\ship\cannons\BasicCannon.cpp" />
@@ -201,7 +203,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\</OutDir>
     <IntDir>$(Platform)\tmp\</IntDir>
-    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\core;C:\Users\DT\DEV\2_libs\c++\SDL_mixer_1.2\include;C:\Users\DT\DEV\2_libs\c++\SDL-1.2.15\include\SDL;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\DT\DEV\2_libs\c++\SDL_mixer_1.2\include;C:\Users\DT\DEV\2_libs\c++\SDL-1.2.15\include\SDL;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\</OutDir>

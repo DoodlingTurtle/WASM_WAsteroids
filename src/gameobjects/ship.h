@@ -8,7 +8,6 @@
 #include "../engine/world/components/Updateable.h"
 #include "../engine/physics/Collision.h"
 
-#include "./ship/shipstats.h"
 #include "./ship/shipupgrade.h"
 #include "./ship/shipstats.h"
 #include "./ship/shipengine.h"
@@ -27,12 +26,11 @@ class Ship :
 {
     public:
 
-        Ship();
+        Ship(olc::Sprite dissoveSprite = olc::Sprite{0, 0});
         ~Ship();
-        void reset();
 
         void onUpdate(float deltaTime) override;
-        void onDraw(olc::PixelGameEngine*) override;
+        void drawUpgrades(olc::PixelGameEngine*, RGNDS::Transform*);
 
         // Getters
         Physics::Collision::Circle getCollider();
@@ -40,29 +38,19 @@ class Ship :
 
         // Upgrade related stuff
         void addUpgrade(ShipUpgrade* upgrade);
+        
+
         bool shieldIsActive();
 
     protected:
         ShipUpgrade_Shield* currentShield;    // keeps track, which updgrade is the current shield
-
-        // Ship Sub functions
-        ShipEngine                  shipEngine;
-        ShipStats*                  stats;
+        olc::Sprite         sprDissolve;
+        void clearUpgrades(); // removes and deletes all installed upgrades
+        float angRes;      // defines how fast the ship can turn per sec.
 
     private:
-
-        void clearUpgrades(); // removes and deletes all installed upgrades
-
-        float angRes;      // defines how fast the ship can turn per sec.
-        bool  thrusting;   // defines if the ship is accelerating
-
         std::vector<ShipUpgrade*> upgrades;
         std::vector<ShipUpgrade*> newUpgrades; 
-        std::vector<ShipComponent*> components;
 
-        olc::Sprite* sprDissolve;
-        int          chaThrust;    // keeps track on what channel the thrusting sound is playing
 
-        std::vector<int> selectableComponents;  // A list of indexes in this->components, that is invoceable bz the plazer
-        int              selectedComponent;     // the currently selected component in selectableComponents
 };

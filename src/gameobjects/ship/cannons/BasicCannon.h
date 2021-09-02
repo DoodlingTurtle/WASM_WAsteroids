@@ -7,7 +7,7 @@ public:
 	// Inherited via ShipCannon
 	virtual void fire(ShipStats*, Ship*) override;
 
-	void onDraw(olc::PixelGameEngine*, ShipStats*, Ship*) override;
+	void onDraw(olc::PixelGameEngine*, ShipStats*, Ship*, RGNDS::Transform* tr) override;
 
 
 };

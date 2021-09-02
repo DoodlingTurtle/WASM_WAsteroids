@@ -19,13 +19,10 @@ public:
     ShipUpgrade_Shield();
     ~ShipUpgrade_Shield();
 
-    bool init(ShipStats *shipstats) override;
+    bool init() override;
 
     void draw(olc::PixelGameEngine*, Transform& ship) override;
-    bool update(
-            ShipStats* shipstats, Ship* ship 
-          , float deltaTime
-    ) override;
+    bool update( Ship* ship , float deltaTime ) override;
 
     virtual float getRadius();
 

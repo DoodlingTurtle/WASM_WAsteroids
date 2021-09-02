@@ -4,7 +4,6 @@
 
 #include "../engine/Scene.h"
 #include "../gameobjects/asteroids.h"
-#include "../gameobjects/ship.h"
 #include "../particles/ship_explosion.h"
 
 #define BGM_TRACKS 5

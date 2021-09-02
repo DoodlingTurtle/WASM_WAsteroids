@@ -21,9 +21,7 @@ void DualCannon::fire(ShipStats* stats, Ship* ship) {
 	stats->generator -= stats->shotenergyconsumption;
 }
 
-void DualCannon::onDraw(olc::PixelGameEngine* pge, ShipStats* stats, Ship* ship) {
-	ship->draw([this](RGNDS::Transform* tra) {
-		Global::game->DrawPartialRotatedDecal(
-			tra->pos, Assets::ship->Decal(), tra->ang, { 16.0f, 16.0f }, { 32.0f, 32.0f }, { 32.0f, 32.0f });
-	});
+void DualCannon::onDraw(olc::PixelGameEngine* pge, ShipStats* stats, Ship* ship, RGNDS::Transform* tra) {
+	pge->DrawPartialRotatedDecal(
+		tra->pos, Assets::ship->Decal(), tra->ang, { 16.0f, 16.0f }, { 32.0f, 32.0f }, { 32.0f, 32.0f });
 }

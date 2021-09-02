@@ -11,6 +11,8 @@
 #include "./gameoverscreen.h"
 #include "./upgradescreen.h"
 
+#include "../gameobjects/player_ship.h"
+
 using namespace RGNDS;
 
 Mix_Music** MainGameScreen::bgMusic[BGM_TRACKS] = {
@@ -46,7 +48,7 @@ void MainGameScreen::onStart(olc::PixelGameEngine* pge) {
         Global::world->removeWithAttribute(GameObject::ALL);
 
     // Initialize the Ship
-        Ship* ship = new Ship();
+        auto ship = new PlayerShip();
         Global::world->addGameObject(ship);
 
     // Initialize the asteroids

@@ -309,6 +309,9 @@
     <ClInclude Include="src\gameobjects\ship\MultiUseUpgrade.h">
       <Filter>Source Files\gameobjects\ship</Filter>
     </ClInclude>
+    <ClInclude Include="src\gameobjects\player_ship.h">
+      <Filter>Source Files\gameobjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\animation\animation.cpp">
@@ -430,6 +433,9 @@
     </ClCompile>
     <ClCompile Include="src\gameobjects\ship\cannons\DualCannon.cpp">
       <Filter>Source Files\gameobjects\ship\cannons</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\player_ship.cpp">
+      <Filter>Source Files\gameobjects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,14 +11,11 @@ void ShipUpgrade_Shield::init(olc::PixelGameEngine* pge) {}
 void ShipUpgrade_Shield::deinit() { } 
 
 // constructors
-ShipUpgrade_Shield::ShipUpgrade_Shield() {
-    rotspeed = PI2 * 4.0f;
-    ang = 0.0f;
-}
+ShipUpgrade_Shield::ShipUpgrade_Shield() : ang(0.0f), rotspeed(PI2 * 4.0f) { }
 ShipUpgrade_Shield::~ShipUpgrade_Shield() { }
 
 // Implement Ship_Upgrade
-bool ShipUpgrade_Shield::init(ShipStats* shipstats){
+bool ShipUpgrade_Shield::init(){
     
     lifetime = 5000.0f;
     lastHitTime = 0;
@@ -28,7 +25,7 @@ bool ShipUpgrade_Shield::init(ShipStats* shipstats){
 }
 
 bool ShipUpgrade_Shield::update(
-            ShipStats* shipstats, Ship* ship 
+            Ship* ship 
           , float dt
 ) {
     lifetime -= dt * 1000.0f;
