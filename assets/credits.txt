@@ -9,6 +9,10 @@ https://github.com
 SFX from opengameart.org:
 (CC0 - LICENSE)
 
+8-bit Platformer SFX commissioned 
+by Mark McCorkle for OpenGameArt.org 
+( http://opengameart.org )
+
 
 Music from James Gargette
 (CC0 - LICENSE)

@@ -13,14 +13,16 @@ void BasicCannon::fire(ShipStats* stats, Ship* ship) {
 
 	if (!stats->generatorhalt && stats->generator >= stats->shotenergyconsumption) {
 
-		Bullet* b = stats->prototypeBullet->clone(ship->pos, ship->dir,
+		Global::world->addGameObject(stats->prototypeBullet->clone(
+			ship->translate({16, 0}),
+			ship->dir,
 			std::max(0.0f, ship->moveVelocity * (ship->dir.dot(ship->getDirection())))
-		);
-		b->movePixelDistance(16);
-		Global::world->addGameObject(b);
+		));
+
 		stats->generator -= stats->shotenergyconsumption;
 
-		Mix_PlayChannel(-1, Assets::bullet_fire_1, 0);
+		Mix_PlayChannel(-1, Assets::laser2, 0);
+
 	}
 
 }

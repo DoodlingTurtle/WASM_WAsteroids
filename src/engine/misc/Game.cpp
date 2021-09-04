@@ -85,5 +85,4 @@ namespace RGNDS {
 		return true;
 	}
 
-
 }

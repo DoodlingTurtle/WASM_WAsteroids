@@ -1,7 +1,8 @@
 #include <SDL/SDL_mixer.h>
 
-#include "./engine/olcPixelGameEngine.h"
+#include "./engine/Engine.h"
 #include "./engine/Global.h"
+
 #include "./scenes/loadscreen.h"
 
 #include "./gameobjects/ship/shipstats.h"

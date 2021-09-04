@@ -16,9 +16,9 @@ namespace RGNDS {
 		void pause();
 		void resume();
 
+
 	private:
 		bool paused;
-
 		Scene* currentScene;
 
 	};

@@ -17,7 +17,8 @@ namespace RGNDS {
 
         virtual void moveInDirection( float distance );
 
-        void translate(olc::vf2d* in, olc::vf2d* out);
+        olc::vf2d translate(olc::vf2d in, olc::vf2d* out = nullptr);
+        
 
         void setAngle(float radiants);
         void setAngleRel( float radiants );

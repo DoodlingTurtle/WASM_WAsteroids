@@ -41,19 +41,25 @@ namespace RGNDS {
         dir.y = pos.y / dist;
     }
 
-    void Transform::translate(olc::vf2d* in, olc::vf2d* out) {
-        olc::vf2d p = *in;
+    olc::vf2d Transform::translate(olc::vf2d in, olc::vf2d* outptr) {
+
+        olc::vf2d out;
         /*
         +-   -+   +--                  --+   +-  -+
         |out.x| = | cos(ang), - sin(ang) | * |in.x|
         |out.y|   | sin(ang),   cos(ang) |   |in.y|
         +-   -+   +--                  --+   +-  -+
         */
-        out->x = dir.x * p.x + -dir.y * p.y;
-        out->y = dir.y * p.x +  dir.x * p.y; 
+        out.x = dir.x * in.x + -dir.y * in.y;
+        out.y = dir.y * in.x +  dir.x * in.y; 
 
-        *out *= scale;
-        *out += pos;
+        out *= scale;
+        out += pos;
+
+        if (outptr)
+            *outptr = out;
+
+        return out;
     }
 
 }

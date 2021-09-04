@@ -3,6 +3,7 @@
 #include "./../shipstats.h"
 #include "../../ship.h"
 #include "../../../engine/Global.h"
+#include "../../../engine/Assets.h"
 #include "../../../engine/olcPixelGameEngine.h"
 
 void DualCannon::fire(ShipStats* stats, Ship* ship) {
@@ -10,15 +11,23 @@ void DualCannon::fire(ShipStats* stats, Ship* ship) {
 
 	float accell = std::max(0.0f, ship->moveVelocity * (ship->dir.dot(ship->getDirection())));
 
-	Bullet* b = stats->prototypeBullet->clone({ 4, -8 }, ship->dir, accell);
-	ship->translate(&(b->pos), &(b->pos));
-	Global::world->addGameObject(b);
+	Global::world->addGameObject(
+		stats->prototypeBullet->clone( 
+			ship->translate({4, -8}) , 
+			ship->dir, accell 
+		)
+	);
 
-	b = stats->prototypeBullet->clone({ 4, 8 }, ship->dir, accell);
-	ship->translate(&(b->pos), &(b->pos));
-	Global::world->addGameObject(b);
+	Global::world->addGameObject(
+		stats->prototypeBullet->clone( 
+			ship->translate({4, 8}) , 
+			ship->dir, accell 
+		)
+	);
 
 	stats->generator -= stats->shotenergyconsumption;
+
+	Mix_PlayChannel(-1, Assets::laser1, 0);
 }
 
 void DualCannon::onDraw(olc::PixelGameEngine* pge, ShipStats* stats, Ship* ship, RGNDS::Transform* tra) {

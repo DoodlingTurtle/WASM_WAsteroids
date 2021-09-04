@@ -48,7 +48,7 @@ SpriteDissolve_Emitter::SpriteDissolve_Emitter(
                 initialCoords.x = (x - offx);
                 initialCoords.y = (y - offy);
 
-                tr->translate(&initialCoords, &finalCoords);
+                tr->translate(initialCoords, &finalCoords);
                 
                 SpriteDissolve_Particle* pa = new SpriteDissolve_Particle(
                         finalCoords, this->pos, p, 

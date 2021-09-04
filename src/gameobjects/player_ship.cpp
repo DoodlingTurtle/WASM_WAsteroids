@@ -233,4 +233,3 @@ void PlayerShip::onDraw(olc::PixelGameEngine* pge) {
 	if (sz > 0)
 		pge->FillRect({ 8, 40 + (10 * selectedComponent) }, { 8, 8 }, olc::RED);
 }
-

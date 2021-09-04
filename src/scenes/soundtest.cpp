@@ -2,9 +2,10 @@
 #include "../engine/Global.h"
 using namespace RGNDS;
 
-#define CNT_SNDS 11 
+#define CNT_SNDS 12 
 SoundTest::Sound SoundTest::sounds[CNT_SNDS] = {
-   {SOUNDTYPE::TYPE_SFX, "Ship fire"     , { .c=&Assets::bullet_fire_1  }},
+   {SOUNDTYPE::TYPE_SFX, "Ship fire 1"   , { .c=&Assets::laser1         }},
+   {SOUNDTYPE::TYPE_SFX, "Ship fire 2"   , { .c=&Assets::laser2         }},
    {SOUNDTYPE::TYPE_SFX, "Ship explosion", { .c=&Assets::shipExplode    }},
    {SOUNDTYPE::TYPE_SFX, "Ship thrust"   , { .c=&Assets::shipThrust     }},
 
