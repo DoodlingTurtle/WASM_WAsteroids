@@ -12,8 +12,11 @@ using namespace RGNDS;
 
 class MainGameScreen;
 
+
 class UpgradeScreen : public Scene {
 public:
+    static void resetPool();
+
     UpgradeScreen(MainGameScreen* backscene);
     virtual ~UpgradeScreen();
 
@@ -27,23 +30,21 @@ protected:
     void onEnd() override;
     
 private:
+	struct UpgradeSlot {
+		int grp, grpIndex, listIndex;
+	};
 
-    MainGameScreen* backscene;
+    static std::vector<std::vector<int>> upgrade_pool;
 
-    ShipStats* shipstats;
-    int*       score;
-    UI::TextMenu selection;
-
+    MainGameScreen*          backscene;
+    UI::TextMenu             selection;
     std::vector<std::string> description;
-    olc::vf2d descriptionlocation;
-    olc::vf2d scorelocation;
-    olc::vf2d costlocation;
+    olc::vf2d                descriptionlocation;
+    olc::vf2d                scorelocation;
+    olc::vf2d                costlocation;
 
     bool showError;
 
-    std::vector<int> upgrade_data;
-    std::function<void()> handlers[4];
-
-    float* game_difficulty;
-
+    std::vector<int>         upgrade_data;
+    std::vector<UpgradeSlot> upgrade_slotdata;
 };

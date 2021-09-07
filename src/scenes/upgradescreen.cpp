@@ -17,7 +17,6 @@
 using namespace RGNDS;
 
 #define ERROR_PRICE_TO_HIGH "You don't have enough points"
-
 #define NUM_TOTAL_UPGRADES 5
 
 struct Upgrade {
@@ -25,28 +24,53 @@ struct Upgrade {
 	const char* title;
 	const char* descriptionFile;
 	int influence;
+	bool singleuse;
+
+	std::function<void()> fnc;
+
 	std::string description;
 };
 
-static Upgrade upgradeList[] = {
-	{   0, "none"                 , "upgrades/none.txt"      , 0   },
-	{ 700, "+1 Shield use"        , "upgrades/shield.txt"    , 80  },
-	{2050, "Generator capacity up", "upgrades/gencap.txt"    , 30  },
-	{3500, "Generator speed + 50%", "upgrades/genreg.txt"    , 30  },
-	{2080, "Snipe Shot"           , "upgrades/snipeshot.txt" , 20  },
 
-	{ 400, "Bullet Hell"          , "upgrades/bullethell.txt", 20  },
-	{1200, "Dual Shot"            , "upgrades/dualshot.txt"  , 80  }
+static Upgrade upgradeList[] = {
+	{   0, "none"                 , "upgrades/none.txt"      , 0 , false, []() {} },
+
+	{ 700, "+1 Shield use"        , "upgrades/shield.txt"    , 80, false, []() {
+		Global::shipStats->registerNewComponent(new ShipUpgrade_ShieldGenerator());
+	} },
+
+	{2050, "Generator capacity up", "upgrades/gencap.txt"    , 30, false, []() {
+		Global::shipStats->generatorcapacity += 15;
+	} },
+
+	{3500, "Generator speed + 50%", "upgrades/genreg.txt"    , 30, false, []() {
+		Global::shipStats->generatorrecovery *= 1.5f;
+	} },
+
+	{2080, "Snipe Shot"           , "upgrades/snipeshot.txt" , 20, true , []() {
+		Global::shipStats->shotenergyconsumption += 6.0f;
+		Global::shipStats->prototypeBullet->addModifier(new SnipeShot());
+	} },
+
+	{ 400, "Bullet Hell"          , "upgrades/bullethell.txt", 20, false, []() {
+		Global::shipStats->registerNewComponent(new UpgradeBulletHell());
+	} },
+
+	{1200, "Dual Shot"            , "upgrades/dualshot.txt"  , 80, true , []() {
+		delete Global::shipStats->shipCannon;
+		Global::shipStats->shipCannon = new DualCannon();
+		Global::shipStats->shotenergyconsumption += 10;
+	} }
 };
 
 #ifdef DEBUG_BUILD
-std::vector<std::vector<int>> categorielist = {
+static const std::vector<std::vector<int>> categorielist = {
 	{ 1 }, { 5 },    /* Acitvateables */
 	{ 2 }, { 3 },    /* Ship Control */
-	{ 4 }, { 6 }        /* Weapons */
+	{ 4 }, { 6 }     /* Weapons */
 };
 #else
-std::vector<std::vector<int>> categorielist = {
+static const std::vector<std::vector<int>> categorielist = {
 	{ 1, 5 },    /* Acitvateables */
 	{ 2, 3 },    /* Ship Control */
 	{ 4, 6 }     /* Weapons */
@@ -56,22 +80,20 @@ std::vector<std::vector<int>> categorielist = {
 /*=============================================================================
  * UpgradeScreen
  *===========================================================================*/
-UpgradeScreen::UpgradeScreen(MainGameScreen* backscene) : Scene(), backscene(backscene)
+
+std::vector<std::vector<int>> UpgradeScreen::upgrade_pool = {};
+
+UpgradeScreen::UpgradeScreen(MainGameScreen* backscene) :
+	Scene(), backscene(backscene), showError(false)
+	, descriptionlocation(8, 34)
+	, scorelocation(8, 8)
+	, costlocation(8, 180)
+	, upgrade_slotdata(std::vector<UpgradeScreen::UpgradeSlot>())
 {
 	selection.transform.pos.y += 200;
 	selection.transform.pos.x += 8;
-
-	descriptionlocation.x += 8;
-	descriptionlocation.y += 34;
-
-	scorelocation.x += 8.0f;
-	scorelocation.y += 8.0f;
-
-	costlocation.x += 8;
-	costlocation.y = 180;
 }
 UpgradeScreen::~UpgradeScreen() {}
-
 
 void UpgradeScreen::onStart(olc::PixelGameEngine* pge) {
 
@@ -81,12 +103,15 @@ void UpgradeScreen::onStart(olc::PixelGameEngine* pge) {
 	upgrade_data.clear();
 
 	// Add one purchaseable from each Group
-	for (auto grp : categorielist) {
+	for (int a = 0; a < upgrade_pool.size(); a++) {
+		auto grp = upgrade_pool.at(a);
+
+		int grpIndex = 0;
 		if (grp.size() > 1)
-			//TODO: Implement weights for randomizer
-			upgrade_data.push_back(grp.at(rand() % grp.size()));
-		else
-			upgrade_data.push_back(grp.at(0));
+			grpIndex = rand() % grp.size(); //TODO: Implement weights for randomizer
+
+		upgrade_data.push_back(grp.at(grpIndex));
+		upgrade_slotdata.push_back({ a, grpIndex, grp.at(grpIndex) });
 	}
 
 	upgrade_data.push_back(0);
@@ -123,39 +148,15 @@ bool UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 		if (Global::score >= cost) {
 			Global::score -= cost;
 
-			switch (selected) {
+			upgradeList[selected].fnc();
+			if (upgradeList[selected].singleuse) {
+				auto slot_data = upgrade_slotdata.at(selection.selected());
 
-			case 0: // none 
-				break;
-
-			case 1: // shielduses 
-				Global::shipStats->registerNewComponent(new ShipUpgrade_ShieldGenerator());
-				break;
-
-			case 2: // Generator capacity 
-				Global::shipStats->generatorcapacity += 15;
-				break;
-
-			case 3: // Generator regen
-				Global::shipStats->generatorrecovery *= 1.5f;
-				break;
-
-			case 4: // snipe upgrade
-				Global::shipStats->shotenergyconsumption += 6.0f;
-				Global::shipStats->prototypeBullet->addModifier(new SnipeShot());
-				break;
-
-			case 5: // Bullet hell
-				Global::shipStats->registerNewComponent(new UpgradeBulletHell());
-				break;
-
-			case 6: // DualShot
-				delete Global::shipStats->shipCannon;
-				Global::shipStats->shipCannon = new DualCannon();
-				Global::shipStats->shotenergyconsumption += 10;
-				break;
-
+				upgrade_pool.at(slot_data.grp).erase(upgrade_pool.at(slot_data.grp).begin() + slot_data.grpIndex);
+				if (upgrade_pool.at(slot_data.grp).size() == 0) 
+					upgrade_pool.erase(upgrade_pool.begin() + slot_data.grp);
 			}
+
 			return false;
 		}
 		else {
@@ -165,7 +166,6 @@ bool UpgradeScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
 
 	return true;
 }
-
 
 static void _printPGE(
 	olc::PixelGameEngine* pge,
@@ -216,3 +216,4 @@ void UpgradeScreen::onDraw(olc::PixelGameEngine* pge) {
 
 Scene* UpgradeScreen::nextScene() { return backscene; }
 
+void UpgradeScreen::resetPool() { upgrade_pool = categorielist; }

@@ -32,9 +32,10 @@ MainGameScreen::MainGameScreen()
     switchBGMusic(nullptr);
 
     Global::shipStats->resetToLV1();
+    UpgradeScreen::resetPool();
+    
     Global::level = 0;
     Global::score = 0;
-
 }
 
 void MainGameScreen::onStart(olc::PixelGameEngine* pge) {
@@ -130,7 +131,6 @@ Scene* MainGameScreen::nextScene() {
     case GAME_STATE::STATE_WON: 
         this->persistent = true;
         return new UpgradeScreen (this);
-
     }
 
     return nullptr;
