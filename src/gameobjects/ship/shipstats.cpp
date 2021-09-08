@@ -1,5 +1,6 @@
 #include "./shipstats.h"
 #include "./cannons/BasicCannon.h"
+#include "./../bullets/PlayerBullet.h"
 
 ShipStats::ShipStats()
     :prototypeBullet(nullptr), shipCannon(nullptr)
@@ -31,7 +32,7 @@ void ShipStats::resetToLV1() {
     _clearComponents(components);
 
     if(prototypeBullet) delete prototypeBullet;
-    prototypeBullet = new Bullet();
+    prototypeBullet = new PlayerBullet();
 
     if (shipCannon) delete shipCannon;
     shipCannon = new BasicCannon();

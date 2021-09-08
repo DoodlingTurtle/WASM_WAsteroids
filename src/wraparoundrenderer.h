@@ -20,7 +20,6 @@ class WrapAroundRenderer
 
     private:
         int top, right, bottom, left, width, height;
-
         std::vector<olc::vf2d> drawingInstances;
 
 };

@@ -11,9 +11,16 @@
 #include "./gameoverscreen.h"
 #include "./upgradescreen.h"
 
+#include "./../gameobjects/enemys/Saucer.h"
+
 #include "../gameobjects/player_ship.h"
 
 using namespace RGNDS;
+
+// chance = 1 in x 
+#define SAUCER_MAX_SPAWNCHANCE 2048 
+#define SAUCER_MIN_SPAWNCHANCE 192 
+#define SAUCER_SPANCHANCE_PER_LEVEL 256
 
 Mix_Music** MainGameScreen::bgMusic[BGM_TRACKS] = {
     &Assets::bgmLV01,
@@ -23,11 +30,13 @@ Mix_Music** MainGameScreen::bgMusic[BGM_TRACKS] = {
     &Assets::bgmLV05
 };
 
-MainGameScreen::MainGameScreen() 
-    : state(GAME_STATE::STATE_LOST), game_difficulty(0.0f), scoreTimer(0.0f)
+MainGameScreen::MainGameScreen()
+    : state(GAME_STATE::STATE_LOST)
+    , game_difficulty(0.0f), scoreTimer(0.0f)
+    , saucer_spawnrate(SAUCER_MAX_SPAWNCHANCE)
 { 
 // setup the scoreboard
-    scorelocation.pos = { 5.0f, 5.0f };
+    scorelocation.pos = { 8.0f, 8.0f };
     scorelocation.scale = 2;
     switchBGMusic(nullptr);
 
@@ -42,6 +51,8 @@ void MainGameScreen::onStart(olc::PixelGameEngine* pge) {
     if(state != GAME_STATE::STATE_RUNNING) {
         game_difficulty += 1.0f;
         Global::level++;
+
+        saucer_spawnrate -= SAUCER_SPANCHANCE_PER_LEVEL * (saucer_spawnrate > SAUCER_MIN_SPAWNCHANCE);
 
         if(game_difficulty>16.0f)
             game_difficulty = 16.0f;
@@ -71,8 +82,8 @@ bool MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
     updateBGM();
 
 // Check for Pause Key
-    if(Global::input->pressed&KEYPAD_SELECT){ 
-        return false; }
+    if(Global::input->pressed&KEYPAD_SELECT) 
+        return false; 
 
 // Check Win loos state
     // If no asteroids = game won
@@ -96,6 +107,17 @@ bool MainGameScreen::onUpdate(olc::PixelGameEngine* pge, float deltaTime) {
         }
     }
 
+// spawn enemys according to difficulty
+    if (Global::world->countWithAttribute(GameObject::SAUCER) < (game_difficulty>=1)) {
+        int chance = rand();
+            chance = chance % saucer_spawnrate;
+
+        if (chance == 0) {
+			auto saucer = new Saucer();
+			Global::world->addGameObject(saucer);
+        }
+    }
+
     return true;
 }
 
@@ -108,7 +130,7 @@ void MainGameScreen::onDraw(olc::PixelGameEngine* pge) {
     
     pge->DrawString(
         scorelocation.pos.x, scorelocation.pos.y, 
-        s, olc::Pixel(32, 32, 196), 
+        s, olc::Pixel(0, 80, 255), 
         scorelocation.scale
     ); 
 }

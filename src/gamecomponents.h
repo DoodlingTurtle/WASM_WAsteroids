@@ -26,3 +26,5 @@ public:
     virtual void hitByBullet(Bullet*, Physics::Collision*) = 0;
     virtual int getDestructionScore() = 0;
 };
+class PlayerHitable : public BulletHitable {};
+class EnemyHitable  : public BulletHitable {};

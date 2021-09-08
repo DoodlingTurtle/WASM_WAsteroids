@@ -22,6 +22,12 @@ public:
     /* sets the Angle that thie object will face */
     void setAngle(float radiants);
 
+    /**
+     * Sets the moveRotation and moveDirection to face the given pos
+     * \param pos
+     */
+    void pointTowardsPosition(const olc::vf2d& pos);
+
     /* defines the direction the object is moving in */ 
     void setDirection(olc::vf2d directionVector);
 

@@ -74,7 +74,9 @@ Scene* PauseScreen::nextScene() {
 
     case 2: /* Skip Level */
         Global::score += Global::world->countWithAttribute(GameObject::ASTEROID) * 2100;
+        Global::score += Global::world->countWithAttribute(GameObject::SAUCER)   *  450;
         Global::world->removeWithAttribute(GameObject::ASTEROID);
+        Global::world->removeWithAttribute(GameObject::SAUCER);
     case 0: /* resume */
         return backgroundProvider;
 

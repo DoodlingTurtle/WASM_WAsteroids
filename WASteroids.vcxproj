@@ -73,8 +73,12 @@
     <ClInclude Include="src\gamecomponents.h" />
     <ClInclude Include="src\gameobjects\asteroids.h" />
     <ClInclude Include="src\gameobjects\bullet.h" />
+    <ClInclude Include="src\gameobjects\bullets\EnemyBullet.h" />
+    <ClInclude Include="src\gameobjects\bullets\EnemyShot.h" />
+    <ClInclude Include="src\gameobjects\bullets\PlayerBullet.h" />
     <ClInclude Include="src\gameobjects\bullets\SnipeShot.h" />
     <ClInclude Include="src\gameobjects\bullet_modifier.h" />
+    <ClInclude Include="src\gameobjects\enemys\Saucer.h" />
     <ClInclude Include="src\gameobjects\player_ship.h" />
     <ClInclude Include="src\gameobjects\scorepopup.h" />
     <ClInclude Include="src\gameobjects\ship.h" />
@@ -124,7 +128,11 @@
     <ClCompile Include="src\engine\world\world.cpp" />
     <ClCompile Include="src\gameobjects\asteroids.cpp" />
     <ClCompile Include="src\gameobjects\bullet.cpp" />
+    <ClCompile Include="src\gameobjects\bullets\EnemyBullet.cpp" />
+    <ClCompile Include="src\gameobjects\bullets\EnemyShot.cpp" />
+    <ClCompile Include="src\gameobjects\bullets\PlayerBullet.cpp" />
     <ClCompile Include="src\gameobjects\bullets\SnipeShot.cpp" />
+    <ClCompile Include="src\gameobjects\enemys\Saucer.cpp" />
     <ClCompile Include="src\gameobjects\player_ship.cpp" />
     <ClCompile Include="src\gameobjects\scorepopup.cpp" />
     <ClCompile Include="src\gameobjects\ship.cpp" />

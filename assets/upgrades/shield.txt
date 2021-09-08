@@ -1,6 +1,8 @@
 Allows you to manually 
-activate the shield 
-via the "use shield" button.
+activate a temporary shield.
+
+Shields defend against
+asteroids and enemy fire.
 
 Once you use it however, 
 it will be gone.

@@ -67,6 +67,9 @@
     <Filter Include="Resource Files\assets\sfx">
       <UniqueIdentifier>{5cbe1a27-d29b-4233-91b7-994a1c503521}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\gameobjects\enemys">
+      <UniqueIdentifier>{3e7a110a-e4c7-4db4-84a6-c66902bafc89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">
@@ -321,6 +324,18 @@
     <ClInclude Include="src\gameobjects\player_ship.h">
       <Filter>Source Files\gameobjects</Filter>
     </ClInclude>
+    <ClInclude Include="src\gameobjects\enemys\Saucer.h">
+      <Filter>Source Files\gameobjects\enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameobjects\bullets\EnemyShot.h">
+      <Filter>Source Files\gameobjects\bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameobjects\bullets\EnemyBullet.h">
+      <Filter>Source Files\gameobjects\bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gameobjects\bullets\PlayerBullet.h">
+      <Filter>Source Files\gameobjects\bullets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\animation\animation.cpp">
@@ -445,6 +460,18 @@
     </ClCompile>
     <ClCompile Include="src\gameobjects\player_ship.cpp">
       <Filter>Source Files\gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\enemys\Saucer.cpp">
+      <Filter>Source Files\gameobjects\enemys</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\bullets\EnemyShot.cpp">
+      <Filter>Source Files\gameobjects\bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\bullets\EnemyBullet.cpp">
+      <Filter>Source Files\gameobjects\bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameobjects\bullets\PlayerBullet.cpp">
+      <Filter>Source Files\gameobjects\bullets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

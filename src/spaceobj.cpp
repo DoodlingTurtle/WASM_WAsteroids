@@ -15,6 +15,17 @@ SpaceObj::SpaceObj( float radius ) {
 float SpaceObj::getAngle() { return moveAngle; }
 olc::vf2d SpaceObj::getDirection() { return moveDirection; }
 
+void SpaceObj::pointTowardsPosition(const olc::vf2d& pos) {
+    //olc::vf2d d = pos - this->pos;
+    //float hyp = std::sqrt(d.x * d.x + d.y * d.y);
+    // d.x /= hyp; d.y /= hyp;
+    //setDirection(d)
+
+    setDirection((pos - this->pos).norm());
+    this->dir = this->moveDirection;
+    this->ang = this->moveAngle;
+}
+
 void SpaceObj::setDirection(olc::vf2d dir) {
     if(dir.x < -1.0f || dir.x > 1.0f || dir.y < -1.0f || dir.y > 1.0f) 
         throw "SpaceObj::setDirection: is not a direction vector";

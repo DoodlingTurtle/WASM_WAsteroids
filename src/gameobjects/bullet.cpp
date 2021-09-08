@@ -25,11 +25,10 @@ void Bullet::onUpdate(float deltaTime) {
 
     lifetime -= deltaTime * 0.25f;    
     if(lifetime <= 0) { assignAttribute(GameObject::DEAD); }
-
     else {
         updatePosition(deltaTime);
 
-        auto list = Global::world->allBulletHitable();
+        auto list = this->getHitables(); // Global::world->allBulletHitable();
 
         Physics::Collision c;
         
@@ -68,12 +67,17 @@ void Bullet::onDraw(olc::PixelGameEngine *pge) {
 }
 
 Bullet* Bullet::clone(olc::vf2d pos, olc::vf2d dir, float velocity) {
-    Bullet* b = new Bullet(lifetime, decalCoords, radius);
+
+    Bullet* b = this->newInstance();
+    b->lifetime = this->lifetime;
+    b->radius = this->radius;
+    b->decalCoords = this->decalCoords;
     
     b->moveVelocity = velocity + 72.0f;
     b->pos = pos;
     b->setDirection(dir);
     b->modifiers = modifiers;
+
     b->isClone = true;
 
     return b;

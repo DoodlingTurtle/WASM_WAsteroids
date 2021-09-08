@@ -37,6 +37,7 @@ protected:
     GAME_STATE state;
 
 private:
+    int saucer_spawnrate;
     RGNDS::Transform scorelocation;
     float scoreTimer;
 

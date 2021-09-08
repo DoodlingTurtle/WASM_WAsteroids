@@ -21,7 +21,8 @@ class Asteroid
 , public World::Updateable
 , public ShipShieldDeflectable
 , public PlayerKiller
-, public BulletHitable
+, public PlayerHitable
+, public EnemyHitable
 , public SpaceObj {
 
 public:

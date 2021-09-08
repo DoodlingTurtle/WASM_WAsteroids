@@ -36,11 +36,12 @@ public:
 
     void addModifier(BulletModifier*);
 
+    virtual std::unordered_set<BulletHitable*> getHitables() = 0;
+    virtual Bullet* newInstance() = 0;
+
 protected:
-    static olc::Renderable spriteSheet;
     float totalLifetime, lifetime, radius;
     std::vector<BulletModifier*> modifiers;
-
     DecalRect decalCoords;
 
 private:
