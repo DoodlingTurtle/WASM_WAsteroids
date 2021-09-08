@@ -6,6 +6,6 @@ class Ship;
 class ShipStats;
 
 class DualCannon : public ShipCannon {
-	virtual void fire(ShipStats*, Ship*);
+	virtual void fire(ShipStats*, Ship*) override;
 	void onDraw(olc::PixelGameEngine* pge, ShipStats* stats, Ship* ship, RGNDS::Transform* tr) override;
 };
